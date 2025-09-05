@@ -3,7 +3,7 @@ from datetime import date
 from django.test import TestCase
 from django.urls import reverse
 
-from users.models import CustomUser, Student, Professor, Administrator
+from app.models import CustomUser, Student, Professor, Administrator
 
 
 class AccountsViewsTests(TestCase):

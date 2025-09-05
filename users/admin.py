@@ -7,7 +7,7 @@ Notes:
 """
 
 from django.contrib import admin
-from .models import CustomUser, Student, Professor, Administrator
+from app.models import CustomUser, Student, Professor, Administrator
 
 
 @admin.register(CustomUser)

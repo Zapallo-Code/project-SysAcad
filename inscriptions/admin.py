@@ -4,7 +4,7 @@ Registers SubjectInscription and FinalExamInscription with basic list and search
 """
 
 from django.contrib import admin
-from .models import SubjectInscription, FinalExamInscription
+from app.models import SubjectInscription, FinalExamInscription
 
 
 @admin.register(SubjectInscription)

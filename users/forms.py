@@ -11,8 +11,7 @@ Notes:
 """
 
 from django import forms
-from users.models import CustomUser, Student, Professor, Administrator
-from academics.models import Career
+from app.models import CustomUser, Student, Professor, Administrator, Career
 
 
 class UserForm(forms.ModelForm):

@@ -24,10 +24,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from academics.forms import CareerForm, FacultyForm, FinalExamForm, GradeForm, SubjectForm
-from academics.models import Career, Faculty, FinalExam, Grade, Subject
-from inscriptions.models import FinalExamInscription, SubjectInscription
+from app.models import Career, Faculty, FinalExam, Grade, Subject, FinalExamInscription, SubjectInscription, CustomUser, Professor, Student
 from users.forms import AdministratorProfileForm, ProfessorProfileForm, StudentProfileForm, UserForm
-from users.models import CustomUser, Professor, Student
 
 
 # --------- Admin Views -------
