@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificado para el Alumno: {{alumno.apellido}}, {{alumno.nombre}}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+
+        body {
+            font-family: sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        .half {
+            flex: 1;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        .left {
+            background-color: #fff;
+            text-align: left;
+        }
+        .right {
+            background-color: #fff;
+            text-align: right;
+        }
+        .text-justificado {
+            text-align: justify;
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="half left">
+    <img src="{{url_base}}/static/img/logo-ministerio.png" alt="Logo UTN" style="width: 304px; height: auto;">
+        </div>
+        <div class="half right">
+    <img src="{{url_base}}/static/img/logo-utn.png" alt="Logo UTN" style="width: 304px; height: auto;">
+        </div>
+    </div>
+    <p class="text-justificado">
+        Por la presente se hace constar que <strong>{{alumno.apellido}}</strong>, <strong>{{alumno.nombre}}</strong> <strong>{{alumno.tipo_documento.sigla}}</strong>: <strong>{{alumno.nrodocumento}}</strong> - LEGAJO Nro: <strong>{{alumno.nro_legajo}}</strong>, es Estudiante 
+Regular de la especialidad <strong>{{especialidad.nombre}}</strong> que se dicta en la
+<strong>{{facultad.nombre}}</strong> de la <strong>{{universidad.nombre}}</strong>.
+A solicitud del interesado y a los fines de ser presentado ante quien corresponda, se le extiende el presente certificado, sin
+enmiendas ni raspaduras, en <strong>{{facultad.ciudad}}</strong>. el <strong>{{fecha}}</strong>.-
+    </p>
+</body>
+</html>

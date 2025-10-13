@@ -1,6 +1,15 @@
-asgiref==3.8.1
-Django==5.2.3
-psycopg2-binary==2.9.10
-sqlparse==0.5.3
-python-dotenv==1.1.1
-docxtpl==0.18.0
+Flask==3.1.1
+Flask-SQLAlchemy==3.1.1
+flask-marshmallow==1.3.0
+marshmallow==4.0.0
+SQLAlchemy==2.0.41
+psycopg2==2.9.10
+psycopg[binary]
+python-dotenv==1.1.0
+Flask-Migrate==4.1.0
+weasyprint == 65.1 #Transforma html a pdf
+python-odt-template==0.5.1
+docxtpl==0.20.0
+Flask-Hashids==1.0.3
+
+#TODO buscar para que sirve cada libreria

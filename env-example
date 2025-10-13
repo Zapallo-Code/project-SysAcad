@@ -1,0 +1,5 @@
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQLALCHEMY_RECORD_QUERIES = True
+TEST_DATABASE_URI='postgresql+psycopg2://usuario:password@localhost:5432/TEST_SYSACAD'
+DEV_DATABASE_URI='postgresql+psycopg2://usuario:password@localhost:5432/DEV_SYSACAD'
+PROD_DATABASE_URI='postgresql://usuario:password@localhost:5432/SYSACAD'
