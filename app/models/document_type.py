@@ -5,32 +5,27 @@ class DocumentType(models.Model):
     dni = models.IntegerField(
         null=False,
         blank=False,
-        help_text="Tipo: DNI (Documento Nacional de Identidad)"
+        help_text="Type: DNI (Documento Nacional de Identidad)"
     )
     civic_card = models.CharField(
         max_length=20,
         null=False,
         blank=False,
-        help_text="Tipo: L.C (Libreta Cívica)"
+        help_text="Type: L.C (Libreta Cívica)"
     )
     enrollment_card = models.CharField(
         max_length=20,
         null=False,
         blank=False,
-        help_text="Tipo: L.E (Libreta de Enrolamiento)"
+        help_text="Type: L.E (Libreta de Enrolamiento)"
     )
     passport = models.CharField(
         max_length=20,
         null=False,
         blank=False,
-        help_text="Tipo: Pasaporte"
+        help_text="Type: Pasaporte"
     )
-    
-    class Meta:
-        db_table = 'document_types'
-        verbose_name = 'Tipo de Documento'
-        verbose_name_plural = 'Tipos de Documentos'
-    
+
     def __str__(self):
         types = []
         if self.dni:
@@ -42,6 +37,6 @@ class DocumentType(models.Model):
         if self.passport:
             types.append(f"Pasaporte: {self.passport}")
         return " | ".join(types) if types else "Tipo de Documento"
-    
+
     def __repr__(self):
         return f"<DocumentType: id={self.id}>"

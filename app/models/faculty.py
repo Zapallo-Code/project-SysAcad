@@ -8,21 +8,21 @@ class Faculty(models.Model):
         max_length=10,
         null=False,
         blank=False,
-        help_text="Abreviatura de la facultad"
+        help_text="Faculty abbreviation"
     )
     directory = models.CharField(
         max_length=100,
         null=False,
         blank=False,
-        help_text="Ruta o ubicación del directorio"
+        help_text="Directory path or location"
     )
     acronym = models.CharField(
         max_length=10,
         null=False,
         blank=False,
-        help_text="Sigla identificadora de la facultad"
+        help_text="Faculty identifying acronym"
     )
-    
+
     postal_code = models.CharField(max_length=10, null=True, blank=True)
     city = models.CharField(max_length=50, null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
@@ -31,49 +31,24 @@ class Faculty(models.Model):
         max_length=100,
         null=True,
         blank=True,
-        help_text="Nombre de la persona de contacto"
+        help_text="Contact person's name"
     )
     email = models.EmailField(
         max_length=100,
         null=False,
         blank=False,
-        validators=[EmailValidator(message="Ingrese un email válido")]
+        validators=[EmailValidator(message="Please enter a valid email address")]
     )
-    
+
     university = models.ForeignKey(
         'University',
         on_delete=models.PROTECT,
         related_name='faculties',
         null=False
     )
-    
-    # La relación ManyToMany con Authority está definida en el modelo Authority
-    # para acceder a las autoridades de una facultad: faculty.authorities.all()
-    
-    class Meta:
-        db_table = 'facultades'
-        verbose_name = 'Facultad'
-        verbose_name_plural = 'Facultades'
-        ordering = ['name']
-        indexes = [
-            models.Index(fields=['name']),
-            models.Index(fields=['acronym']),
-            models.Index(fields=['abbreviation']),
-        ]
 
-        constraints = [
-            models.UniqueConstraint(
-                fields=['university', 'acronym'],
-                name='unique_facultad_sigla_universidad'
-            ),
-            models.UniqueConstraint(
-                fields=['university', 'abbreviation'],
-                name='unique_facultad_abreviatura_universidad'
-            ),
-        ]
-    
     def __str__(self):
         return f"{self.name} ({self.abbreviation})"
-    
+
     def __repr__(self):
         return f"<Faculty: {self.name} - {self.acronym}>"
