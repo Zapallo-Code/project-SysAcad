@@ -20,6 +20,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/home/sysacad
+      - /home/sysacad/.local
     environment:
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG}
