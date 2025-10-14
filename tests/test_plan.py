@@ -1,27 +1,12 @@
-import unittest
-import os
-from flask import current_app
-from app import create_app
+from django.test import TestCase
 from app.models.plan import Plan
 from app.services import PlanService
-from test.instancias import nuevoplan
-from app import db
+from tests.instancias import nuevoplan
 from datetime import date
 
 
 
-class PlanTestCase(unittest.TestCase):
-    def setUp(self):
-        os.environ['FLASK_CONTEXT'] = 'testing'
-        self.app = create_app()
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        db.create_all()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        self.app_context.pop()
+class PlanTestCase(TestCase):
 
     def test_crear(self):
         plan = nuevoplan()
@@ -30,9 +15,9 @@ class PlanTestCase(unittest.TestCase):
         self.assertGreaterEqual(plan.id, 1)
         self.assertEqual(plan.nombre, "Plan A")
 
-    def test_buscar_por_id(self):
+    def test_find_by_id(self):
         plan = nuevoplan()
-        r = PlanService.buscar_por_id(plan.id)
+        r = PlanService.find_by_id(plan.id)
         self.assertIsNotNone(r)
         self.assertEqual(r.nombre, plan.nombre)
         self.assertEqual(r.fecha_inicio, plan.fecha_inicio)
@@ -56,6 +41,6 @@ class PlanTestCase(unittest.TestCase):
         plan = nuevoplan()
         borrado = PlanService.borrar_por_id(plan.id)
         self.assertTrue(borrado)
-        r = PlanService.buscar_por_id(plan.id)
+        r = PlanService.find_by_id(plan.id)
         self.assertIsNone(r)
 

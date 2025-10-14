@@ -1,28 +1,28 @@
-from app.models import Area
-from app.repositories import AreaRepository
+from app.models.area import Area
+from app.repositories.area_repository import AreaRepository
 
 class AreaService:
     @staticmethod
-    def crear(area):
-        AreaRepository.crear(area)
+    def create(area):
+        AreaRepository.create(area)
     
     @staticmethod
-    def buscar_por_id(id: int) -> Area:
-       return AreaRepository.buscar_por_id(id)
+    def find_by_id(id: int) -> Area:
+       return AreaRepository.find_by_id(id)
     
     @staticmethod
-    def buscar_todos() -> list[Area]:
-       return AreaRepository.buscar_todos()
+    def find_all() -> list[Area]:
+       return AreaRepository.find_all()
     
     @staticmethod
-    def actualizar(id: int, area: Area) -> Area:
-        area_existente = AreaRepository.buscar_por_id(id)
-        if not area_existente:
-            return None
-        area_existente.nombre = area.nombre
-        return AreaRepository.actualizar(area_existente)
+    def update(id: int, area: Area) -> Area:
+        existing_area = AreaRepository.find_by_id(id)
+        if not existing_area:
+            raise ValueError(f"Area with id {id} not found")
+        existing_area.name = area.name
+        return AreaRepository.update(existing_area)
     
     @staticmethod
-    def borrar_por_id(id: int) -> bool:
-        return AreaRepository.borrar_por_id(id)
-    
+    def delete_by_id(id: int) -> bool:
+        return AreaRepository.delete_by_id(id)
+

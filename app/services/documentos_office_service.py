@@ -1,35 +1,44 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
 import os
-from flask import current_app, render_template, url_for
+# TODO: Adaptar este servicio a Django
+# from flask import current_app, render_template, url_for
 from python_odt_template import ODTTemplate
 from weasyprint import HTML
 from python_odt_template.jinja import get_odt_renderer
 from docxtpl import DocxTemplate
 import jinja2
+from django.template.loader import render_to_string
+from django.conf import settings
 
 class Document(ABC):
     @staticmethod
     @abstractmethod
-    def generar(carpeta: str, plantilla: str, context: dict, tipo: str) -> BytesIO:
+    def generar(folder: str, template: str, context: dict, tipo: str) -> BytesIO:
             pass
         
 class PDFDocument(Document):
 
     @staticmethod
-    def generar(carpeta: str, plantilla: str, context: dict) ->BytesIO:
-        html_string = render_template(f'{carpeta}/{plantilla}.html', 
+    def generar(folder: str, template: str, context: dict) ->BytesIO:
+        # Adaptar para Django
+        html_string = render_to_string(f'{folder}/{template}.html', 
                                 context=context)        
         
-        base_url = url_for('static', filename='', _external=True)
+        # En Django, usar settings.STATIC_URL en lugar de url_for
+        base_url = settings.STATIC_URL if hasattr(settings, 'STATIC_URL') else '/static/'
         bytes_data = HTML(string=html_string, base_url=base_url).write_pdf()
         pdf_io = BytesIO(bytes_data)        
         return pdf_io
 
 class ODTDocument(Document):
-    def generar(carpeta: str, plantilla: str, context: dict) ->BytesIO:
-        odt_renderer = get_odt_renderer(media_path=url_for('static', filename='media'))
-        path_template = os.path.join(current_app.root_path, f'{carpeta}', f'{plantilla}.odt')
+    def generar(folder: str, template: str, context: dict) ->BytesIO:
+        # Adaptar para Django - usar settings.MEDIA_ROOT
+        media_path = settings.MEDIA_ROOT if hasattr(settings, 'MEDIA_ROOT') else 'media'
+        odt_renderer = get_odt_renderer(media_path=media_path)
+        
+        # En Django, usar settings.BASE_DIR en lugar de current_app.root_path
+        path_template = os.path.join(settings.BASE_DIR, 'app', f'{folder}', f'{template}.odt')
         
         odt_io = BytesIO()
         import tempfile
@@ -49,9 +58,10 @@ class ODTDocument(Document):
         return odt_io
     
 class DOCXDocument(Document):
-    def generar(carpeta: str, plantilla: str, context: dict) ->BytesIO:
+    def generar(folder: str, template: str, context: dict) ->BytesIO:
         
-        path_template = os.path.join(current_app.root_path, f'{carpeta}', f'{plantilla}.docx')
+        # En Django, usar settings.BASE_DIR en lugar de current_app.root_path
+        path_template = os.path.join(settings.BASE_DIR, 'app', f'{folder}', f'{template}.docx')
         doc = DocxTemplate(path_template)
         
         docx_io = BytesIO()
@@ -70,7 +80,7 @@ class DOCXDocument(Document):
         docx_io.seek(0)
         return docx_io
     
-def obtener_tipo_documento(tipo:str) -> Document:
+def get_document_type(tipo:str) -> Document:
     tipos ={
         'pdf': PDFDocument,
         'odt': ODTDocument,

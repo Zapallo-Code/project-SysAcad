@@ -1,29 +1,32 @@
-from app.models import Plan
-from app.repositories import PlanRepository
+from app.models.plan import Plan
+from app.repositories.plan_repository import PlanRepository
 
 class PlanService:
     @staticmethod
-    def crear(plan):
-        PlanRepository.crear(plan)
+    def create(plan):
+        PlanRepository.create(plan)
     
     @staticmethod
-    def buscar_por_id(id: int) -> Plan:
-        return PlanRepository.buscar_por_id(id)
+    def find_by_id(id: int) -> Plan:
+        return PlanRepository.find_by_id(id)
     
     @staticmethod
-    def buscar_todos() -> list[Plan]:
-        return PlanRepository.buscar_todos()
+    def find_all() -> list[Plan]:
+        return PlanRepository.find_all()
     
     @staticmethod
-    def actualizar(id : int, plan: Plan) -> Plan:
-        plan_existente = PlanRepository.buscar_por_id(plan.id)
-        if not plan_existente:
-            return None
-        plan_existente.fecha_inicio = plan.fecha_inicio
-        plan_existente.fecha_fin = plan.fecha_fin
-        plan_existente.observacion = plan.observacion
-        return PlanRepository.actualizar(plan_existente)
+    def update(id : int, plan: Plan) -> Plan:
+        existing_plan = PlanRepository.find_by_id(plan.id)
+        if not existing_plan:
+            raise ValueError(f"Plan with id {id} not found")
+        existing_plan.name = plan.name
+        existing_plan.start_date = plan.start_date
+        existing_plan.end_date = plan.end_date
+        existing_plan.observation = plan.observation
+        return PlanRepository.update(existing_plan)
     
     @staticmethod
-    def borrar_por_id(id: int) -> bool:
-        return PlanRepository.borrar_por_id(id)
+    def delete_by_id(id: int) -> bool:
+        return PlanRepository.delete_by_id(id)
+
+

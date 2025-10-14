@@ -1,25 +1,10 @@
-import unittest
-import os
-from flask import current_app
-from app import create_app
+from django.test import TestCase
 from app.models.area import Area
-from app.services import AreaService
-from test.instancias import nuevaarea
-from app import db
+from app.services.area_service import AreaService
+from tests.instancias import nuevaarea
 
-class AreaTestCase(unittest.TestCase):
-    def setUp(self):
-        os.environ['FLASK_CONTEXT'] = 'testing'
-        self.app = create_app()
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        db.create_all()
 
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        self.app_context.pop()
-
+class AreaTestCase(TestCase):
     def test_crear(self):
         area = nuevaarea()
         self.assertIsNotNone(area)
@@ -27,9 +12,9 @@ class AreaTestCase(unittest.TestCase):
         self.assertGreaterEqual(area.id, 1)
         self.assertEqual(area.nombre, "Matematica")
 
-    def test_buscar_por_id(self):
+    def test_find_by_id(self):
         area = nuevaarea()
-        r = AreaService.buscar_por_id(area.id)
+        r = AreaService.find_by_id(area.id)
         self.assertIsNotNone(r)
         self.assertEqual(r.nombre, "Matematica")
 
@@ -48,7 +33,7 @@ class AreaTestCase(unittest.TestCase):
 
     def test_borrar(self):
         area = nuevaarea()
-        borrado= AreaService.borrar_por_id(area.id)
+        borrado = AreaService.borrar_por_id(area.id)
         self.assertTrue(borrado)
-        resultado = AreaService.buscar_por_id(area.id)
+        resultado = AreaService.find_by_id(area.id)
         self.assertIsNone(resultado)
