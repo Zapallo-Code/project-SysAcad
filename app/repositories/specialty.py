@@ -23,7 +23,7 @@ class SpecialtyRepository:
     def update(specialty) -> Specialty:
         specialty.save()
         return specialty
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         specialty = SpecialtyRepository.find_by_id(id)
@@ -31,15 +31,15 @@ class SpecialtyRepository:
             return False
         specialty.delete()
         return True
-    
+
     @staticmethod
     def find_by_faculty(faculty_id: int):
         return Specialty.objects.filter(faculty_id=faculty_id)
-    
+
     @staticmethod
     def find_by_letter(letter: str):
         return Specialty.objects.filter(letter=letter)
-    
+
     @staticmethod
     def find_with_relations(id: int):
         try:
@@ -48,5 +48,3 @@ class SpecialtyRepository:
             ).get(id=id)
         except ObjectDoesNotExist:
             return None
-
-

@@ -1,5 +1,5 @@
 from app.models.specialty_type import SpecialtyType
-from app.repositories.specialty_type_repository import SpecialtyTypeRepository
+from app.repositories.specialty_type import SpecialtyTypeRepository
 
 class SpecialtyTypeService:
     @staticmethod

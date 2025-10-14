@@ -1,5 +1,5 @@
 from app.models.specialty import Specialty
-from app.repositories.specialty_repository import SpecialtyRepository
+from app.repositories.specialty import SpecialtyRepository
 
 class SpecialtyService:
 

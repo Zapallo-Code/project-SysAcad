@@ -1,7 +1,7 @@
 from app.models.authority import Authority
-from app.repositories.authority_repository import AuthorityRepository
-from app.repositories.subject_repository import SubjectRepository
-from app.repositories.faculty_repository import FacultyRepository
+from app.repositories.authority import AuthorityRepository
+from app.repositories.subject import SubjectRepository
+from app.repositories.faculty import FacultyRepository
 
 class AuthorityService:
     @staticmethod

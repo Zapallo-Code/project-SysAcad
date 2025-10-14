@@ -1,5 +1,5 @@
 from app.models.department import Department
-from app.repositories.department_repository import DepartmentRepository
+from app.repositories.department import DepartmentRepository
 
 class DepartmentService:
 

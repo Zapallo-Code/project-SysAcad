@@ -1,5 +1,5 @@
 from app.models.dedication_type import DedicationType
-from app.repositories.dedication_type_repository import DedicationTypeRepository
+from app.repositories.dedication_type import DedicationTypeRepository
 
 class DedicationTypeService:
 

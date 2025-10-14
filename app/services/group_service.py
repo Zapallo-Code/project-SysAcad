@@ -1,5 +1,5 @@
 from app.models.group import Group
-from app.repositories.group_repository import GroupRepository
+from app.repositories.group import GroupRepository
 
 class GroupService:
     @staticmethod

@@ -1,6 +1,6 @@
 from app.models.subject import Subject
-from app.repositories.subject_repository import SubjectRepository
-from app.repositories.authority_repository import AuthorityRepository
+from app.repositories.subject import SubjectRepository
+from app.repositories.authority import AuthorityRepository
 
 class SubjectService:
     @staticmethod

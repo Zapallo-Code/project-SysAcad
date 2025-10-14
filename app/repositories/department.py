@@ -14,16 +14,16 @@ class DepartmentRepository:
             return Department.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
-    
+
     @staticmethod
     def find_all():
         return Department.objects.all()
-    
+
     @staticmethod
     def update(departamento) -> Department:
         departamento.save()
         return departamento
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         departamento = DepartmentRepository.find_by_id(id)
@@ -31,8 +31,7 @@ class DepartmentRepository:
             return False
         departamento.delete()
         return True
-    
+
     @staticmethod
     def find_by_name(name: str):
         return Department.objects.filter(nombre__icontains=name)
-

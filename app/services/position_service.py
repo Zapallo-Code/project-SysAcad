@@ -1,5 +1,5 @@
 from app.models.position import Position
-from app.repositories.position_repository import PositionRepository
+from app.repositories.position import PositionRepository
 
 class PositionService:
      

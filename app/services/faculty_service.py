@@ -1,6 +1,6 @@
 from app.models.faculty import Faculty
-from app.repositories.faculty_repository import FacultyRepository
-from app.repositories.authority_repository import AuthorityRepository
+from app.repositories.faculty import FacultyRepository
+from app.repositories.authority import AuthorityRepository
 
 class FacultyService:
     

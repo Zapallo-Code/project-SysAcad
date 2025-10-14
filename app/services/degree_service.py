@@ -1,5 +1,5 @@
 from app.models.degree import Degree
-from app.repositories.degree_repository import DegreeRepository
+from app.repositories.degree import DegreeRepository
 
 class DegreeService:
 

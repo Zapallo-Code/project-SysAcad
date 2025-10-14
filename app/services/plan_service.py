@@ -1,5 +1,5 @@
 from app.models.plan import Plan
-from app.repositories.plan_repository import PlanRepository
+from app.repositories.plan import PlanRepository
 
 class PlanService:
     @staticmethod

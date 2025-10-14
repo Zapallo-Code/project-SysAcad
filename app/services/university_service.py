@@ -1,5 +1,5 @@
 from app.models.university import University
-from app.repositories.university_repository import UniversityRepository
+from app.repositories.university import UniversityRepository
 
 class UniversityService:
     @staticmethod

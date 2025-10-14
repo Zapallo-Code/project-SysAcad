@@ -1,5 +1,5 @@
 from app.models.orientation import Orientation
-from app.repositories.orientation_repository import OrientationRepository
+from app.repositories.orientation import OrientationRepository
 
 class OrientationService:
     @staticmethod

@@ -1,5 +1,5 @@
 from app.models.area import Area
-from app.repositories.area_repository import AreaRepository
+from app.repositories.area import AreaRepository
 
 class AreaService:
     @staticmethod

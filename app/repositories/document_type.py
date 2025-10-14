@@ -14,16 +14,16 @@ class DocumentTypeRepository:
             return DocumentType.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
-    
+
     @staticmethod
     def find_all():
         return DocumentType.objects.all()
-    
+
     @staticmethod
     def update(document_type) -> DocumentType:
         document_type.save()
         return document_type
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         document_type = DocumentTypeRepository.find_by_id(id)
@@ -31,5 +31,3 @@ class DocumentTypeRepository:
             return False
         document_type.delete()
         return True
-
-        

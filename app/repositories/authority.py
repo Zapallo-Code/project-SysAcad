@@ -25,7 +25,7 @@ class AuthorityRepository:
     def update(authority) -> Authority:
         authority.save()
         return authority
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         authority = AuthorityRepository.find_by_id(id)
@@ -49,11 +49,11 @@ class AuthorityRepository:
     @staticmethod
     def disassociate_faculty(authority: Authority, faculty: Faculty):
         authority.disassociate_faculty(faculty)
-    
+
     @staticmethod
     def find_by_position(position_id: int):
         return Authority.objects.filter(position_id=position_id)
-    
+
     @staticmethod
     def find_with_relations(id: int):
         try:
@@ -62,4 +62,3 @@ class AuthorityRepository:
             ).get(id=id)
         except ObjectDoesNotExist:
             return None
-

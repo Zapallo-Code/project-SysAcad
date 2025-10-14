@@ -14,16 +14,16 @@ class GroupRepository:
             return Group.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
-    
+
     @staticmethod
     def find_all():
         return Group.objects.all()
-    
+
     @staticmethod
     def update(grupo) -> Group:
         grupo.save()
         return grupo
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         grupo = GroupRepository.find_by_id(id)
@@ -31,8 +31,7 @@ class GroupRepository:
             return False
         grupo.delete()
         return True
-    
+
     @staticmethod
     def find_by_name(name: str):
         return Group.objects.filter(nombre__icontains=name)
-

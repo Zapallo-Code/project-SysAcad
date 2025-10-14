@@ -19,12 +19,12 @@ class FacultyRepository:
     @staticmethod
     def find_all():
         return Faculty.objects.all()
-    
+
     @staticmethod
     def update(faculty) -> Faculty:
         faculty.save()
         return faculty
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         faculty = FacultyRepository.find_by_id(id)
@@ -32,7 +32,7 @@ class FacultyRepository:
             return False
         faculty.delete()
         return True
-    
+
     @staticmethod
     def associate_authority(faculty: Faculty, authority: Authority):
         # En Django, la relación está definida en Authority
@@ -42,18 +42,18 @@ class FacultyRepository:
     def disassociate_authority(faculty: Faculty, authority: Authority):
         # En Django, la relación está definida en Authority
         authority.faculties.remove(faculty)
-    
+
     @staticmethod
     def find_by_university(university_id: int):
         return Faculty.objects.filter(university_id=university_id)
-    
+
     @staticmethod
     def find_by_acronym(acronym: str):
         try:
             return Faculty.objects.get(acronym=acronym)
         except ObjectDoesNotExist:
             return None
-    
+
     @staticmethod
     def find_with_relations(id: int):
         try:
@@ -62,4 +62,3 @@ class FacultyRepository:
             ).get(id=id)
         except ObjectDoesNotExist:
             return None
-

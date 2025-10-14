@@ -1,5 +1,5 @@
 from app.models.position_category import PositionCategory
-from app.repositories.position_category_repository import PositionCategoryRepository
+from app.repositories.position_category import PositionCategoryRepository
 
 class PositionCategoryService:
 

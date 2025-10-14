@@ -1,7 +1,7 @@
 import datetime
 from io import BytesIO
 from app.models.student import Student
-from app.repositories.student_repository import StudentRepository
+from app.repositories.student import StudentRepository
 from app.services.documentos_office_service import PDFDocument, ODTDocument, DOCXDocument, Document, get_document_type
 
 class StudentService:

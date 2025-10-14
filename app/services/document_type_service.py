@@ -1,5 +1,5 @@
 from app.models.document_type import DocumentType
-from app.repositories.document_type_repository import DocumentTypeRepository
+from app.repositories.document_type import DocumentTypeRepository
 
 class DocumentTypeService:
 
