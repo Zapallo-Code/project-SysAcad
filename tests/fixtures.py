@@ -17,23 +17,23 @@ from app.models.specialty_type import SpecialtyType
 from app.models.university import University
 from datetime import date
 
-from app.services.student_service import StudentService
-from app.services.area_service import AreaService
-from app.services.authority_service import AuthorityService
-from app.services.position_service import PositionService
-from app.services.position_category_service import PositionCategoryService
-from app.services.department_service import DepartmentService
-from app.services.specialty_service import SpecialtyService
-from app.services.faculty_service import FacultyService
-from app.services.degree_service import DegreeService
-from app.services.group_service import GroupService
-from app.services.subject_service import SubjectService
-from app.services.orientation_service import OrientationService
-from app.services.plan_service import PlanService
-from app.services.dedication_type_service import DedicationTypeService
-from app.services.document_type_service import DocumentTypeService
-from app.services.specialty_type_service import SpecialtyTypeService
-from app.services.university_service import UniversityService
+from app.services.student import StudentService
+from app.services.area import AreaService
+from app.services.authority import AuthorityService
+from app.services.position import PositionService
+from app.services.position_category import PositionCategoryService
+from app.services.department import DepartmentService
+from app.services.specialty import SpecialtyService
+from app.services.faculty import FacultyService
+from app.services.degree import DegreeService
+from app.services.group import GroupService
+from app.services.subject import SubjectService
+from app.services.orientation import OrientationService
+from app.services.plan import PlanService
+from app.services.dedication_type import DedicationTypeService
+from app.services.document_type import DocumentTypeService
+from app.services.specialty_type import SpecialtyTypeService
+from app.services.university import UniversityService
 
 def new_document_type(dni=46291002, civic_card="nacional", enrollment_card="naci", passport="nacnal"):
     document_type = DocumentType()

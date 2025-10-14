@@ -1,6 +1,6 @@
 from django.test import TestCase
 from app.models.position_category import PositionCategory
-from app.services.position_category_service import PositionCategoryService
+from app.services.position_category import PositionCategoryService
 from tests.fixtures import new_position_category
 
 

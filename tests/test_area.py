@@ -1,6 +1,6 @@
 from django.test import TestCase
 from app.models.area import Area
-from app.services.area_service import AreaService
+from app.services.area import AreaService
 from tests.fixtures import new_area
 
 

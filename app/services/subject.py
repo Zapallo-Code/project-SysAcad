@@ -2,10 +2,11 @@ from app.models.subject import Subject
 from app.repositories.subject import SubjectRepository
 from app.repositories.authority import AuthorityRepository
 
+
 class SubjectService:
     @staticmethod
     def create(subject):
-       SubjectRepository.create(subject)
+        SubjectRepository.create(subject)
 
     @staticmethod
     def find_by_id(id: int) -> Subject:
@@ -44,4 +45,3 @@ class SubjectService:
         if not subject or not authority:
             raise ValueError("Subject or authority not found")
         SubjectRepository.disassociate_authority(subject, authority)
-

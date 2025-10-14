@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.university import University
 from app.serializers.university_mapping import UniversitySerializer
-from app.services.university_service import UniversityService
+from app.services.university import UniversityService
 
 
 class UniversityViewSet(viewsets.ModelViewSet):

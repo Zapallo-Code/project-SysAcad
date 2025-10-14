@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.group import Group
 from app.serializers.group_mapping import GroupSerializer
-from app.services.group_service import GroupService
+from app.services.group import GroupService
 
 
 class GroupViewSet(viewsets.ModelViewSet):

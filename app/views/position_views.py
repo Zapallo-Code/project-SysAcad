@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.position import Position
 from app.serializers.position_mapping import PositionSerializer
-from app.services.position_service import PositionService
+from app.services.position import PositionService
 
 
 class PositionViewSet(viewsets.ModelViewSet):

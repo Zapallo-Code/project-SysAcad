@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.plan import Plan
 from app.serializers.plan_mapping import PlanSerializer
-from app.services.plan_service import PlanService
+from app.services.plan import PlanService
 
 
 class PlanViewSet(viewsets.ModelViewSet):

@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.department import Department
 from app.serializers.department_mapping import DepartmentSerializer
-from app.services.department_service import DepartmentService
+from app.services.department import DepartmentService
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):

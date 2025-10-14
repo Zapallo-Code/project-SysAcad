@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.authority import Authority
 from app.serializers.authority_mapping import AuthoritySerializer
-from app.services.authority_service import AuthorityService
+from app.services.authority import AuthorityService
 
 
 class AuthorityViewSet(viewsets.ModelViewSet):

@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.orientation import Orientation
 from app.serializers.orientation_mapping import OrientationSerializer
-from app.services.orientation_service import OrientationService
+from app.services.orientation import OrientationService
 
 
 class OrientationViewSet(viewsets.ModelViewSet):

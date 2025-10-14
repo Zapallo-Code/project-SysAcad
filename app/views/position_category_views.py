@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.position_category import PositionCategory
 from app.serializers.position_category_mapping import PositionCategorySerializer
-from app.services.position_category_service import PositionCategoryService
+from app.services.position_category import PositionCategoryService
 
 
 class PositionCategoryViewSet(viewsets.ModelViewSet):

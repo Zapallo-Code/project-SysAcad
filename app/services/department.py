@@ -1,6 +1,7 @@
 from app.models.department import Department
 from app.repositories.department import DepartmentRepository
 
+
 class DepartmentService:
 
     @staticmethod
@@ -13,8 +14,8 @@ class DepartmentService:
 
     @staticmethod
     def find_all() -> list[Department]:
-         return DepartmentRepository.find_all()
-    
+        return DepartmentRepository.find_all()
+
     @staticmethod
     def update(id: int, departamento: Department) -> Department:
         existing_department = DepartmentRepository.find_by_id(id)
@@ -22,8 +23,7 @@ class DepartmentService:
             return None
         existing_department.name = departamento.name
         return DepartmentRepository.update(existing_department)
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         return DepartmentRepository.delete_by_id(id)
-

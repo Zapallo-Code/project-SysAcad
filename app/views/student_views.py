@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.student import Student
 from app.serializers.student_mapping import StudentSerializer
-from app.services.student_service import StudentService
+from app.services.student import StudentService
 
 
 class StudentViewSet(viewsets.ModelViewSet):

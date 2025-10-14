@@ -3,6 +3,7 @@ from app.repositories.authority import AuthorityRepository
 from app.repositories.subject import SubjectRepository
 from app.repositories.faculty import FacultyRepository
 
+
 class AuthorityService:
     @staticmethod
     def create(authority):
@@ -10,11 +11,11 @@ class AuthorityService:
 
     @staticmethod
     def find_by_id(id: int) -> Authority:
-         return AuthorityRepository.find_by_id(id)
+        return AuthorityRepository.find_by_id(id)
 
     @staticmethod
     def find_all() -> list[Authority]:
-       return AuthorityRepository.find_all()
+        return AuthorityRepository.find_all()
 
     @staticmethod
     def update(id: int, authority: Authority) -> Authority:
@@ -61,4 +62,3 @@ class AuthorityService:
         if not authority or not faculty:
             raise ValueError("Faculty or authority not found")
         AuthorityRepository.disassociate_faculty(authority, faculty)
-

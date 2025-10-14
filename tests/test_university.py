@@ -1,6 +1,6 @@
 from django.test import TestCase
 from app.models.university import University
-from app.services.university_service import UniversityService
+from app.services.university import UniversityService
 from tests.fixtures import new_university
 
 

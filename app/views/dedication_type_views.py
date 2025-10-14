@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.dedication_type import DedicationType
 from app.serializers.dedication_type_mapping import DedicationTypeSerializer
-from app.services.dedication_type_service import DedicationTypeService
+from app.services.dedication_type import DedicationTypeService
 
 
 class DedicationTypeViewSet(viewsets.ModelViewSet):

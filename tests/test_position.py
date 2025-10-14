@@ -2,7 +2,7 @@ from django.test import TestCase
 from app.models.position import Position
 from app.models.position_category import PositionCategory
 from app.models.dedication_type import DedicationType
-from app.services.position_service import PositionService
+from app.services.position import PositionService
 from tests.fixtures import new_position
 
 

@@ -1,6 +1,7 @@
 from app.models.degree import Degree
 from app.repositories.degree import DegreeRepository
 
+
 class DegreeService:
 
     @staticmethod
@@ -27,4 +28,3 @@ class DegreeService:
     @staticmethod
     def delete_by_id(id: int) -> bool:
         return DegreeRepository.delete_by_id(id)
-

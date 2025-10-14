@@ -1,6 +1,7 @@
 from app.models.specialty import Specialty
 from app.repositories.specialty import SpecialtyRepository
 
+
 class SpecialtyService:
 
     @staticmethod
@@ -10,7 +11,7 @@ class SpecialtyService:
     @staticmethod
     def find_by_id(id: int) -> Specialty:
         return SpecialtyRepository.find_by_id(id)
-    
+
     @staticmethod
     def find_all() -> list[Specialty]:
         return SpecialtyRepository.find_all()
@@ -26,8 +27,7 @@ class SpecialtyService:
         existing_specialty.specialty_type = specialty.specialty_type
         existing_specialty.faculty = specialty.faculty
         return SpecialtyRepository.update(existing_specialty)
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         return SpecialtyRepository.delete_by_id(id)
-

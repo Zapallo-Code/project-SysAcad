@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.specialty_type import SpecialtyType
 from app.serializers.specialty_type_mapping import SpecialtyTypeSerializer
-from app.services.specialty_type_service import SpecialtyTypeService
+from app.services.specialty_type import SpecialtyTypeService
 
 
 class SpecialtyTypeViewSet(viewsets.ModelViewSet):

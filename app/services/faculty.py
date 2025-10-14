@@ -2,20 +2,21 @@ from app.models.faculty import Faculty
 from app.repositories.faculty import FacultyRepository
 from app.repositories.authority import AuthorityRepository
 
+
 class FacultyService:
-    
+
     @staticmethod
     def create(faculty: Faculty):
         FacultyRepository.create(faculty)
-    
+
     @staticmethod
     def find_by_id(id: int) -> Faculty:
         return FacultyRepository.find_by_id(id)
-    
+
     @staticmethod
     def find_all() -> list[Faculty]:
         return FacultyRepository.find_all()
-    
+
     @staticmethod
     def update(id: int, faculty: Faculty) -> Faculty:
         existing_faculty = FacultyRepository.find_by_id(id)
@@ -33,11 +34,11 @@ class FacultyService:
         existing_faculty.email = faculty.email
         existing_faculty.university = faculty.university
         return FacultyRepository.update(existing_faculty)
-    
+
     @staticmethod
     def delete_by_id(id: int) -> bool:
         return FacultyRepository.delete_by_id(id)
-    
+
     @staticmethod
     def associate_authority(faculty_id: int, authority_id: int):
         faculty = FacultyRepository.find_by_id(faculty_id)
@@ -53,4 +54,3 @@ class FacultyService:
         if not faculty or not authority:
             raise ValueError("Faculty or authority not found")
         FacultyRepository.disassociate_authority(faculty, authority)
-

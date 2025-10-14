@@ -2,8 +2,8 @@ from django.test import TestCase
 from datetime import date
 from app.models.document_type import DocumentType
 from app.models.student import Student
-from app.services.student_service import StudentService
-from app.services.document_type_service import DocumentTypeService
+from app.services.student import StudentService
+from app.services.document_type import DocumentTypeService
 from tests.fixtures import new_student, new_document_type
 
 

@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.subject import Subject
 from app.serializers.subject_mapping import SubjectSerializer
-from app.services.subject_service import SubjectService
+from app.services.subject import SubjectService
 
 
 class SubjectViewSet(viewsets.ModelViewSet):

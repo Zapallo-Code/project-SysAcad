@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.area import Area
 from app.serializers.area_mapping import AreaSerializer
-from app.services.area_service import AreaService
+from app.services.area import AreaService
 
 
 class AreaViewSet(viewsets.ModelViewSet):

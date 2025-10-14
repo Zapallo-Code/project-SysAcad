@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.degree import Degree
 from app.serializers.degree_mapping import DegreeSerializer
-from app.services.degree_service import DegreeService
+from app.services.degree import DegreeService
 
 
 class DegreeViewSet(viewsets.ModelViewSet):

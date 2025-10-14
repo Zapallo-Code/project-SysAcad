@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from app.models.document_type import DocumentType
 from app.serializers.document_type_mapping import DocumentTypeSerializer
-from app.services.document_type_service import DocumentTypeService
+from app.services.document_type import DocumentTypeService
 
 
 class DocumentTypeViewSet(viewsets.ModelViewSet):

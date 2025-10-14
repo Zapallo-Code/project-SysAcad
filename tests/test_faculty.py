@@ -1,6 +1,6 @@
 from django.test import TestCase
 from app.models.faculty import Faculty
-from app.services.faculty_service import FacultyService
+from app.services.faculty import FacultyService
 from tests.fixtures import new_faculty, new_authority
 
 class FacultyTestCase(TestCase):

@@ -1,11 +1,12 @@
 from app.models.specialty_type import SpecialtyType
 from app.repositories.specialty_type import SpecialtyTypeRepository
 
+
 class SpecialtyTypeService:
     @staticmethod
     def create(specialty_type):
         SpecialtyTypeRepository.create(specialty_type)
-    
+
     @staticmethod
     def find_by_id(id: int) -> SpecialtyType:
         return SpecialtyTypeRepository.find_by_id(id)
@@ -26,4 +27,3 @@ class SpecialtyTypeService:
     @staticmethod
     def delete_by_id(id: int) -> bool:
         return SpecialtyTypeRepository.delete_by_id(id)
-
