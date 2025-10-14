@@ -15,10 +15,6 @@ class StudentRepository:
     def create(student):
         student.save()
         return student
-
-    @staticmethod
-    def find_by_id(id: int):
-        return StudentRepository.find_by_id(id)
     
     @staticmethod
     def find_all():
@@ -38,9 +34,9 @@ class StudentRepository:
         return True
     
     @staticmethod
-    def find_by_student_id_number(student_id_number: int):
+    def find_by_student_number(student_number: int):
         try:
-            return Student.objects.get(student_id_number=student_id_number)
+            return Student.objects.get(student_number=student_number)
         except ObjectDoesNotExist:
             return None
     

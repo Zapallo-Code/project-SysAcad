@@ -1,7 +1,7 @@
 from django.test import TestCase
 from app.models import Specialty, SpecialtyType
 from app.services import SpecialtyService, SpecialtyTypeService
-from tests.instancias import new_specialty, new_specialty_type
+from tests.fixtures import new_specialty, new_specialty_type
 
 class SpecialtyTestCase(TestCase):
 
@@ -10,14 +10,14 @@ class SpecialtyTestCase(TestCase):
         self.assertIsNotNone(specialty)
         self.assertIsNotNone(specialty.id)
         self.assertGreaterEqual(specialty.id, 1)
-        self.assertEqual(specialty.name, "Matematicas")
-        self.assertEqual(specialty.specialty_type.name, "Cardiologia")
+        self.assertEqual(specialty.name, "Mathematics")
+        self.assertEqual(specialty.specialty_type.name, "Cardiology")
 
     def test_find_by_id(self):
         specialty = new_specialty()
         r = SpecialtyService.find_by_id(specialty.id)
         self.assertIsNotNone(r)
-        self.assertEqual(r.name, "Matematicas")
+        self.assertEqual(r.name, "Mathematics")
         self.assertEqual(r.letter, "A")
 
     def test_buscar_todos(self):
@@ -29,9 +29,9 @@ class SpecialtyTestCase(TestCase):
 
     def test_actualizar(self):
         specialty = new_specialty()
-        specialty.name = "matematica actualizada"
+        specialty.name = "mathematics updated"
         especialidad_actualizada = SpecialtyService.update(specialty.id, specialty)
-        self.assertEqual(especialidad_actualizada.name, "matematica actualizada")
+        self.assertEqual(especialidad_actualizada.name, "mathematics updated")
 
     def test_borrar(self):
         specialty = new_specialty()

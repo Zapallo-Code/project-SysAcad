@@ -32,8 +32,8 @@ class AreaAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['student_id_number', 'first_name', 'last_name', 'document_number', 'enrollment_date']
-    search_fields = ['first_name', 'last_name', 'document_number', 'student_id_number']
+    list_display = ['student_number', 'first_name', 'last_name', 'document_number', 'enrollment_date']
+    search_fields = ['first_name', 'last_name', 'document_number', 'student_id']
     list_filter = ['gender', 'specialty', 'enrollment_date']
 
 

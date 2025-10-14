@@ -1,7 +1,7 @@
 from django.test import TestCase
 from app.models import Orientation
 from app.services import OrientationService
-from tests.instancias import new_orientation
+from tests.fixtures import new_orientation
 from datetime import date
 
 
@@ -13,9 +13,9 @@ class OrientationTestCase(TestCase):
         self.assertIsNotNone(orientacion)
         self.assertIsNotNone(orientacion.name)
         self.assertGreaterEqual(orientacion.name, "Orientation 1")
-        self.assertEqual(orientacion.specialty.specialty_type.name, "Cardiologia")
+        self.assertEqual(orientacion.specialty.specialty_type.name, "Cardiology")
         self.assertEqual(orientacion.plan.start_date, date(2024, 6, 4))
-        self.assertIsNotNone(orientacion.subject.name, "Desarrollo")
+        self.assertIsNotNone(orientacion.subject.name, "Development")
 
     def test_find_by_id(self):
         orientacion = new_orientation()

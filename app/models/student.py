@@ -23,7 +23,7 @@ class Student(models.Model):
         choices=[('M', 'Masculino'), ('F', 'Femenino'), ('O', 'Otro')]
     )
 
-    student_id = models.IntegerField(null=False, blank=False, unique=True)
+    student_number = models.IntegerField(null=False, blank=False, unique=True)
     enrollment_date = models.DateField(null=False, blank=False)
 
     specialty = models.ForeignKey(
@@ -34,7 +34,7 @@ class Student(models.Model):
     )
 
     def __str__(self):
-        return f"{self.last_name}, {self.first_name} - Student ID: {self.student_id}"
+        return f"{self.last_name}, {self.first_name} - Student Number: {self.student_number}"
 
     def __repr__(self):
         return f"<Student: {self.last_name}, {self.first_name}>"

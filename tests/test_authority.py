@@ -2,7 +2,7 @@ from django.test import TestCase
 from app.models.authority import Authority
 from app.models.subject import Subject
 from app.services.authority_service import AuthorityService
-from tests.instancias import new_authority, new_subject, new_faculty
+from tests.fixtures import new_authority, new_subject, new_faculty
 
 
 class AuthorityTestCase(TestCase):

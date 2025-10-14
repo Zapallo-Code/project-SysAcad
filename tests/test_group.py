@@ -1,7 +1,7 @@
 from django.test import TestCase
 from app.models.group import Group
 from app.services import GroupService
-from tests.instancias import new_group
+from tests.fixtures import new_group
 
 class GroupTestCase(TestCase):
         

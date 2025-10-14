@@ -1,7 +1,7 @@
 from django.test import TestCase
 from app.models.document_type import DocumentType
 from app.services import DocumentTypeService
-from tests.instancias import new_document_type
+from tests.fixtures import new_document_type
 
 class DocumentTypeTestCase(TestCase):
 

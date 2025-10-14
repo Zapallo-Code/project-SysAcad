@@ -44,7 +44,7 @@ class FacultyService:
         authority = AuthorityRepository.find_by_id(authority_id)
         if not faculty or not authority:
             raise ValueError("Faculty or authority not found")
-        FacultyRepository.asociar_autoridad(faculty, authority)
+        FacultyRepository.associate_authority(faculty, authority)
 
     @staticmethod
     def disassociate_authority(faculty_id: int, authority_id: int):
@@ -52,5 +52,5 @@ class FacultyService:
         authority = AuthorityRepository.find_by_id(authority_id)
         if not faculty or not authority:
             raise ValueError("Faculty or authority not found")
-        FacultyRepository.desasociar_autoridad(faculty, authority)
+        FacultyRepository.disassociate_authority(faculty, authority)
 

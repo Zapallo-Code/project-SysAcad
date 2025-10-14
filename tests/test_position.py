@@ -3,7 +3,7 @@ from app.models.position import Position
 from app.models.position_category import PositionCategory
 from app.models.dedication_type import DedicationType
 from app.services.position_service import PositionService
-from tests.instancias import new_position
+from tests.fixtures import new_position
 
 
 class PositionTestCase(TestCase):
@@ -11,16 +11,16 @@ class PositionTestCase(TestCase):
         position = new_position()
         self.assertIsNotNone(position)
         self.assertIsNotNone(position.name)
-        self.assertGreaterEqual(position.name, "Profesor")
-        self.assertEqual(position.position_category.name, "Docente")
-        self.assertEqual(position.dedication_type.name, "Dedicacion Completa")
+        self.assertGreaterEqual(position.name, "Professor")
+        self.assertEqual(position.position_category.name, "Teacher")
+        self.assertEqual(position.dedication_type.name, "Full Dedication")
 
     def test_find_by_id(self):
         position = new_position()
         r = PositionService.find_by_id(position.id)
         self.assertIsNotNone(r)
-        self.assertEqual(r.name, "Profesor")
-        self.assertEqual(r.dedication_type.name, "Dedicacion Completa")
+        self.assertEqual(r.name, "Professor")
+        self.assertEqual(r.dedication_type.name, "Full Dedication")
 
     def test_buscar_todos(self):
         cargo1 = new_position()
@@ -31,9 +31,9 @@ class PositionTestCase(TestCase):
 
     def test_actualizar(self):
         position = new_position()
-        position.name = "profe actualizado"
+        position.name = "professor updated"
         cargo_actualizado = PositionService.update(position.id, position)
-        self.assertEqual(cargo_actualizado.name, "profe actualizado")
+        self.assertEqual(cargo_actualizado.name, "professor updated")
 
     def test_borrar(self):
         position = new_position()

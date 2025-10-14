@@ -23,13 +23,13 @@ class StudentService:
         existing_student = StudentRepository.find_by_id(id)
         if not existing_student:
             return None
-        existing_student.name = student.name
+        existing_student.first_name = student.first_name
         existing_student.last_name = student.last_name
         existing_student.document_number = student.document_number
         existing_student.document_type = student.document_type
         existing_student.birth_date = student.birth_date
         existing_student.gender = student.gender
-        existing_student.student_id_number = student.student_id_number
+        existing_student.student_number = student.student_number
         existing_student.enrollment_date = student.enrollment_date
         existing_student.specialty = student.specialty
         return StudentRepository.update(existing_student)

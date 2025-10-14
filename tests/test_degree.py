@@ -1,7 +1,7 @@
 from django.test import TestCase
 from app.models import Degree
 from app.services import DegreeService
-from tests.instancias import new_degree
+from tests.fixtures import new_degree
 
 
 class DegreeTestCase(TestCase):
@@ -11,14 +11,14 @@ class DegreeTestCase(TestCase):
         self.assertIsNotNone(grado)
         self.assertIsNotNone(grado.id)
         self.assertGreaterEqual(grado.id, 1)
-        self.assertEqual(grado.name, "Primero")
+        self.assertEqual(grado.name, "First")
 
     def test_find_by_id(self):
         grado = new_degree()
         r = DegreeService.find_by_id(grado.id)
         self.assertIsNotNone(r)
-        self.assertEqual(r.name, "Primero")
-        self.assertEqual(r.description, "Descripcion del primer grado")
+        self.assertEqual(r.name, "First")
+        self.assertEqual(r.description, "Description of the first degree")
 
     
     def test_buscar_todos(self):
@@ -30,8 +30,8 @@ class DegreeTestCase(TestCase):
 
     def test_actualizar(self):
         grado = new_degree()
-        grado.name = "Segundo"
-        grado.description = "Descripción del segundo grado"
+        grado.name = "Second"
+        grado.description = "Description of the second degree"
 
     def test_borrar(self):
         university = new_degree()

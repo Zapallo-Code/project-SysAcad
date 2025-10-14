@@ -1,7 +1,7 @@
 from django.test import TestCase
 from app.models.university import University
 from app.services.university_service import UniversityService
-from tests.instancias import new_university
+from tests.fixtures import new_university
 
 
 class UniversityTestCase(TestCase):
@@ -10,13 +10,13 @@ class UniversityTestCase(TestCase):
         self.assertIsNotNone(university)
         self.assertIsNotNone(university.id)
         self.assertGreaterEqual(university.id, 1)
-        self.assertEqual(university.name, "University Nacional")
+        self.assertEqual(university.name, "National University")
 
     def test_find_by_id(self):
         university = new_university()
         r = UniversityService.find_by_id(university.id)
         self.assertIsNotNone(r)
-        self.assertEqual(r.name, "University Nacional")
+        self.assertEqual(r.name, "National University")
         self.assertEqual(r.acronym, university.acronym)  # Comparar con la acronym generada
     
     def test_buscar_todos(self):
@@ -28,9 +28,9 @@ class UniversityTestCase(TestCase):
 
     def test_actualizar(self):
         university = new_university()
-        university.name = "University Actualizada"
+        university.name = "Updated University"
         universidad_actualizada = UniversityService.update(university.id, university)
-        self.assertEqual(universidad_actualizada.name, "University Actualizada")
+        self.assertEqual(universidad_actualizada.name, "Updated University")
 
     def test_borrar(self):
         university = new_university()

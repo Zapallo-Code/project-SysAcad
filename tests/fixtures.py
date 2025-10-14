@@ -44,20 +44,20 @@ def new_document_type(dni=46291002, civic_card="nacional", enrollment_card="naci
     DocumentTypeService.create(document_type)
     return document_type
 
-def new_dedication_type(name="Dedicacion Completa", observation="Observacion de prueba"):
+def new_dedication_type(name="Full Dedication", observation="Test observation"):
     dt = DedicationType()
     dt.name = name
     dt.observation = observation
     DedicationTypeService.create(dt)
     return dt
 
-def new_position_category(name="Docente"):
+def new_position_category(name="Teacher"):
     category = PositionCategory()
     category.name = name
     PositionCategoryService.create(category)
     return category
 
-def new_position(name="Profesor", points=10, position_category=None, dedication_type=None):
+def new_position(name="Professor", points=10, position_category=None, dedication_type=None):
     position = Position()
     position.name = name
     position.points = points
@@ -66,9 +66,9 @@ def new_position(name="Profesor", points=10, position_category=None, dedication_
     PositionService.create(position)
     return position
 
-def new_faculty(name="Facultad de Ciencias", abbreviation="FCC", directory="/facultad/ciencias",
-                acronym="FC", postal_code="12345", city="Ciudad", address="Calle 123",
-                phone="123456789", contact_name="Juan Perez", email="1234@gmail.com", university=None, authorities=None):
+def new_faculty(name="Faculty of Sciences", abbreviation="FSC", directory="/faculty/sciences",
+                acronym="FS", postal_code="12345", city="City", address="Street 123",
+                phone="123456789", contact_name="John Doe", email="1234@gmail.com", university=None, authorities=None):
     faculty = Faculty()
     faculty.name = name
     faculty.abbreviation = abbreviation
@@ -92,26 +92,26 @@ def new_faculty(name="Facultad de Ciencias", abbreviation="FCC", directory="/fac
     
     return faculty
 
-def new_department(name="Matematicas"):
+def new_department(name="Mathematics"):
     department = Department()
     department.name = name
     DepartmentService.create(department)
     return department
 
-def new_area(name="Matematica"):
+def new_area(name="Mathematics"):
     area = Area()
     area.name = name
     AreaService.create(area)
     return area
 
-def new_specialty_type(name="Cardiologia", level="Avanzado"):
+def new_specialty_type(name="Cardiology", level="Advanced"):
     specialty_type = SpecialtyType()
     specialty_type.name = name
     specialty_type.level = level
     SpecialtyTypeService.create(specialty_type)
     return specialty_type
 
-def new_specialty(name="Matematicas", letter="A", observation="Observacion de prueba", specialty_type=None, faculty=None):
+def new_specialty(name="Mathematics", letter="A", observation="Test observation", specialty_type=None, faculty=None):
     specialty = Specialty()
     specialty.name = name
     specialty.letter = letter
@@ -121,7 +121,7 @@ def new_specialty(name="Matematicas", letter="A", observation="Observacion de pr
     SpecialtyService.create(specialty)
     return specialty
 
-def new_plan(name="Plan A", start_date=date(2024, 6, 4), end_date=date(2024, 6, 5), observation="Observacion de prueba"):
+def new_plan(name="Plan A", start_date=date(2024, 6, 4), end_date=date(2024, 6, 5), observation="Test observation"):
     plan = Plan()
     plan.name = name
     plan.start_date = start_date
@@ -130,7 +130,7 @@ def new_plan(name="Plan A", start_date=date(2024, 6, 4), end_date=date(2024, 6, 
     PlanService.create(plan)
     return plan
 
-def new_subject(name="Matematica", code=None, observation="Observacion de prueba", authorities=None):
+def new_subject(name="Mathematics", code=None, observation="Test observation", authorities=None):
     import random
     if code is None:
         code = f"MAT{random.randint(1000, 9999)}"
@@ -150,7 +150,7 @@ def new_subject(name="Matematica", code=None, observation="Observacion de prueba
     
     return subject
 
-def new_orientation(name="Orientacion 1", specialty=None, plan=None, subject=None):
+def new_orientation(name="Orientation 1", specialty=None, plan=None, subject=None):
     orientation = Orientation()
     orientation.name = name
     orientation.specialty = specialty or new_specialty()
@@ -159,7 +159,7 @@ def new_orientation(name="Orientacion 1", specialty=None, plan=None, subject=Non
     OrientationService.create(orientation)
     return orientation
 
-def new_university(name="Universidad Nacional", acronym=None):
+def new_university(name="National University", acronym=None):
     import random
     if acronym is None:
         acronym = f"UN{random.randint(100, 999)}"
@@ -170,21 +170,21 @@ def new_university(name="Universidad Nacional", acronym=None):
     UniversityService.create(university)
     return university
 
-def new_degree(name="Primero", description="Descripcion del primer grado"):
+def new_degree(name="First", description="Description of the first degree"):
     degree = Degree()
     degree.name = name
     degree.description = description
     DegreeService.create(degree)
     return degree
 
-def new_group(name="Grupo A"):
+def new_group(name="Group A"):
     group = Group()
     group.name = name
     GroupService.create(group)
     return group
 
 def new_student(first_name="Juan", last_name="Pérez", document_number="46291002", document_type=None,
-                birth_date=date(1990, 1, 1), gender="M", student_id_number=123456, enrollment_date=date(2020, 1, 1), specialty=None):
+                birth_date=date(1990, 1, 1), gender="M", student_number=123456, enrollment_date=date(2020, 1, 1), specialty=None):
     student = Student()
     student.first_name = first_name
     student.last_name = last_name
@@ -192,7 +192,7 @@ def new_student(first_name="Juan", last_name="Pérez", document_number="46291002
     student.document_type = document_type or new_document_type()
     student.birth_date = birth_date
     student.gender = gender
-    student.student_id_number = student_id_number
+    student.student_number = student_number
     student.enrollment_date = enrollment_date
     student.specialty = specialty or new_specialty()
     StudentService.create(student)

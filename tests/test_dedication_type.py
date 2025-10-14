@@ -1,7 +1,7 @@
 from django.test import TestCase
 from app.models.dedication_type import DedicationType
 from app.services import DedicationTypeService
-from tests.instancias import new_dedication_type
+from tests.fixtures import new_dedication_type
 
 class DedicationTypeTestCase(TestCase):
 
@@ -10,15 +10,15 @@ class DedicationTypeTestCase(TestCase):
         self.assertIsNotNone(dedication_type)
         self.assertIsNotNone(dedication_type.id)
         self.assertGreaterEqual(dedication_type.id, 1)
-        self.assertEqual(dedication_type.name, "Dedicacion Completa")
-        self.assertEqual(dedication_type.observation, "Observacion de prueba")
+        self.assertEqual(dedication_type.name, "Full Dedication")
+        self.assertEqual(dedication_type.observation, "Test observation")
 
     def test_find_by_id(self):
         dedication_type = new_dedication_type()
         r = DedicationTypeService.find_by_id(dedication_type.id)
         self.assertIsNotNone(r)
-        self.assertEqual(r.name, "Dedicacion Completa")
-        self.assertEqual(r.observation, "Observacion de prueba")
+        self.assertEqual(r.name, "Full Dedication")
+        self.assertEqual(r.observation, "Test observation")
     
     def test_buscar_todos(self):
         dedication_type1 = new_dedication_type()
