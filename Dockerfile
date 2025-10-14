@@ -1,9 +1,11 @@
-FROM python:3.12.10-bookworm
+FROM python:3.12-slim-bullseye
 
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV PATH=$PATH:/home/sysacad/.local/bin
 
 RUN useradd --create-home --home-dir /home/sysacad sysacad
+
 RUN apt-get update && \
     apt-get install -y python3-dev build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
@@ -12,14 +14,12 @@ RUN apt-get update && \
 WORKDIR /home/sysacad
 
 USER sysacad
-RUN mkdir app
 
-COPY --chown=sysacad:sysacad ./app ./app
-COPY --chown=sysacad:sysacad ./main ./main
-COPY --chown=sysacad:sysacad ./manage.py .
-COPY --chown=sysacad:sysacad ./requirements.txt .
+COPY --chown=sysacad:sysacad requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY --chown=sysacad:sysacad . .
 
 EXPOSE 8000
 

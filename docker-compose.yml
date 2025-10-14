@@ -1,5 +1,4 @@
 services:
-
   db:
     image: postgres:latest
     restart: always
@@ -15,10 +14,12 @@ services:
       - sysacad_network
 
   backend:
-    image: sysacad:dev
-    build:  .
+    image: sysacad:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - .:/app  # only for development, not recommended for production
+      - .:/home/sysacad
     environment:
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG}
