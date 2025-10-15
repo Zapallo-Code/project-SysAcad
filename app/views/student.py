@@ -39,7 +39,12 @@ class StudentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             student = serializer.save()
-            StudentService.update(pk, student)
+            updated_student = StudentService.update(pk, student)
+            if updated_student is None:
+                return Response(
+                    {'message': 'Student not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
             return Response(
                 'Student actualizado exitosamente',
                 status=status.HTTP_200_OK
@@ -47,6 +52,12 @@ class StudentViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
+        student = StudentService.find_by_id(pk)
+        if student is None:
+            return Response(
+                {'message': 'Student not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
         StudentService.delete_by_id(pk)
         return Response(
             'Student borrado exitosamente',
