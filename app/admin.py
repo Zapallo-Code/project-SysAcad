@@ -124,4 +124,3 @@ class DocumentTypeAdmin(admin.ModelAdmin):
 class SpecialtyTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     search_fields = ['name']
-

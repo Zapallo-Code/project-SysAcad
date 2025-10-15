@@ -44,4 +44,3 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('api/v1/', include(router.urls)),
 ]
-
