@@ -1,54 +1,54 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.department import Department
-from app.serializers.department_mapping import DepartmentSerializer
-from app.services.department import DepartmentService
+from app.models.area import Area
+from app.serializers.area import AreaSerializer
+from app.services.area import AreaService
 
 
-class DepartmentViewSet(viewsets.ModelViewSet):
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
-    
+class AreaViewSet(viewsets.ModelViewSet):
+    queryset = Area.objects.all()
+    serializer_class = AreaSerializer
+
     def list(self, request):
-        departments = DepartmentService.find_all()
-        serializer = self.get_serializer(departments, many=True)
+        areas = AreaService.buscar_todos()
+        serializer = self.get_serializer(areas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def retrieve(self, request, pk=None):
-        departamento = DepartmentService.find_by_id(pk)
-        if departamento is None:
+        area = AreaService.find_by_id(pk)
+        if area is None:
             return Response(
-                {'message': 'Department not found'}, 
+                {'message': 'Area not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(departamento)
+        serializer = self.get_serializer(area)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            departamento = serializer.save()
-            DepartmentService.create(departamento)
+            area = serializer.save()
+            AreaService.crear(area)
             return Response(
-                'Department creado exitosamente',
+                'Area creada exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            departamento = serializer.save()
-            DepartmentService.update(pk, departamento)
+            area = serializer.save()
+            AreaService.update(pk, area)
             return Response(
-                'Department actualizado exitosamente',
+                'Area actualizado exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, pk=None):
-        DepartmentService.delete_by_id(pk)
+        AreaService.borrar_por_id(pk)
         return Response(
-            'Department borrado exitosamente',
+            'Area borrada exitosamente',
             status=status.HTTP_200_OK
         )

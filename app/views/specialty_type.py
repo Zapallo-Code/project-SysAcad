@@ -1,54 +1,54 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.student import Student
-from app.serializers.student_mapping import StudentSerializer
-from app.services.student import StudentService
+from app.models.specialty_type import SpecialtyType
+from app.serializers.specialty_type import SpecialtyTypeSerializer
+from app.services.specialty_type import SpecialtyTypeService
 
 
-class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()
-    serializer_class = StudentSerializer
-    
+class SpecialtyTypeViewSet(viewsets.ModelViewSet):
+    queryset = SpecialtyType.objects.all()
+    serializer_class = SpecialtyTypeSerializer
+
     def list(self, request):
-        students = StudentService.find_all()
-        serializer = self.get_serializer(students, many=True)
+        tipos = SpecialtyTypeService.find_all()
+        serializer = self.get_serializer(tipos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def retrieve(self, request, pk=None):
-        student = StudentService.find_by_id(pk)
-        if student is None:
+        tipo = SpecialtyTypeService.find_by_id(pk)
+        if tipo is None:
             return Response(
-                {'message': 'Student not found'}, 
+                {'message': 'Specialty type not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(student)
+        serializer = self.get_serializer(tipo)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            student = serializer.save()
-            StudentService.create(student)
+            tipo = serializer.save()
+            SpecialtyTypeService.create(tipo)
             return Response(
-                'Student creado exitosamente',
+                'Tipo de specialty creado exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            student = serializer.save()
-            StudentService.update(pk, student)
+            tipo = serializer.save()
+            SpecialtyTypeService.update(pk, tipo)
             return Response(
-                'Student actualizado exitosamente',
+                'Tipo de specialty actualizado exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, pk=None):
-        StudentService.delete_by_id(pk)
+        SpecialtyTypeService.delete_by_id(pk)
         return Response(
-            'Student borrado exitosamente',
+            'Tipo de specialty borrado exitosamente',
             status=status.HTTP_200_OK
         )

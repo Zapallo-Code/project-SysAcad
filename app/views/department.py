@@ -1,54 +1,54 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.subject import Subject
-from app.serializers.subject_mapping import SubjectSerializer
-from app.services.subject import SubjectService
+from app.models.department import Department
+from app.serializers.department import DepartmentSerializer
+from app.services.department import DepartmentService
 
 
-class SubjectViewSet(viewsets.ModelViewSet):
-    queryset = Subject.objects.all()
-    serializer_class = SubjectSerializer
-    
+class DepartmentViewSet(viewsets.ModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
     def list(self, request):
-        subjects = SubjectService.find_all()
-        serializer = self.get_serializer(subjects, many=True)
+        departments = DepartmentService.find_all()
+        serializer = self.get_serializer(departments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def retrieve(self, request, pk=None):
-        subject = SubjectService.find_by_id(pk)
-        if subject is None:
+        departamento = DepartmentService.find_by_id(pk)
+        if departamento is None:
             return Response(
-                {'message': 'Subject not found'}, 
+                {'message': 'Department not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(subject)
+        serializer = self.get_serializer(departamento)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            subject = serializer.save()
-            SubjectService.create(subject)
+            departamento = serializer.save()
+            DepartmentService.create(departamento)
             return Response(
-                'Subject creada exitosamente',
+                'Department creado exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            subject = serializer.save()
-            SubjectService.update(pk, subject)
+            departamento = serializer.save()
+            DepartmentService.update(pk, departamento)
             return Response(
-                'Subject actualizada exitosamente',
+                'Department actualizado exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, pk=None):
-        SubjectService.delete_by_id(pk)
+        DepartmentService.delete_by_id(pk)
         return Response(
-            'Subject borrada exitosamente',
+            'Department borrado exitosamente',
             status=status.HTTP_200_OK
         )

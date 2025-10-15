@@ -1,54 +1,54 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.document_type import DocumentType
-from app.serializers.document_type_mapping import DocumentTypeSerializer
-from app.services.document_type import DocumentTypeService
+from app.models.position import Position
+from app.serializers.position import PositionSerializer
+from app.services.position import PositionService
 
 
-class DocumentTypeViewSet(viewsets.ModelViewSet):
-    queryset = DocumentType.objects.all()
-    serializer_class = DocumentTypeSerializer
-    
+class PositionViewSet(viewsets.ModelViewSet):
+    queryset = Position.objects.all()
+    serializer_class = PositionSerializer
+
     def list(self, request):
-        tipos = DocumentTypeService.find_all()
-        serializer = self.get_serializer(tipos, many=True)
+        positions = PositionService.find_all()
+        serializer = self.get_serializer(positions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def retrieve(self, request, pk=None):
-        tipo = DocumentTypeService.find_by_id(pk)
-        if tipo is None:
+        position = PositionService.find_by_id(pk)
+        if position is None:
             return Response(
-                {'message': 'Document type not found'}, 
+                {'message': 'Position not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(tipo)
+        serializer = self.get_serializer(position)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            tipo = serializer.save()
-            DocumentTypeService.create(tipo)
+            position = serializer.save()
+            PositionService.create(position)
             return Response(
-                'Tipo de documento creado exitosamente',
+                'Position creado exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            tipo = serializer.save()
-            DocumentTypeService.update(pk, tipo)
+            position = serializer.save()
+            PositionService.update(pk, position)
             return Response(
-                'Tipo de documento actualizado exitosamente',
+                'Position actualizado exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, pk=None):
-        DocumentTypeService.delete_by_id(pk)
+        PositionService.delete_by_id(pk)
         return Response(
-            'Tipo de documento borrado exitosamente',
+            'Position borrado exitosamente',
             status=status.HTTP_200_OK
         )

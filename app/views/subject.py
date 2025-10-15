@@ -1,54 +1,54 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.plan import Plan
-from app.serializers.plan_mapping import PlanSerializer
-from app.services.plan import PlanService
+from app.models.subject import Subject
+from app.serializers.subject import SubjectSerializer
+from app.services.subject import SubjectService
 
 
-class PlanViewSet(viewsets.ModelViewSet):
-    queryset = Plan.objects.all()
-    serializer_class = PlanSerializer
-    
+class SubjectViewSet(viewsets.ModelViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
+
     def list(self, request):
-        planes = PlanService.buscar_todos()
-        serializer = self.get_serializer(planes, many=True)
+        subjects = SubjectService.find_all()
+        serializer = self.get_serializer(subjects, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def retrieve(self, request, pk=None):
-        plan = PlanService.find_by_id(pk)
-        if plan is None:
+        subject = SubjectService.find_by_id(pk)
+        if subject is None:
             return Response(
-                {'message': 'Plan not found'}, 
+                {'message': 'Subject not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(plan)
+        serializer = self.get_serializer(subject)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            plan = serializer.save()
-            PlanService.crear(plan)
+            subject = serializer.save()
+            SubjectService.create(subject)
             return Response(
-                'Plan creado exitosamente',
+                'Subject creada exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            plan = serializer.save()
-            PlanService.update(pk, plan)
+            subject = serializer.save()
+            SubjectService.update(pk, subject)
             return Response(
-                'Plan actualizado exitosamente',
+                'Subject actualizada exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, pk=None):
-        PlanService.borrar_por_id(pk)
+        SubjectService.delete_by_id(pk)
         return Response(
-            'Plan borrado exitosamente',
+            'Subject borrada exitosamente',
             status=status.HTTP_200_OK
         )

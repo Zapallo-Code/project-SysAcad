@@ -1,54 +1,54 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.orientation import Orientation
-from app.serializers.orientation_mapping import OrientationSerializer
-from app.services.orientation import OrientationService
+from app.models.university import University
+from app.serializers.university import UniversitySerializer
+from app.services.university import UniversityService
 
 
-class OrientationViewSet(viewsets.ModelViewSet):
-    queryset = Orientation.objects.all()
-    serializer_class = OrientationSerializer
-    
+class UniversityViewSet(viewsets.ModelViewSet):
+    queryset = University.objects.all()
+    serializer_class = UniversitySerializer
+
     def list(self, request):
-        orientations = OrientationService.find_all()
-        serializer = self.get_serializer(orientations, many=True)
+        universidades = UniversityService.find_all()
+        serializer = self.get_serializer(universidades, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def retrieve(self, request, pk=None):
-        orientacion = OrientationService.find_by_id(pk)
-        if orientacion is None:
+        university = UniversityService.find_by_id(pk)
+        if university is None:
             return Response(
-                {'message': 'Orientation not found'}, 
+                {'message': 'University not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(orientacion)
+        serializer = self.get_serializer(university)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            orientacion = serializer.save()
-            OrientationService.create(orientacion)
+            university = serializer.save()
+            UniversityService.create(university)
             return Response(
-                'Orientación creada exitosamente',
+                'University creada exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            orientacion = serializer.save()
-            OrientationService.update(pk, orientacion)
+            university = serializer.save()
+            UniversityService.update(pk, university)
             return Response(
-                'Orientación actualizada exitosamente',
+                'University actualizada exitosamente',
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, pk=None):
-        OrientationService.delete_by_id(pk)
+        UniversityService.delete_by_id(pk)
         return Response(
-            'Orientación borrada exitosamente',
+            'University borrada exitosamente',
             status=status.HTTP_200_OK
         )
