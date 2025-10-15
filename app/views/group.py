@@ -15,20 +15,20 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
-        grupo = GroupService.find_by_id(pk)
-        if grupo is None:
+        group = GroupService.find_by_id(pk)
+        if group is None:
             return Response(
                 {'message': 'Group not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(grupo)
+        serializer = self.get_serializer(group)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            grupo = serializer.save()
-            GroupService.create(grupo)
+            group = serializer.save()
+            GroupService.create(group)
             return Response(
                 'Group creado exitosamente',
                 status=status.HTTP_200_OK
@@ -38,8 +38,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            grupo = serializer.save()
-            GroupService.update(pk, grupo)
+            group = serializer.save()
+            GroupService.update(pk, group)
             return Response(
                 'Group actualizado exitosamente',
                 status=status.HTTP_200_OK

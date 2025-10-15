@@ -19,8 +19,21 @@ class Position(models.Model):
         null=False
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.name} ({self.position_category})"
 
     def __repr__(self):
         return f"<Position: {self.name} - {self.points} points>"
+
+    class Meta:
+        db_table = 'positions'
+        verbose_name = 'Position'
+        verbose_name_plural = 'Positions'
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['position_category']),
+        ]

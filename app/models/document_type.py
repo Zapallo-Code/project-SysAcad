@@ -26,6 +26,9 @@ class DocumentType(models.Model):
         help_text="Type: Pasaporte"
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         types = []
         if self.dni:
@@ -40,3 +43,8 @@ class DocumentType(models.Model):
 
     def __repr__(self):
         return f"<DocumentType: id={self.id}>"
+
+    class Meta:
+        db_table = 'document_types'
+        verbose_name = 'Document Type'
+        verbose_name_plural = 'Document Types'

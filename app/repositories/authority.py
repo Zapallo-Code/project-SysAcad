@@ -36,19 +36,23 @@ class AuthorityRepository:
 
     @staticmethod
     def associate_subject(authority: Authority, subject: Subject):
-        authority.associate_subject(subject)
+        """Use Django's ManyToMany add method directly."""
+        authority.subjects.add(subject)
 
     @staticmethod
     def disassociate_subject(authority: Authority, subject: Subject):
-        authority.disassociate_subject(subject)
+        """Use Django's ManyToMany remove method directly."""
+        authority.subjects.remove(subject)
 
     @staticmethod
     def associate_faculty(authority: Authority, faculty: Faculty):
-        authority.associate_faculty(faculty)
+        """Use Django's ManyToMany add method directly."""
+        authority.faculties.add(faculty)
 
     @staticmethod
     def disassociate_faculty(authority: Authority, faculty: Faculty):
-        authority.disassociate_faculty(faculty)
+        """Use Django's ManyToMany remove method directly."""
+        authority.faculties.remove(faculty)
 
     @staticmethod
     def find_by_position(position_id: int):

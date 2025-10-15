@@ -25,8 +25,8 @@ class FacultyTestCase(TestCase):
         self.assertEqual(list(r.authorities.all())[0].name, authority.name)
 
     def test_buscar_todos(self):
-        facultad1 = new_faculty()
-        facultad2 = new_faculty(name="Faculty of Mathematics")
+        faculty1 = new_faculty()
+        faculty2 = new_faculty(name="Faculty of Mathematics")
         faculties = FacultyService.find_all()
         self.assertIsNotNone(faculties)
         self.assertEqual(len(faculties), 2)
@@ -38,8 +38,8 @@ class FacultyTestCase(TestCase):
     def test_actualizar(self):
         faculty = new_faculty()
         faculty.name = "Faculty of Sciences Updated"
-        facultad_actualizada = FacultyService.update(faculty.id, faculty)
-        self.assertEqual(facultad_actualizada.name, "Faculty of Sciences Updated")
+        faculty_actualizada = FacultyService.update(faculty.id, faculty)
+        self.assertEqual(faculty_actualizada.name, "Faculty of Sciences Updated")
 
     def test_borrar(self):
         faculty = new_faculty()
@@ -48,16 +48,16 @@ class FacultyTestCase(TestCase):
         resultado = FacultyService.find_by_id(faculty.id)
         self.assertIsNone(resultado)
     
-    def test_asociar_y_desasociar_autoridad(self):
+    def test_asociar_y_desasociar_authority(self):
         faculty = new_faculty()
         authority = new_authority()
         
         # Asociar authority
         FacultyService.associate_authority(faculty.id, authority.id)
-        facultad_actualizada = FacultyService.find_by_id(faculty.id)
-        self.assertIn(authority, facultad_actualizada.authorities.all())
+        faculty_actualizada = FacultyService.find_by_id(faculty.id)
+        self.assertIn(authority, faculty_actualizada.authorities.all())
         
         # Desasociar authority
         FacultyService.disassociate_authority(faculty.id, authority.id)
-        facultad_actualizada = FacultyService.find_by_id(faculty.id)
-        self.assertNotIn(authority, facultad_actualizada.authorities.all())
+        faculty_actualizada = FacultyService.find_by_id(faculty.id)
+        self.assertNotIn(authority, faculty_actualizada.authorities.all())

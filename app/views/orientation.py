@@ -15,20 +15,20 @@ class OrientationViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
-        orientacion = OrientationService.find_by_id(pk)
-        if orientacion is None:
+        orientation = OrientationService.find_by_id(pk)
+        if orientation is None:
             return Response(
                 {'message': 'Orientation not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(orientacion)
+        serializer = self.get_serializer(orientation)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            orientacion = serializer.save()
-            OrientationService.create(orientacion)
+            orientation = serializer.save()
+            OrientationService.create(orientation)
             return Response(
                 'Orientación creada exitosamente',
                 status=status.HTTP_200_OK
@@ -38,8 +38,8 @@ class OrientationViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            orientacion = serializer.save()
-            OrientationService.update(pk, orientacion)
+            orientation = serializer.save()
+            OrientationService.update(pk, orientation)
             return Response(
                 'Orientación actualizada exitosamente',
                 status=status.HTTP_200_OK

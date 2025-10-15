@@ -41,7 +41,7 @@ package "Sistema Académico"{
 
     class Autoridad {
         -nombre: str
-        -cargo: str
+        -position: str
         -telefono: str
         -email: str
     }

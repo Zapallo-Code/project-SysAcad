@@ -30,8 +30,8 @@ class DedicationTypeTestCase(TestCase):
     def test_actualizar(self):
         dedication_type = new_dedication_type()
         dedication_type.name = "Dedicacion actualizada"
-        tipodededicacion_actualizado = DedicationTypeService.update(dedication_type.id, dedication_type)
-        self.assertEqual(tipodededicacion_actualizado.name, "Dedicacion actualizada")
+        dedication_type_actualizado = DedicationTypeService.update(dedication_type.id, dedication_type)
+        self.assertEqual(dedication_type_actualizado.name, "Dedicacion actualizada")
 
     def test_borrar(self):
         dedication_type = new_dedication_type()

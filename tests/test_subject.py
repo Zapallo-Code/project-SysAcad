@@ -19,8 +19,8 @@ class SubjectTestCase(TestCase):
         self.assertEqual(encontrado.name, subject.name)
 
     def test_buscar_todos(self):
-        materia1 = new_subject(name="Mathematics 1", code="MAT1")
-        materia2 = new_subject(name="Mathematics 2", code="MAT2")
+        subject1 = new_subject(name="Mathematics 1", code="MAT1")
+        subject2 = new_subject(name="Mathematics 2", code="MAT2")
         subjects = SubjectService.find_all()
         self.assertIsNotNone(subjects)
         self.assertGreaterEqual(len(subjects), 2)
@@ -41,16 +41,16 @@ class SubjectTestCase(TestCase):
         resultado = SubjectService.find_by_id(subject.id)
         self.assertIsNone(resultado)
 
-    def test_asociar_y_desasociar_autoridad(self):
+    def test_asociar_y_desasociar_authority(self):
         subject = new_subject()
         authority = new_authority()
         
         # Asociar authority
         SubjectService.associate_authority(subject.id, authority.id)
-        materia_actualizada = SubjectService.find_by_id(subject.id)
-        self.assertIn(authority, materia_actualizada.authorities.all())
+        subject_actualizada = SubjectService.find_by_id(subject.id)
+        self.assertIn(authority, subject_actualizada.authorities.all())
         
         # Desasociar authority
         SubjectService.disassociate_authority(subject.id, authority.id)
-        materia_actualizada = SubjectService.find_by_id(subject.id)
-        self.assertNotIn(authority, materia_actualizada.authorities.all())
+        subject_actualizada = SubjectService.find_by_id(subject.id)
+        self.assertNotIn(authority, subject_actualizada.authorities.all())

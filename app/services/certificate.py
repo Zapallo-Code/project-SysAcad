@@ -21,10 +21,8 @@ class PDFDocument(Document):
 
     @staticmethod
     def generar(folder: str, template: str, context: dict) -> BytesIO:
-        # Adaptar para Django
         html_string = render_to_string(f'{folder}/{template}.html', context=context)
 
-        # En Django, usar settings.STATIC_URL en lugar de url_for
         base_url = settings.STATIC_URL if hasattr(settings, 'STATIC_URL') else '/static/'
         bytes_data = HTML(string=html_string, base_url=base_url).write_pdf()
         pdf_io = BytesIO(bytes_data)
@@ -33,11 +31,9 @@ class PDFDocument(Document):
 
 class ODTDocument(Document):
     def generar(folder: str, template: str, context: dict) -> BytesIO:
-        # Adaptar para Django - usar settings.MEDIA_ROOT
         media_path = settings.MEDIA_ROOT if hasattr(settings, 'MEDIA_ROOT') else 'media'
         odt_renderer = get_odt_renderer(media_path=media_path)
 
-        # En Django, usar settings.BASE_DIR en lugar de current_app.root_path
         path_template = os.path.join(settings.BASE_DIR, 'app', f'{folder}', f'{template}.odt')
 
         odt_io = BytesIO()
@@ -59,7 +55,6 @@ class ODTDocument(Document):
 class DOCXDocument(Document):
     def generar(folder: str, template: str, context: dict) -> BytesIO:
 
-        # En Django, usar settings.BASE_DIR en lugar de current_app.root_path
         path_template = os.path.join(settings.BASE_DIR, 'app', f'{folder}', f'{template}.docx')
         doc = DocxTemplate(path_template)
 

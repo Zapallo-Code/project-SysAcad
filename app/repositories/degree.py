@@ -4,9 +4,9 @@ from app.models.degree import Degree
 
 class DegreeRepository:
     @staticmethod
-    def create(grado):
-        grado.save()
-        return grado
+    def create(degree):
+        degree.save()
+        return degree
 
     @staticmethod
     def find_by_id(id: int):
@@ -20,16 +20,16 @@ class DegreeRepository:
         return Degree.objects.all()
 
     @staticmethod
-    def update(grado) -> Degree:
-        grado.save()
-        return grado
+    def update(degree) -> Degree:
+        degree.save()
+        return degree
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
-        grado = DegreeRepository.find_by_id(id)
-        if not grado:
+        degree = DegreeRepository.find_by_id(id)
+        if not degree:
             return False
-        grado.delete()
+        degree.delete()
         return True
 
     @staticmethod

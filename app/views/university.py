@@ -10,8 +10,8 @@ class UniversityViewSet(viewsets.ModelViewSet):
     serializer_class = UniversitySerializer
 
     def list(self, request):
-        universidades = UniversityService.find_all()
-        serializer = self.get_serializer(universidades, many=True)
+        universityes = UniversityService.find_all()
+        serializer = self.get_serializer(universityes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):

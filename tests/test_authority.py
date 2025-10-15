@@ -22,8 +22,8 @@ class AuthorityTestCase(TestCase):
         self.assertEqual(encontrado.name, authority.name)
 
     def test_buscar_todos(self):
-        autoridad1 = new_authority(name="Pelo1")
-        autoridad2 = new_authority(name="Pelo2")
+        authority1 = new_authority(name="Pelo1")
+        authority2 = new_authority(name="Pelo2")
         authorities = AuthorityService.find_all()
         self.assertIsNotNone(authorities)
         self.assertGreaterEqual(len(authorities), 2)
@@ -44,45 +44,45 @@ class AuthorityTestCase(TestCase):
         resultado = AuthorityService.find_by_id(authority.id)
         self.assertIsNone(resultado)
 
-    def test_relacion_materias(self):
+    def test_relacion_subjects(self):
         authority = new_authority()
-        materia1 = new_subject(name="Matematica")
-        materia2 = new_subject(name="Fisica")
+        subject1 = new_subject(name="Matematica")
+        subject2 = new_subject(name="Fisica")
 
-        authority.subjects.add(materia1)
-        authority.subjects.add(materia2)
+        authority.subjects.add(subject1)
+        authority.subjects.add(subject2)
         authority.save()
 
-        self.assertIn(materia1, authority.subjects.all())
-        self.assertIn(materia2, authority.subjects.all())
-        self.assertIn(authority, materia1.authorities.all())
-        self.assertIn(authority, materia2.authorities.all())
+        self.assertIn(subject1, authority.subjects.all())
+        self.assertIn(subject2, authority.subjects.all())
+        self.assertIn(authority, subject1.authorities.all())
+        self.assertIn(authority, subject2.authorities.all())
 
-        authority.subjects.remove(materia1)
+        authority.subjects.remove(subject1)
         authority.save()
-        self.assertNotIn(materia1, authority.subjects.all())
-        self.assertNotIn(authority, materia1.authorities.all())
+        self.assertNotIn(subject1, authority.subjects.all())
+        self.assertNotIn(authority, subject1.authorities.all())
 
-    def test_asociar_y_desasociar_materia(self):
+    def test_asociar_y_desasociar_subject(self):
         authority = new_authority()
         subject = new_subject()
 
         AuthorityService.associate_subject(authority.id, subject.id)
-        autoridad_actualizada = AuthorityService.find_by_id(authority.id)
-        self.assertIn(subject, autoridad_actualizada.subjects.all())
+        authority_actualizada = AuthorityService.find_by_id(authority.id)
+        self.assertIn(subject, authority_actualizada.subjects.all())
 
         AuthorityService.disassociate_subject(authority.id, subject.id)
-        autoridad_actualizada = AuthorityService.find_by_id(authority.id)
-        self.assertNotIn(subject, autoridad_actualizada.subjects.all())
+        authority_actualizada = AuthorityService.find_by_id(authority.id)
+        self.assertNotIn(subject, authority_actualizada.subjects.all())
 
-    def test_asociar_y_desasociar_facultad(self):
+    def test_asociar_y_desasociar_faculty(self):
         faculty = new_faculty()
         authority = new_authority()
 
         AuthorityService.associate_faculty(authority.id, faculty.id)
-        autoridad_actualizada = AuthorityService.find_by_id(authority.id)
-        self.assertIn(faculty, autoridad_actualizada.faculties.all())
+        authority_actualizada = AuthorityService.find_by_id(authority.id)
+        self.assertIn(faculty, authority_actualizada.faculties.all())
 
         AuthorityService.disassociate_faculty(authority.id, faculty.id)
-        autoridad_actualizada = AuthorityService.find_by_id(authority.id)
-        self.assertNotIn(faculty, autoridad_actualizada.faculties.all())
+        authority_actualizada = AuthorityService.find_by_id(authority.id)
+        self.assertNotIn(faculty, authority_actualizada.faculties.all())

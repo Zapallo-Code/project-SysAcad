@@ -20,17 +20,17 @@ class UniversityTestCase(TestCase):
         self.assertEqual(r.acronym, university.acronym)  # Comparar con la acronym generada
     
     def test_buscar_todos(self):
-        universidad1 = new_university()
-        universidad2 = new_university()
-        universidades = UniversityService.find_all()
-        self.assertIsNotNone(universidades)
-        self.assertEqual(len(universidades), 2)
+        university1 = new_university()
+        university2 = new_university()
+        universityes = UniversityService.find_all()
+        self.assertIsNotNone(universityes)
+        self.assertEqual(len(universityes), 2)
 
     def test_actualizar(self):
         university = new_university()
         university.name = "Updated University"
-        universidad_actualizada = UniversityService.update(university.id, university)
-        self.assertEqual(universidad_actualizada.name, "Updated University")
+        university_actualizada = UniversityService.update(university.id, university)
+        self.assertEqual(university_actualizada.name, "Updated University")
 
     def test_borrar(self):
         university = new_university()

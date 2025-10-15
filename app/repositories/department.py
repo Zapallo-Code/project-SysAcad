@@ -4,9 +4,9 @@ from app.models.department import Department
 
 class DepartmentRepository:
     @staticmethod
-    def create(departamento):
-        departamento.save()
-        return departamento
+    def create(departament):
+        departament.save()
+        return departament
 
     @staticmethod
     def find_by_id(id: int):
@@ -20,16 +20,16 @@ class DepartmentRepository:
         return Department.objects.all()
 
     @staticmethod
-    def update(departamento) -> Department:
-        departamento.save()
-        return departamento
+    def update(departament) -> Department:
+        departament.save()
+        return departament
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
-        departamento = DepartmentRepository.find_by_id(id)
-        if not departamento:
+        departament = DepartmentRepository.find_by_id(id)
+        if not departament:
             return False
-        departamento.delete()
+        departament.delete()
         return True
 
     @staticmethod

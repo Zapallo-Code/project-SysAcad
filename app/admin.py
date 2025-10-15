@@ -32,9 +32,15 @@ class AreaAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['student_number', 'first_name', 'last_name', 'document_number', 'enrollment_date']
+    list_display = ['student_number', 'first_name', 'last_name', 'document_number', 'enrollment_date', 'get_age']
     search_fields = ['first_name', 'last_name', 'document_number', 'student_id']
     list_filter = ['gender', 'specialty', 'enrollment_date']
+
+    @admin.display(description='Age')
+    def get_age(self, obj):
+        """Display age using Service Layer."""
+        from app.services.student import StudentService
+        return StudentService.calculate_age(obj)
 
 
 @admin.register(Authority)
@@ -104,9 +110,15 @@ class OrientationAdmin(admin.ModelAdmin):
 
 @admin.register(Plan)
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ['name', 'start_date', 'end_date', 'is_active']
+    list_display = ['name', 'start_date', 'end_date', 'get_is_active']
     search_fields = ['name']
     list_filter = ['start_date', 'end_date']
+
+    @admin.display(description='Active', boolean=True)
+    def get_is_active(self, obj):
+        """Display active status using Service Layer."""
+        from app.services.plan import PlanService
+        return PlanService.is_plan_active(obj)
 
 
 @admin.register(DedicationType)

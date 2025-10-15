@@ -15,20 +15,20 @@ class DepartmentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
-        departamento = DepartmentService.find_by_id(pk)
-        if departamento is None:
+        departament = DepartmentService.find_by_id(pk)
+        if departament is None:
             return Response(
                 {'message': 'Department not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(departamento)
+        serializer = self.get_serializer(departament)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            departamento = serializer.save()
-            DepartmentService.create(departamento)
+            departament = serializer.save()
+            DepartmentService.create(departament)
             return Response(
                 'Department creado exitosamente',
                 status=status.HTTP_200_OK
@@ -38,8 +38,8 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            departamento = serializer.save()
-            DepartmentService.update(pk, departamento)
+            departament = serializer.save()
+            DepartmentService.update(pk, departament)
             return Response(
                 'Department actualizado exitosamente',
                 status=status.HTTP_200_OK

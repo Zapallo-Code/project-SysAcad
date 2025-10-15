@@ -64,7 +64,22 @@ class StudentService:
         return result
 
     @staticmethod
-    def generar_certificado_alumno_regular(id: int, tipo: str) -> BytesIO:
+    def calculate_age(student: Student) -> int:
+        """
+        Calculate student's age based on birth date.
+        Business logic moved from Model layer.
+        """
+        if not student or not student.birth_date:
+            return None
+        
+        today = datetime.date.today()
+        age = today.year - student.birth_date.year - (
+            (today.month, today.day) < (student.birth_date.month, student.birth_date.day)
+        )
+        return age
+
+    @staticmethod
+    def generar_certificado_student_regular(id: int, tipo: str) -> BytesIO:
         student = StudentRepository.find_by_id(id)
         if not student:
             raise ValueError(f"Student with id {id} not found")

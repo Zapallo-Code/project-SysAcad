@@ -15,20 +15,20 @@ class DegreeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
-        grado = DegreeService.find_by_id(pk)
-        if grado is None:
+        degree = DegreeService.find_by_id(pk)
+        if degree is None:
             return Response(
                 {'message': 'Degree not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        serializer = self.get_serializer(grado)
+        serializer = self.get_serializer(degree)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            grado = serializer.save()
-            DegreeService.create(grado)
+            degree = serializer.save()
+            DegreeService.create(degree)
             return Response(
                 'Degree creado exitosamente',
                 status=status.HTTP_200_OK
@@ -38,8 +38,8 @@ class DegreeViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            grado = serializer.save()
-            DegreeService.update(pk, grado)
+            degree = serializer.save()
+            DegreeService.update(pk, degree)
             return Response(
                 'Degree actualizado exitosamente',
                 status=status.HTTP_200_OK

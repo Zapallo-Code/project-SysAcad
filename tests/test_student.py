@@ -24,14 +24,14 @@ class StudentTestCase(TestCase):
         self.assertEqual(r.last_name, "Pérez")
 
     def test_buscar_todos(self):
-        alumno1 = new_student()
+        student1 = new_student()
         tipo_doc2 = new_document_type(
             dni="50291002",
             civic_card="l",
             enrollment_card="aci",
             passport="nacn")
     
-        alumno2 = new_student(
+        student2 = new_student(
             first_name="Pedro",
             last_name="Gómez",
             document_number="12345678",

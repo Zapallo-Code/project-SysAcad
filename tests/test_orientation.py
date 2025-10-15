@@ -9,39 +9,39 @@ from datetime import date
 class OrientationTestCase(TestCase):
 
     def test_crear(self):
-        orientacion = new_orientation()
-        self.assertIsNotNone(orientacion)
-        self.assertIsNotNone(orientacion.name)
-        self.assertGreaterEqual(orientacion.name, "Orientation 1")
-        self.assertEqual(orientacion.specialty.specialty_type.name, "Cardiology")
-        self.assertEqual(orientacion.plan.start_date, date(2024, 6, 4))
-        self.assertIsNotNone(orientacion.subject.name, "Development")
+        orientation = new_orientation()
+        self.assertIsNotNone(orientation)
+        self.assertIsNotNone(orientation.name)
+        self.assertGreaterEqual(orientation.name, "Orientation 1")
+        self.assertEqual(orientation.specialty.specialty_type.name, "Cardiology")
+        self.assertEqual(orientation.plan.start_date, date(2024, 6, 4))
+        self.assertIsNotNone(orientation.subject.name, "Development")
 
     def test_find_by_id(self):
-        orientacion = new_orientation()
-        r = OrientationService.find_by_id(orientacion.id)
+        orientation = new_orientation()
+        r = OrientationService.find_by_id(orientation.id)
         self.assertIsNotNone(r)
         self.assertEqual(r.name, "Orientation 1")
 
     def test_buscar_todos(self):
-        orientacion1 = new_orientation()
-        orientacion2 = new_orientation(name="Orientation B")
+        orientation1 = new_orientation()
+        orientation2 = new_orientation(name="Orientation B")
 
         orientations = OrientationService.find_all()
         self.assertIsNotNone(orientations)
         self.assertGreaterEqual(len(orientations), 2)
 
     def test_actualizar(self):
-        orientacion = new_orientation()
-        orientacion.name = "Orientation Actualizada"
-        orientacion_actualizada = OrientationService.update(orientacion.id, orientacion)
-        self.assertEqual(orientacion_actualizada.name, "Orientation Actualizada")
+        orientation = new_orientation()
+        orientation.name = "Orientation Actualizada"
+        orientation_actualizada = OrientationService.update(orientation.id, orientation)
+        self.assertEqual(orientation_actualizada.name, "Orientation Actualizada")
 
     def test_borrar(self):
-        orientacion = new_orientation()
-        borrado = OrientationService.delete_by_id(orientacion.id)
+        orientation = new_orientation()
+        borrado = OrientationService.delete_by_id(orientation.id)
         self.assertTrue(borrado)
-        resultado = OrientationService.find_by_id(orientacion.id)
+        resultado = OrientationService.find_by_id(orientation.id)
         self.assertIsNone(resultado)
 
 

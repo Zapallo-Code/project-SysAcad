@@ -7,31 +7,31 @@ from tests.fixtures import new_degree
 class DegreeTestCase(TestCase):
 
     def test_crear(self):
-        grado = new_degree()
-        self.assertIsNotNone(grado)
-        self.assertIsNotNone(grado.id)
-        self.assertGreaterEqual(grado.id, 1)
-        self.assertEqual(grado.name, "First")
+        degree = new_degree()
+        self.assertIsNotNone(degree)
+        self.assertIsNotNone(degree.id)
+        self.assertGreaterEqual(degree.id, 1)
+        self.assertEqual(degree.name, "First")
 
     def test_find_by_id(self):
-        grado = new_degree()
-        r = DegreeService.find_by_id(grado.id)
+        degree = new_degree()
+        r = DegreeService.find_by_id(degree.id)
         self.assertIsNotNone(r)
         self.assertEqual(r.name, "First")
         self.assertEqual(r.description, "Description of the first degree")
 
     
     def test_buscar_todos(self):
-        grado1 = new_degree()
-        grado2 = new_degree()
+        degree1 = new_degree()
+        degree2 = new_degree()
         degrees = DegreeService.find_all()
         self.assertIsNotNone(degrees)
         self.assertGreaterEqual(len(degrees), 2)
 
     def test_actualizar(self):
-        grado = new_degree()
-        grado.name = "Second"
-        grado.description = "Description of the second degree"
+        degree = new_degree()
+        degree.name = "Second"
+        degree.description = "Description of the second degree"
 
     def test_borrar(self):
         university = new_degree()

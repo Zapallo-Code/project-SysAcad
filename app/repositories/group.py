@@ -4,9 +4,9 @@ from app.models.group import Group
 
 class GroupRepository:
     @staticmethod
-    def create(grupo):
-        grupo.save()
-        return grupo
+    def create(group):
+        group.save()
+        return group
 
     @staticmethod
     def find_by_id(id: int):
@@ -20,16 +20,16 @@ class GroupRepository:
         return Group.objects.all()
 
     @staticmethod
-    def update(grupo) -> Group:
-        grupo.save()
-        return grupo
+    def update(group) -> Group:
+        group.save()
+        return group
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
-        grupo = GroupRepository.find_by_id(id)
-        if not grupo:
+        group = GroupRepository.find_by_id(id)
+        if not group:
             return False
-        grupo.delete()
+        group.delete()
         return True
 
     @staticmethod

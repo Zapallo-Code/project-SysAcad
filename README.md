@@ -153,8 +153,8 @@ El sistema cuenta con **18 modelos principales** que representan la estructura u
 - **Area**: Área de conocimiento
 
 #### 🎓 Estructura Académica
-- **Specialty**: Especialidad/Carrera (asociada a facultad)
-- **SpecialtyType**: Tipo de especialidad
+- **Specialty**: Especialidad/Carrera (asociada a faculty)
+- **SpecialtyType**: Tipo de speciality
 - **Plan**: Plan de estudios (vigencia)
 - **Subject**: Materia (código único, nombre)
 - **Orientation**: Orientación académica
@@ -173,7 +173,7 @@ El sistema cuenta con **18 modelos principales** que representan la estructura u
 #### 👔 Personal y Autoridades
 - **Authority**: Autoridades académicas
 - **Position**: Cargos/Posiciones
-- **PositionCategory**: Categoría de cargo
+- **PositionCategory**: Categoría de position
 - **DedicationType**: Tipo de dedicación
 
 #### 📄 Tipos de Documentos
@@ -371,42 +371,42 @@ La API REST está disponible en `/api/v1/` con los siguientes recursos:
 
 | Recurso | Endpoint | Métodos |
 |---------|----------|---------|
-| Universidades | `/api/v1/universidad/` | GET, POST, PUT, DELETE |
-| Facultades | `/api/v1/facultad/` | GET, POST, PUT, DELETE |
-| Especialidades | `/api/v1/especialidad/` | GET, POST, PUT, DELETE |
-| Estudiantes | `/api/v1/alumno/` | GET, POST, PUT, DELETE |
-| Materias | `/api/v1/materia/` | GET, POST, PUT, DELETE |
+| Universidades | `/api/v1/university/` | GET, POST, PUT, DELETE |
+| Facultades | `/api/v1/faculty/` | GET, POST, PUT, DELETE |
+| Especialidades | `/api/v1/speciality/` | GET, POST, PUT, DELETE |
+| Estudiantes | `/api/v1/student/` | GET, POST, PUT, DELETE |
+| Materias | `/api/v1/subject/` | GET, POST, PUT, DELETE |
 | Planes | `/api/v1/plan/` | GET, POST, PUT, DELETE |
 | Autoridades | `/api/v1/authority/` | GET, POST, PUT, DELETE |
-| Cargos | `/api/v1/cargo/` | GET, POST, PUT, DELETE |
-| Categorías Cargo | `/api/v1/categoriacargo/` | GET, POST, PUT, DELETE |
-| Departamentos | `/api/v1/departamento/` | GET, POST, PUT, DELETE |
+| Cargos | `/api/v1/position/` | GET, POST, PUT, DELETE |
+| Categorías Cargo | `/api/v1/position_category/` | GET, POST, PUT, DELETE |
+| Departamentos | `/api/v1/departament/` | GET, POST, PUT, DELETE |
 | Áreas | `/api/v1/area/` | GET, POST, PUT, DELETE |
-| Grupos | `/api/v1/grupo/` | GET, POST, PUT, DELETE |
-| Orientaciones | `/api/v1/orientacion/` | GET, POST, PUT, DELETE |
-| Títulos | `/api/v1/grado/` | GET, POST, PUT, DELETE |
+| Grupos | `/api/v1/group/` | GET, POST, PUT, DELETE |
+| Orientaciones | `/api/v1/orientation/` | GET, POST, PUT, DELETE |
+| Títulos | `/api/v1/degree/` | GET, POST, PUT, DELETE |
 | Tipos Dedicación | `/api/v1/dedication_type/` | GET, POST, PUT, DELETE |
 | Tipos Documento | `/api/v1/document_type/` | GET, POST, PUT, DELETE |
-| Tipos Especialidad | `/api/v1/tipoespecialidad/` | GET, POST, PUT, DELETE |
+| Tipos Especialidad | `/api/v1/speciality_type/` | GET, POST, PUT, DELETE |
 
 ### Ejemplos de Uso
 
 #### Listar todos los estudiantes
 
 ```bash
-curl -X GET http://localhost:8000/api/v1/alumno/
+curl -X GET http://localhost:8000/api/v1/student/
 ```
 
 #### Obtener un estudiante específico
 
 ```bash
-curl -X GET http://localhost:8000/api/v1/alumno/1/
+curl -X GET http://localhost:8000/api/v1/student/1/
 ```
 
 #### Crear un nuevo estudiante
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/alumno/ \
+curl -X POST http://localhost:8000/api/v1/student/ \
   -H "Content-Type: application/json" \
   -d '{
     "first_name": "Juan",
@@ -424,7 +424,7 @@ curl -X POST http://localhost:8000/api/v1/alumno/ \
 #### Actualizar un estudiante
 
 ```bash
-curl -X PUT http://localhost:8000/api/v1/alumno/1/ \
+curl -X PUT http://localhost:8000/api/v1/student/1/ \
   -H "Content-Type: application/json" \
   -d '{
     "first_name": "Juan Modificado",
@@ -435,7 +435,7 @@ curl -X PUT http://localhost:8000/api/v1/alumno/1/ \
 #### Eliminar un estudiante
 
 ```bash
-curl -X DELETE http://localhost:8000/api/v1/alumno/1/
+curl -X DELETE http://localhost:8000/api/v1/student/1/
 ```
 
 ### Paginación
@@ -443,7 +443,7 @@ curl -X DELETE http://localhost:8000/api/v1/alumno/1/
 La API implementa paginación automática (100 elementos por página):
 
 ```bash
-curl -X GET "http://localhost:8000/api/v1/alumno/?page=2"
+curl -X GET "http://localhost:8000/api/v1/student/?page=2"
 ```
 
 ---
@@ -529,7 +529,7 @@ El sistema puede generar certificados académicos en múltiples formatos:
 
 ```python
 # En app/services/student.py
-def generar_certificado_alumno_regular(id: int, tipo: str) -> BytesIO:
+def generar_certificado_student_regular(id: int, tipo: str) -> BytesIO:
     # tipo puede ser: 'pdf', 'odt', 'docx'
     student = StudentRepository.find_by_id(id)
     context = self.__get_student_data(student)

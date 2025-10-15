@@ -1,37 +1,37 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from datetime import date
 
 
 class Student(models.Model):
-    first_name = models.CharField(max_length=50, null=False, blank=False)
-    last_name = models.CharField(max_length=50, null=False, blank=False)
-    document_number = models.CharField(max_length=50, null=False, blank=False)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    document_number = models.CharField(max_length=50)
+    birth_date = models.DateField()
+    gender = models.CharField(
+        max_length=1,
+        choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')],
+    )
+    student_number = models.IntegerField(unique=True)
+    enrollment_date = models.DateField()
 
     document_type = models.ForeignKey(
         'DocumentType',
         on_delete=models.PROTECT,
         related_name='students',
-        null=False
     )
-
-    birth_date = models.DateField(null=False, blank=False)
-
-    gender = models.CharField(
-        max_length=1,
-        null=False,
-        blank=False,
-        choices=[('M', 'Masculino'), ('F', 'Femenino'), ('O', 'Otro')]
-    )
-
-    student_number = models.IntegerField(null=False, blank=False, unique=True)
-    enrollment_date = models.DateField(null=False, blank=False)
-
     specialty = models.ForeignKey(
         'Specialty',
         on_delete=models.PROTECT,
         related_name='students',
-        null=False
     )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
     def __str__(self):
         return f"{self.last_name}, {self.first_name} - Student Number: {self.student_number}"
@@ -39,13 +39,22 @@ class Student(models.Model):
     def __repr__(self):
         return f"<Student: {self.last_name}, {self.first_name}>"
 
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
+    def clean(self):
+        super().clean()
 
-    @property
-    def age(self):
-        today = date.today()
-        return today.year - self.birth_date.year - (
-            (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
-        )
+        if self.birth_date and self.birth_date > date.today():
+            raise ValidationError({'birth_date': 'Birth date cannot be in the future.'})
+
+        if (self.enrollment_date and self.birth_date and self.enrollment_date < self.birth_date):
+            raise ValidationError({'enrollment_date': 'Enrollment date cannot be before birth date.'})
+
+    class Meta:
+        db_table = 'students'
+        verbose_name = 'Student'
+        verbose_name_plural = 'Students'
+        ordering = ['last_name', 'first_name']
+        indexes = [
+            models.Index(fields=['student_number']),
+            models.Index(fields=['document_number']),
+            models.Index(fields=['last_name', 'first_name']),
+        ]

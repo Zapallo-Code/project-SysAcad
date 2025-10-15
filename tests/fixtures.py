@@ -84,7 +84,7 @@ def new_faculty(name="Faculty of Sciences", abbreviation="FSC", directory="/facu
 
     FacultyService.create(faculty)
     
-    # Asignar autoridades después de crear la facultad
+    # Asignar authorityes después de crear la faculty
     if authorities is None:
         authorities = []
     if authorities:
@@ -142,7 +142,7 @@ def new_subject(name="Mathematics", code=None, observation="Test observation", a
     
     SubjectService.create(subject)
     
-    # Asignar autoridades después de crear la materia
+    # Asignar authorityes después de crear la subject
     if authorities is None:
         authorities = []
     if authorities:
@@ -208,7 +208,7 @@ def new_authority(name="Pelo", position=None, phone="123456789", email="123@gmai
 
     AuthorityService.create(authority)
     
-    # Asignar materias y facultades después de crear la authority
+    # Asignar subjects y facultyes después de crear la authority
     if subjects is None:
         subjects = []
     if subjects:

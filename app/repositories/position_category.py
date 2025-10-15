@@ -26,10 +26,10 @@ class PositionCategoryRepository:
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
-        categoriacargo = PositionCategoryRepository.find_by_id(id)
-        if not categoriacargo:
+        position_category = PositionCategoryRepository.find_by_id(id)
+        if not position_category:
             return False
-        categoriacargo.delete()
+        position_category.delete()
         return True
 
     @staticmethod

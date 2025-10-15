@@ -23,8 +23,8 @@ class PositionTestCase(TestCase):
         self.assertEqual(r.dedication_type.name, "Full Dedication")
 
     def test_buscar_todos(self):
-        cargo1 = new_position()
-        cargo2 = new_position()
+        position1 = new_position()
+        position2 = new_position()
         positions = PositionService.find_all()
         self.assertIsNotNone(positions)
         self.assertEqual(len(positions), 2)
@@ -32,8 +32,8 @@ class PositionTestCase(TestCase):
     def test_actualizar(self):
         position = new_position()
         position.name = "professor updated"
-        cargo_actualizado = PositionService.update(position.id, position)
-        self.assertEqual(cargo_actualizado.name, "professor updated")
+        position_actualizado = PositionService.update(position.id, position)
+        self.assertEqual(position_actualizado.name, "professor updated")
 
     def test_borrar(self):
         position = new_position()

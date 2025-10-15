@@ -8,20 +8,20 @@ class University(models.Model):
         null=False,
         blank=False,
         unique=True,
-        help_text="Sigla identificadora de la universidad"
+        help_text="Unique acronym for the university"
     )
-    
+
+    def __str__(self):
+        return f"{self.acronym} - {self.name}"
+
+    def __repr__(self):
+        return f"<University: {self.acronym}>"
+
     class Meta:
-        db_table = 'universidades'
-        verbose_name = 'Universidad'
-        verbose_name_plural = 'Universidades'
+        db_table = 'universities'
+        verbose_name = 'University'
+        verbose_name_plural = 'Universities'
         ordering = ['name']
         indexes = [
             models.Index(fields=['acronym']),
         ]
-    
-    def __str__(self):
-        return f"{self.acronym} - {self.name}"
-    
-    def __repr__(self):
-        return f"<University: {self.acronym}>" 

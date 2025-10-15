@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 from django.db import transaction
 from app.models.plan import Plan
 from app.repositories.plan import PlanRepository
@@ -26,6 +27,35 @@ class PlanService:
     def find_all() -> list[Plan]:
         logger.info("Finding all plans")
         return PlanRepository.find_all()
+
+    @staticmethod
+    def find_active_plans() -> list[Plan]:
+        """
+        Get all currently active plans.
+        Business logic moved from Model layer.
+        """
+        logger.info("Finding all active plans")
+        all_plans = PlanRepository.find_all()
+        today = date.today()
+        active_plans = [
+            plan for plan in all_plans
+            if plan.start_date <= today <= plan.end_date
+        ]
+        logger.info(f"Found {len(active_plans)} active plans")
+        return active_plans
+
+    @staticmethod
+    def is_plan_active(plan: Plan) -> bool:
+        """
+        Check if a plan is currently active.
+        Business logic moved from Model layer.
+        """
+        if not plan:
+            return False
+        today = date.today()
+        is_active = plan.start_date <= today <= plan.end_date
+        logger.debug(f"Plan {plan.name} active status: {is_active}")
+        return is_active
 
     @staticmethod
     @transaction.atomic

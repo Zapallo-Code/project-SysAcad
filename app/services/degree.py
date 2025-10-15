@@ -10,10 +10,10 @@ class DegreeService:
 
     @staticmethod
     @transaction.atomic
-    def create(grado: Degree):
-        logger.info(f"Creating degree: {grado.name}")
-        DegreeRepository.create(grado)
-        logger.info(f"Degree created successfully with id: {grado.id}")
+    def create(degree: Degree):
+        logger.info(f"Creating degree: {degree.name}")
+        DegreeRepository.create(degree)
+        logger.info(f"Degree created successfully with id: {degree.id}")
 
     @staticmethod
     def find_by_id(id: int) -> Degree:
@@ -30,14 +30,14 @@ class DegreeService:
 
     @staticmethod
     @transaction.atomic
-    def update(id: int, grado: Degree) -> Degree:
+    def update(id: int, degree: Degree) -> Degree:
         logger.info(f"Updating degree with id: {id}")
         existing_degree = DegreeRepository.find_by_id(id)
         if not existing_degree:
             logger.warning(f"Degree with id {id} not found for update")
             return None
-        existing_degree.name = grado.name
-        existing_degree.description = grado.description
+        existing_degree.name = degree.name
+        existing_degree.description = degree.description
         updated_degree = DegreeRepository.update(existing_degree)
         logger.info(f"Degree with id {id} updated successfully")
         return updated_degree

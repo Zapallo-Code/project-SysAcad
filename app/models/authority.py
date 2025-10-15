@@ -31,20 +31,21 @@ class Authority(models.Model):
         blank=True
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.name} - {self.position}"
 
     def __repr__(self):
         return f"<Authority: {self.name}>"
 
-    def associate_subject(self, subject):
-        self.subjects.add(subject)
-
-    def disassociate_subject(self, subject):
-        self.subjects.remove(subject)
-
-    def associate_faculty(self, faculty):
-        self.faculties.add(faculty)
-
-    def disassociate_faculty(self, faculty):
-        self.faculties.remove(faculty)
+    class Meta:
+        db_table = 'authorities'
+        verbose_name = 'Authority'
+        verbose_name_plural = 'Authorities'
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['position']),
+        ]

@@ -5,8 +5,8 @@ from app.repositories.department import DepartmentRepository
 class DepartmentService:
 
     @staticmethod
-    def create(departamento):
-        DepartmentRepository.create(departamento)
+    def create(departament):
+        DepartmentRepository.create(departament)
 
     @staticmethod
     def find_by_id(id: int) -> Department:
@@ -17,11 +17,11 @@ class DepartmentService:
         return DepartmentRepository.find_all()
 
     @staticmethod
-    def update(id: int, departamento: Department) -> Department:
+    def update(id: int, departament: Department) -> Department:
         existing_department = DepartmentRepository.find_by_id(id)
         if not existing_department:
             return None
-        existing_department.name = departamento.name
+        existing_department.name = departament.name
         return DepartmentRepository.update(existing_department)
 
     @staticmethod

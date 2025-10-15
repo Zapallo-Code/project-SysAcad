@@ -21,8 +21,8 @@ class SpecialtyTypeTestCase(TestCase):
         self.assertEqual(r.name, specialty_type.name)
     
     def test_buscar_todos(self):
-        tipoespecialidad1 = new_specialty_type()
-        tipoespecialidad2 = new_specialty_type("pediatrics", "Basic")
+        speciality_type1 = new_specialty_type()
+        speciality_type2 = new_specialty_type("pediatrics", "Basic")
         specialty_type = SpecialtyTypeService.find_all()
         self.assertIsNotNone(specialty_type)
         self.assertGreaterEqual(len(specialty_type), 2)
@@ -31,9 +31,9 @@ class SpecialtyTypeTestCase(TestCase):
         specialty_type = new_specialty_type()
         specialty_type.name = "Neurology"
         specialty_type.level = "Intermediate"
-        tipoespecialidad_actualizado = SpecialtyTypeService.update(specialty_type.id, specialty_type)
-        self.assertEqual(tipoespecialidad_actualizado.name, "Neurology")
-        self.assertEqual(tipoespecialidad_actualizado.level, "Intermediate")
+        speciality_type_actualizado = SpecialtyTypeService.update(specialty_type.id, specialty_type)
+        self.assertEqual(speciality_type_actualizado.name, "Neurology")
+        self.assertEqual(speciality_type_actualizado.level, "Intermediate")
 
     def test_borrar(self):
         specialty_type = new_specialty_type()

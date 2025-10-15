@@ -25,8 +25,22 @@ class Specialty(models.Model):
         null=False
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.name} ({self.letter})"
 
     def __repr__(self):
         return f"<Specialty: {self.name} - Letter: {self.letter}>"
+
+    class Meta:
+        db_table = 'specialties'
+        verbose_name = 'Specialty'
+        verbose_name_plural = 'Specialties'
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['letter']),
+            models.Index(fields=['name']),
+            models.Index(fields=['specialty_type']),
+        ]

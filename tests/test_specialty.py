@@ -21,8 +21,8 @@ class SpecialtyTestCase(TestCase):
         self.assertEqual(r.letter, "A")
 
     def test_buscar_todos(self):
-        especialidad1 = new_specialty()
-        especialidad2 = new_specialty()
+        speciality1 = new_specialty()
+        speciality2 = new_specialty()
         specialties = SpecialtyService.find_all()
         self.assertIsNotNone(specialties)
         self.assertEqual(len(specialties), 2)
@@ -30,8 +30,8 @@ class SpecialtyTestCase(TestCase):
     def test_actualizar(self):
         specialty = new_specialty()
         specialty.name = "mathematics updated"
-        especialidad_actualizada = SpecialtyService.update(specialty.id, specialty)
-        self.assertEqual(especialidad_actualizada.name, "mathematics updated")
+        speciality_actualizada = SpecialtyService.update(specialty.id, specialty)
+        self.assertEqual(speciality_actualizada.name, "mathematics updated")
 
     def test_borrar(self):
         specialty = new_specialty()

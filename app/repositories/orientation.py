@@ -4,9 +4,9 @@ from app.models.orientation import Orientation
 
 class OrientationRepository:
     @staticmethod
-    def create(orientacion):
-        orientacion.save()
-        return orientacion
+    def create(orientation):
+        orientation.save()
+        return orientation
 
     @staticmethod
     def find_by_id(id: int):
@@ -20,16 +20,16 @@ class OrientationRepository:
         return Orientation.objects.all()
 
     @staticmethod
-    def update(orientacion) -> Orientation:
-        orientacion.save()
-        return orientacion
+    def update(orientation) -> Orientation:
+        orientation.save()
+        return orientation
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
-        orientacion = OrientationRepository.find_by_id(id)
-        if not orientacion:
+        orientation = OrientationRepository.find_by_id(id)
+        if not orientation:
             return False
-        orientacion.delete()
+        orientation.delete()
         return True
 
     @staticmethod

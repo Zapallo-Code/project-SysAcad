@@ -47,8 +47,22 @@ class Faculty(models.Model):
         null=False
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.name} ({self.abbreviation})"
 
     def __repr__(self):
         return f"<Faculty: {self.name} - {self.acronym}>"
+
+    class Meta:
+        db_table = 'faculties'
+        verbose_name = 'Faculty'
+        verbose_name_plural = 'Faculties'
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['acronym']),
+            models.Index(fields=['abbreviation']),
+            models.Index(fields=['name']),
+        ]
