@@ -7,7 +7,5 @@ class PositionCategorySerializer(serializers.ModelSerializer):
         model = PositionCategory
         fields = ['id', 'name']
         read_only_fields = ['id']
-    
+
     name = serializers.CharField(max_length=30, min_length=1)
-
-

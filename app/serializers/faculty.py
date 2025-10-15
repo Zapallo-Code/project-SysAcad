@@ -5,10 +5,10 @@ from app.models.faculty import Faculty
 class FacultySerializer(serializers.ModelSerializer):
     class Meta:
         model = Faculty
-        fields = ['id', 'name', 'abbreviation', 'directory', 'acronym', 'postal_code', 
+        fields = ['id', 'name', 'abbreviation', 'directory', 'acronym', 'postal_code',
                   'city', 'address', 'phone', 'contact_name', 'email', 'university_id']
         read_only_fields = ['id']
-    
+
     name = serializers.CharField(max_length=100, min_length=1)
     abbreviation = serializers.CharField(max_length=10, min_length=1)
     directory = serializers.CharField(max_length=100, min_length=1)

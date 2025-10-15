@@ -7,6 +7,5 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['id', 'name']
         read_only_fields = ['id']
-    
-    name = serializers.CharField(max_length=50, min_length=1)
 
+    name = serializers.CharField(max_length=50, min_length=1)

@@ -7,7 +7,7 @@ class PositionSerializer(serializers.ModelSerializer):
         model = Position
         fields = ['id', 'name', 'points', 'position_category_id', 'dedication_type_id']
         read_only_fields = ['id']
-    
+
     name = serializers.CharField(max_length=50, min_length=1)
     points = serializers.IntegerField(required=False, allow_null=True)
     position_category_id = serializers.IntegerField(write_only=True)

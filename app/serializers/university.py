@@ -7,7 +7,6 @@ class UniversitySerializer(serializers.ModelSerializer):
         model = University
         fields = ['id', 'name', 'acronym']
         read_only_fields = ['id']
-    
+
     name = serializers.CharField(max_length=100, min_length=1)
     acronym = serializers.CharField(max_length=10, min_length=1)
-

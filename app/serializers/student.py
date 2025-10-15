@@ -5,10 +5,10 @@ from app.models.student import Student
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['id', 'name', 'last_name', 'document_number', 'document_type_id', 
+        fields = ['id', 'name', 'last_name', 'document_number', 'document_type_id',
                   'birth_date', 'gender', 'student_number', 'enrollment_date', 'specialty_id']
         read_only_fields = ['id']
-    
+
     name = serializers.CharField(max_length=50, min_length=1)
     last_name = serializers.CharField(max_length=50, min_length=1)
     document_number = serializers.CharField(max_length=50, min_length=1)

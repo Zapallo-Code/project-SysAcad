@@ -7,7 +7,5 @@ class AreaSerializer(serializers.ModelSerializer):
         model = Area
         fields = ['id', 'name']
         read_only_fields = ['id']
-    
+
     name = serializers.CharField(max_length=50, min_length=1)
-
-
