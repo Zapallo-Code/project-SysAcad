@@ -1,28 +1,50 @@
+from typing import Optional, List
 from django.core.exceptions import ObjectDoesNotExist
-from app.models.authority import Authority
-from app.models.subject import Subject
-from app.models.faculty import Faculty
+from app.models import Authority
+from app.models import Subject
+from app.models import Faculty
 
 
 class AuthorityRepository:
     @staticmethod
-    def create(authority):
+    def create(authority: Authority) -> Authority:
+        authority.full_clean()
         authority.save()
         return authority
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[Authority]:
         try:
-            return Authority.objects.get(id=id)
+            return Authority.objects.select_related('position').get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return Authority.objects.all()
+    def find_all() -> List[Authority]:
+        return list(Authority.objects.select_related('position').all())
 
     @staticmethod
-    def update(authority) -> Authority:
+    def find_by_position(position_id: int) -> List[Authority]:
+        return list(Authority.objects.filter(
+            position_id=position_id
+        ).select_related('position'))
+
+    @staticmethod
+    def find_by_name(name: str) -> List[Authority]:
+        return list(Authority.objects.filter(
+            name__icontains=name
+        ).select_related('position'))
+
+    @staticmethod
+    def find_by_email(email: str) -> Optional[Authority]:
+        try:
+            return Authority.objects.select_related('position').get(email=email)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
+    def update(authority: Authority) -> Authority:
+        authority.full_clean()
         authority.save()
         return authority
 
@@ -35,34 +57,44 @@ class AuthorityRepository:
         return True
 
     @staticmethod
-    def associate_subject(authority: Authority, subject: Subject):
-        """Use Django's ManyToMany add method directly."""
-        authority.subjects.add(subject)
+    def exists_by_id(id: int) -> bool:
+        return Authority.objects.filter(id=id).exists()
 
     @staticmethod
-    def disassociate_subject(authority: Authority, subject: Subject):
-        """Use Django's ManyToMany remove method directly."""
-        authority.subjects.remove(subject)
+    def exists_by_email(email: str) -> bool:
+        return Authority.objects.filter(email=email).exists()
 
     @staticmethod
-    def associate_faculty(authority: Authority, faculty: Faculty):
-        """Use Django's ManyToMany add method directly."""
-        authority.faculties.add(faculty)
+    def count() -> int:
+        return Authority.objects.count()
 
     @staticmethod
-    def disassociate_faculty(authority: Authority, faculty: Faculty):
-        """Use Django's ManyToMany remove method directly."""
-        authority.faculties.remove(faculty)
-
-    @staticmethod
-    def find_by_position(position_id: int):
-        return Authority.objects.filter(position_id=position_id)
-
-    @staticmethod
-    def find_with_relations(id: int):
+    def find_with_relations(id: int) -> Optional[Authority]:
         try:
-            return Authority.objects.select_related('position').prefetch_related(
-                'subjects', 'faculties'
+            return Authority.objects.select_related(
+                'position',
+                'position__position_category',
+                'position__dedication_type'
+            ).prefetch_related(
+                'subjects',
+                'faculties',
+                'faculties__university'
             ).get(id=id)
         except ObjectDoesNotExist:
             return None
+
+    @staticmethod
+    def associate_subject(authority: Authority, subject: Subject) -> None:
+        authority.subjects.add(subject)
+
+    @staticmethod
+    def disassociate_subject(authority: Authority, subject: Subject) -> None:
+        authority.subjects.remove(subject)
+
+    @staticmethod
+    def associate_faculty(authority: Authority, faculty: Faculty) -> None:
+        authority.faculties.add(faculty)
+
+    @staticmethod
+    def disassociate_faculty(authority: Authority, faculty: Faculty) -> None:
+        authority.faculties.remove(faculty)

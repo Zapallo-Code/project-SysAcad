@@ -1,28 +1,42 @@
+from typing import Optional, List
 from django.core.exceptions import ObjectDoesNotExist
-from app.models.position_category import PositionCategory
+from app.models import PositionCategory
 
 
 class PositionCategoryRepository:
     @staticmethod
-    def create(categoria):
-        categoria.save()
-        return categoria
+    def create(position_category: PositionCategory) -> PositionCategory:
+        position_category.full_clean()
+        position_category.save()
+        return position_category
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[PositionCategory]:
         try:
             return PositionCategory.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return PositionCategory.objects.all()
+    def find_by_name(name: str) -> Optional[PositionCategory]:
+        try:
+            return PositionCategory.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
-    def update(categoria) -> PositionCategory:
-        categoria.save()
-        return categoria
+    def search_by_name(name: str) -> List[PositionCategory]:
+        return list(PositionCategory.objects.filter(name__icontains=name))
+
+    @staticmethod
+    def find_all() -> List[PositionCategory]:
+        return list(PositionCategory.objects.all())
+
+    @staticmethod
+    def update(position_category: PositionCategory) -> PositionCategory:
+        position_category.full_clean()
+        position_category.save()
+        return position_category
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
@@ -33,5 +47,13 @@ class PositionCategoryRepository:
         return True
 
     @staticmethod
-    def find_by_name(name: str):
-        return PositionCategory.objects.filter(nombre__icontains=name)
+    def exists_by_id(id: int) -> bool:
+        return PositionCategory.objects.filter(id=id).exists()
+
+    @staticmethod
+    def exists_by_name(name: str) -> bool:
+        return PositionCategory.objects.filter(name=name).exists()
+
+    @staticmethod
+    def count() -> int:
+        return PositionCategory.objects.count()

@@ -1,26 +1,40 @@
+from typing import Optional, List
 from django.core.exceptions import ObjectDoesNotExist
-from app.models.degree import Degree
+from app.models import Degree
 
 
 class DegreeRepository:
     @staticmethod
-    def create(degree):
+    def create(degree: Degree) -> Degree:
+        degree.full_clean()
         degree.save()
         return degree
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[Degree]:
         try:
             return Degree.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return Degree.objects.all()
+    def find_by_name(name: str) -> Optional[Degree]:
+        try:
+            return Degree.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
-    def update(degree) -> Degree:
+    def search_by_name(name: str) -> List[Degree]:
+        return list(Degree.objects.filter(name__icontains=name))
+
+    @staticmethod
+    def find_all() -> List[Degree]:
+        return list(Degree.objects.all())
+
+    @staticmethod
+    def update(degree: Degree) -> Degree:
+        degree.full_clean()
         degree.save()
         return degree
 
@@ -33,5 +47,13 @@ class DegreeRepository:
         return True
 
     @staticmethod
-    def find_by_name(name: str):
-        return Degree.objects.filter(nombre__icontains=name)
+    def exists_by_id(id: int) -> bool:
+        return Degree.objects.filter(id=id).exists()
+
+    @staticmethod
+    def exists_by_name(name: str) -> bool:
+        return Degree.objects.filter(name=name).exists()
+
+    @staticmethod
+    def count() -> int:
+        return Degree.objects.count()

@@ -35,14 +35,11 @@ class PlanService:
         Business logic moved from Model layer.
         """
         logger.info("Finding all active plans")
-        all_plans = PlanRepository.find_all()
         today = date.today()
-        active_plans = [
-            plan for plan in all_plans
-            if plan.start_date <= today <= plan.end_date
-        ]
-        logger.info(f"Found {len(active_plans)} active plans")
-        return active_plans
+        # Use repository's date range method (pure data access)
+        all_plans = PlanRepository.find_by_date_range(today, today)
+        logger.info(f"Found {len(all_plans)} active plans")
+        return all_plans
 
     @staticmethod
     def is_plan_active(plan: Plan) -> bool:

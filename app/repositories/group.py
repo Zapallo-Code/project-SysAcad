@@ -1,26 +1,40 @@
+from typing import Optional, List
 from django.core.exceptions import ObjectDoesNotExist
-from app.models.group import Group
+from app.models import Group
 
 
 class GroupRepository:
     @staticmethod
-    def create(group):
+    def create(group: Group) -> Group:
+        group.full_clean()
         group.save()
         return group
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[Group]:
         try:
             return Group.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return Group.objects.all()
+    def find_by_name(name: str) -> Optional[Group]:
+        try:
+            return Group.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
-    def update(group) -> Group:
+    def search_by_name(name: str) -> List[Group]:
+        return list(Group.objects.filter(name__icontains=name))
+
+    @staticmethod
+    def find_all() -> List[Group]:
+        return list(Group.objects.all())
+
+    @staticmethod
+    def update(group: Group) -> Group:
+        group.full_clean()
         group.save()
         return group
 
@@ -33,5 +47,13 @@ class GroupRepository:
         return True
 
     @staticmethod
-    def find_by_name(name: str):
-        return Group.objects.filter(nombre__icontains=name)
+    def exists_by_id(id: int) -> bool:
+        return Group.objects.filter(id=id).exists()
+
+    @staticmethod
+    def exists_by_name(name: str) -> bool:
+        return Group.objects.filter(name=name).exists()
+
+    @staticmethod
+    def count() -> int:
+        return Group.objects.count()

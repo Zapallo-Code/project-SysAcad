@@ -1,27 +1,48 @@
+from typing import Optional, List
 from django.core.exceptions import ObjectDoesNotExist
-from app.models.subject import Subject
-from app.models.authority import Authority
+from app.models import Subject
+from app.models import Authority
 
 
 class SubjectRepository:
     @staticmethod
-    def create(subject):
+    def create(subject: Subject) -> Subject:
+        subject.full_clean()
         subject.save()
         return subject
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[Subject]:
         try:
             return Subject.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return Subject.objects.all()
+    def find_by_code(code: str) -> Optional[Subject]:
+        try:
+            return Subject.objects.get(code=code)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
-    def update(subject) -> Subject:
+    def find_all() -> List[Subject]:
+        return list(Subject.objects.all())
+
+    @staticmethod
+    def find_by_name(name: str) -> List[Subject]:
+        return list(Subject.objects.filter(name__icontains=name))
+
+    @staticmethod
+    def find_by_name_exact(name: str) -> Optional[Subject]:
+        try:
+            return Subject.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
+    def update(subject: Subject) -> Subject:
+        subject.full_clean()
         subject.save()
         return subject
 
@@ -34,29 +55,32 @@ class SubjectRepository:
         return True
 
     @staticmethod
-    def associate_authority(subject: Subject, authority: Authority):
-        # En Django, accedemos a la relación inversa desde Authority
+    def exists_by_id(id: int) -> bool:
+        return Subject.objects.filter(id=id).exists()
+
+    @staticmethod
+    def exists_by_code(code: str) -> bool:
+        return Subject.objects.filter(code=code).exists()
+
+    @staticmethod
+    def count() -> int:
+        return Subject.objects.count()
+
+    @staticmethod
+    def find_with_relations(id: int) -> Optional[Subject]:
+        try:
+            return Subject.objects.prefetch_related(
+                'authorities',
+                'authorities__position',
+                'orientations'
+            ).get(id=id)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
+    def associate_authority(subject: Subject, authority: Authority) -> None:
         authority.subjects.add(subject)
 
     @staticmethod
-    def disassociate_authority(subject: Subject, authority: Authority):
-        # En Django, accedemos a la relación inversa desde Authority
+    def disassociate_authority(subject: Subject, authority: Authority) -> None:
         authority.subjects.remove(subject)
-
-    @staticmethod
-    def find_by_code(code: str):
-        try:
-            return Subject.objects.get(code=code)
-        except ObjectDoesNotExist:
-            return None
-
-    @staticmethod
-    def find_by_name(name: str):
-        return Subject.objects.filter(name__icontains=name)
-
-    @staticmethod
-    def find_with_relations(id: int):
-        try:
-            return Subject.objects.prefetch_related('authorities').get(id=id)
-        except ObjectDoesNotExist:
-            return None

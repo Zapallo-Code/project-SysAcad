@@ -1,26 +1,60 @@
-from django.core.exceptions import ObjectDoesNotExist
-from app.models.student import Student
+from typing import Optional, List
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from app.models import Student
 
 
 class StudentRepository:
     @staticmethod
-    def find_by_id(id):
-        try:
-            return Student.objects.get(id=id)
-        except ObjectDoesNotExist:
-            return None
-
-    @staticmethod
-    def create(student):
+    def create(student: Student) -> Student:
+        student.full_clean()
         student.save()
         return student
 
     @staticmethod
-    def find_all():
-        return Student.objects.all()
+    def find_by_id(id: int) -> Optional[Student]:
+        try:
+            return Student.objects.select_related(
+                'document_type', 'specialty'
+            ).get(id=id)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
-    def update(student) -> Student:
+    def find_by_student_number(student_number: int) -> Optional[Student]:
+        try:
+            return Student.objects.select_related(
+                'document_type', 'specialty'
+            ).get(student_number=student_number)
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            return None
+
+    @staticmethod
+    def find_by_document_number(document_number: str) -> List[Student]:
+        return list(Student.objects.filter(
+            document_number=document_number
+        ).select_related('document_type', 'specialty'))
+
+    @staticmethod
+    def find_all() -> List[Student]:
+        return list(Student.objects.select_related(
+            'document_type', 'specialty'
+        ).all())
+
+    @staticmethod
+    def find_by_specialty(specialty_id: int) -> List[Student]:
+        return list(Student.objects.filter(
+            specialty_id=specialty_id
+        ).select_related('document_type', 'specialty'))
+
+    @staticmethod
+    def find_by_gender(gender: str) -> List[Student]:
+        return list(Student.objects.filter(
+            gender=gender
+        ).select_related('document_type', 'specialty'))
+
+    @staticmethod
+    def update(student: Student) -> Student:
+        student.full_clean()  # Validate before saving
         student.save()
         return student
 
@@ -33,12 +67,30 @@ class StudentRepository:
         return True
 
     @staticmethod
-    def find_by_student_number(student_number: int):
-        try:
-            return Student.objects.get(student_number=student_number)
-        except ObjectDoesNotExist:
-            return None
+    def exists_by_id(id: int) -> bool:
+        return Student.objects.filter(id=id).exists()
 
     @staticmethod
-    def find_by_document_number(document_number: str):
-        return Student.objects.filter(document_number=document_number)
+    def exists_by_student_number(student_number: int) -> bool:
+        return Student.objects.filter(student_number=student_number).exists()
+
+    @staticmethod
+    def exists_by_document_number(document_number: str) -> bool:
+        return Student.objects.filter(document_number=document_number).exists()
+
+    @staticmethod
+    def count() -> int:
+        return Student.objects.count()
+
+    @staticmethod
+    def find_with_full_relations(id: int) -> Optional[Student]:
+        try:
+            return Student.objects.select_related(
+                'document_type',
+                'specialty',
+                'specialty__faculty',
+                'specialty__faculty__university',
+                'specialty__specialty_type'
+            ).get(id=id)
+        except ObjectDoesNotExist:
+            return None

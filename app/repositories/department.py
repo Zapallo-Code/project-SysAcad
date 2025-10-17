@@ -1,37 +1,59 @@
+from typing import Optional, List
 from django.core.exceptions import ObjectDoesNotExist
-from app.models.department import Department
+from app.models import Department
 
 
 class DepartmentRepository:
     @staticmethod
-    def create(departament):
-        departament.save()
-        return departament
+    def create(department: Department) -> Department:
+        department.full_clean()
+        department.save()
+        return department
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[Department]:
         try:
             return Department.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return Department.objects.all()
+    def find_by_name(name: str) -> Optional[Department]:
+        try:
+            return Department.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
-    def update(departament) -> Department:
-        departament.save()
-        return departament
+    def search_by_name(name: str) -> List[Department]:
+        return list(Department.objects.filter(name__icontains=name))
+
+    @staticmethod
+    def find_all() -> List[Department]:
+        return list(Department.objects.all())
+
+    @staticmethod
+    def update(department: Department) -> Department:
+        department.full_clean()
+        department.save()
+        return department
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
-        departament = DepartmentRepository.find_by_id(id)
-        if not departament:
+        department = DepartmentRepository.find_by_id(id)
+        if not department:
             return False
-        departament.delete()
+        department.delete()
         return True
 
     @staticmethod
-    def find_by_name(name: str):
-        return Department.objects.filter(nombre__icontains=name)
+    def exists_by_id(id: int) -> bool:
+        return Department.objects.filter(id=id).exists()
+
+    @staticmethod
+    def exists_by_name(name: str) -> bool:
+        return Department.objects.filter(name=name).exists()
+
+    @staticmethod
+    def count() -> int:
+        return Department.objects.count()

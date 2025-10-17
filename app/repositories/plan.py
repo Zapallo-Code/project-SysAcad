@@ -1,35 +1,54 @@
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from app.models.plan import Plan
+from typing import Optional, List
 from datetime import date
+from django.core.exceptions import ObjectDoesNotExist
+from app.models import Plan
 
 
 class PlanRepository:
     @staticmethod
-    def create(plan):
-        try:
-            plan.save()
-            return plan
-        except ValidationError as e:
-            raise e
+    def create(plan: Plan) -> Plan:
+        plan.full_clean()
+        plan.save()
+        return plan
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[Plan]:
         try:
             return Plan.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return Plan.objects.all()
+    def find_by_name(name: str) -> Optional[Plan]:
+        try:
+            return Plan.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
+    def find_all() -> List[Plan]:
+        return list(Plan.objects.all())
+
+    @staticmethod
+    def find_by_date_range(start_date: date, end_date: date) -> List[Plan]:
+        return list(Plan.objects.filter(
+            start_date__lte=end_date,
+            end_date__gte=start_date
+        ))
+
+    @staticmethod
+    def find_starting_after(target_date: date) -> List[Plan]:
+        return list(Plan.objects.filter(start_date__gt=target_date))
+
+    @staticmethod
+    def find_ending_before(target_date: date) -> List[Plan]:
+        return list(Plan.objects.filter(end_date__lt=target_date))
 
     @staticmethod
     def update(plan: Plan) -> Plan:
-        try:
-            plan.save()
-            return plan
-        except ValidationError as e:
-            raise e
+        plan.full_clean()
+        plan.save()
+        return plan
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
@@ -40,10 +59,13 @@ class PlanRepository:
         return True
 
     @staticmethod
-    def find_active():
-        today = date.today()
-        return Plan.objects.filter(start_date__lte=today, end_date__gte=today)
+    def exists_by_id(id: int) -> bool:
+        return Plan.objects.filter(id=id).exists()
 
     @staticmethod
-    def find_by_date(target_date: date):
-        return Plan.objects.filter(start_date__lte=target_date, end_date__gte=target_date)
+    def exists_by_name(name: str) -> bool:
+        return Plan.objects.filter(name=name).exists()
+
+    @staticmethod
+    def count() -> int:
+        return Plan.objects.count()

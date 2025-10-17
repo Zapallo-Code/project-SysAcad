@@ -1,26 +1,40 @@
+from typing import Optional, List
 from django.core.exceptions import ObjectDoesNotExist
-from app.models.dedication_type import DedicationType
+from app.models import DedicationType
 
 
 class DedicationTypeRepository:
     @staticmethod
-    def create(dedication_type):
+    def create(dedication_type: DedicationType) -> DedicationType:
+        dedication_type.full_clean()
         dedication_type.save()
         return dedication_type
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Optional[DedicationType]:
         try:
             return DedicationType.objects.get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def find_all():
-        return DedicationType.objects.all()
+    def find_by_name(name: str) -> Optional[DedicationType]:
+        try:
+            return DedicationType.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
 
     @staticmethod
-    def update(dedication_type) -> DedicationType:
+    def search_by_name(name: str) -> List[DedicationType]:
+        return list(DedicationType.objects.filter(name__icontains=name))
+
+    @staticmethod
+    def find_all() -> List[DedicationType]:
+        return list(DedicationType.objects.all())
+
+    @staticmethod
+    def update(dedication_type: DedicationType) -> DedicationType:
+        dedication_type.full_clean()
         dedication_type.save()
         return dedication_type
 
@@ -33,5 +47,13 @@ class DedicationTypeRepository:
         return True
 
     @staticmethod
-    def find_by_name(name: str):
-        return DedicationType.objects.filter(nombre__icontains=name)
+    def exists_by_id(id: int) -> bool:
+        return DedicationType.objects.filter(id=id).exists()
+
+    @staticmethod
+    def exists_by_name(name: str) -> bool:
+        return DedicationType.objects.filter(name=name).exists()
+
+    @staticmethod
+    def count() -> int:
+        return DedicationType.objects.count()
