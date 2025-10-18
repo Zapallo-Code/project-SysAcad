@@ -197,7 +197,7 @@ class StudentService:
 
         logger.info(f"Certificate generated successfully for student {id}")
         return document_generator.generate(
-            folder="certificate", template="certificate_pdf", context=context
+            folder="certificado", template="certificado_pdf", context=context
         )
 
     @staticmethod
