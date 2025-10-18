@@ -38,7 +38,6 @@ class SpecialtySerializer(serializers.ModelSerializer):
 
     specialty_type_id = serializers.IntegerField(
         required=True,
-        source="specialty_type.id",
         error_messages={
             "required": "Specialty type ID is required.",
             "invalid": "Specialty type ID must be a valid integer.",
@@ -47,7 +46,6 @@ class SpecialtySerializer(serializers.ModelSerializer):
 
     faculty_id = serializers.IntegerField(
         required=True,
-        source="faculty.id",
         error_messages={
             "required": "Faculty ID is required.",
             "invalid": "Faculty ID must be a valid integer.",
