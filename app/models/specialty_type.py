@@ -15,10 +15,10 @@ class SpecialtyType(models.Model):
         return f"<SpecialtyType: {self.name}>"
 
     class Meta:
-        db_table = 'specialty_types'
-        verbose_name = 'Specialty Type'
-        verbose_name_plural = 'Specialty Types'
-        ordering = ['name']
+        db_table = "specialty_types"
+        verbose_name = "Specialty Type"
+        verbose_name_plural = "Specialty Types"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
+            models.Index(fields=["name"]),
         ]

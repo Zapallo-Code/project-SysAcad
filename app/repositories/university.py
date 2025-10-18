@@ -74,8 +74,7 @@ class UniversityRepository:
     def find_with_relations(id: int) -> Optional[University]:
         try:
             return University.objects.prefetch_related(
-                'faculties',
-                'faculties__specialties'
+                "faculties", "faculties__specialties"
             ).get(id=id)
         except ObjectDoesNotExist:
             return None

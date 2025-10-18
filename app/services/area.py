@@ -13,7 +13,7 @@ class AreaService:
     def create(area_data: dict) -> Any:
         logger.info(f"Creating area: {area_data.get('name')}")
 
-        if AreaRepository.exists_by_name(area_data.get('name')):
+        if AreaRepository.exists_by_name(area_data.get("name")):
             logger.error(f"Area name {area_data.get('name')} already exists")
             raise ValueError(f"Area name '{area_data.get('name')}' is already taken")
 
@@ -54,7 +54,7 @@ class AreaService:
             logger.error(f"Area with id {id} not found for update")
             raise ValueError(f"Area with id {id} does not exist")
 
-        name = area_data.get('name')
+        name = area_data.get("name")
         if name and name != existing_area.name:
             if AreaRepository.exists_by_name(name):
                 logger.error(f"Area name {name} already exists")

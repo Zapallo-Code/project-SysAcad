@@ -13,9 +13,13 @@ class DepartmentService:
     def create(department_data: dict) -> Any:
         logger.info(f"Creating department: {department_data.get('name')}")
 
-        if DepartmentRepository.exists_by_name(department_data.get('name')):
-            logger.error(f"Department name {department_data.get('name')} already exists")
-            raise ValueError(f"Department name '{department_data.get('name')}' is already taken")
+        if DepartmentRepository.exists_by_name(department_data.get("name")):
+            logger.error(
+                f"Department name {department_data.get('name')} already exists"
+            )
+            raise ValueError(
+                f"Department name '{department_data.get('name')}' is already taken"
+            )
 
         created_department = DepartmentRepository.create(department_data)
         logger.info(f"Department created successfully with id: {created_department.id}")
@@ -54,7 +58,7 @@ class DepartmentService:
             logger.error(f"Department with id {id} not found for update")
             raise ValueError(f"Department with id {id} does not exist")
 
-        name = department_data.get('name')
+        name = department_data.get("name")
         if name and name != existing_department.name:
             if DepartmentRepository.exists_by_name(name):
                 logger.error(f"Department name {name} already exists")

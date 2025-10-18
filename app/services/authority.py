@@ -14,14 +14,16 @@ class AuthorityService:
     @staticmethod
     @transaction.atomic
     def create(authority_data: dict) -> Any:
-        logger.info(f"Creating authority: {authority_data.get('first_name')} {authority_data.get('last_name')}")
+        logger.info(
+            f"Creating authority: {authority_data.get('first_name')} {authority_data.get('last_name')}"
+        )
 
-        email = authority_data.get('email')
+        email = authority_data.get("email")
         if email and AuthorityRepository.exists_by_email(email):
             logger.error(f"Authority email {email} already exists")
             raise ValueError(f"Email '{email}' is already registered")
 
-        position_id = authority_data.get('position_id')
+        position_id = authority_data.get("position_id")
         if position_id and not PositionRepository.exists_by_id(position_id):
             logger.error(f"Position with id {position_id} not found")
             raise ValueError(f"Position with id {position_id} does not exist")
@@ -75,13 +77,13 @@ class AuthorityService:
             logger.error(f"Authority with id {id} not found for update")
             raise ValueError(f"Authority with id {id} does not exist")
 
-        email = authority_data.get('email')
+        email = authority_data.get("email")
         if email and email != existing_authority.email:
             if AuthorityRepository.exists_by_email(email):
                 logger.error(f"Authority email {email} already exists")
                 raise ValueError(f"Email '{email}' is already registered")
 
-        position_id = authority_data.get('position_id')
+        position_id = authority_data.get("position_id")
         if position_id and not PositionRepository.exists_by_id(position_id):
             logger.error(f"Position with id {position_id} not found")
             raise ValueError(f"Position with id {position_id} does not exist")
@@ -123,16 +125,24 @@ class AuthorityService:
             raise ValueError(f"Subject with id {subject_id} does not exist")
 
         if AuthorityRepository.is_subject_associated(authority, subject):
-            logger.warning(f"Subject {subject_id} is already associated with authority {authority_id}")
-            raise ValueError(f"Subject {subject_id} is already associated with this authority")
+            logger.warning(
+                f"Subject {subject_id} is already associated with authority {authority_id}"
+            )
+            raise ValueError(
+                f"Subject {subject_id} is already associated with this authority"
+            )
 
         AuthorityRepository.associate_subject(authority, subject)
-        logger.info(f"Subject {subject_id} associated successfully with authority {authority_id}")
+        logger.info(
+            f"Subject {subject_id} associated successfully with authority {authority_id}"
+        )
 
     @staticmethod
     @transaction.atomic
     def disassociate_subject(authority_id: int, subject_id: int) -> None:
-        logger.info(f"Disassociating subject {subject_id} from authority {authority_id}")
+        logger.info(
+            f"Disassociating subject {subject_id} from authority {authority_id}"
+        )
 
         authority = AuthorityRepository.find_by_id(authority_id)
         if not authority:
@@ -145,11 +155,17 @@ class AuthorityService:
             raise ValueError(f"Subject with id {subject_id} does not exist")
 
         if not AuthorityRepository.is_subject_associated(authority, subject):
-            logger.warning(f"Subject {subject_id} is not associated with authority {authority_id}")
-            raise ValueError(f"Subject {subject_id} is not associated with this authority")
+            logger.warning(
+                f"Subject {subject_id} is not associated with authority {authority_id}"
+            )
+            raise ValueError(
+                f"Subject {subject_id} is not associated with this authority"
+            )
 
         AuthorityRepository.disassociate_subject(authority, subject)
-        logger.info(f"Subject {subject_id} disassociated successfully from authority {authority_id}")
+        logger.info(
+            f"Subject {subject_id} disassociated successfully from authority {authority_id}"
+        )
 
     @staticmethod
     @transaction.atomic
@@ -167,16 +183,24 @@ class AuthorityService:
             raise ValueError(f"Faculty with id {faculty_id} does not exist")
 
         if AuthorityRepository.is_faculty_associated(authority, faculty):
-            logger.warning(f"Faculty {faculty_id} is already associated with authority {authority_id}")
-            raise ValueError(f"Faculty {faculty_id} is already associated with this authority")
+            logger.warning(
+                f"Faculty {faculty_id} is already associated with authority {authority_id}"
+            )
+            raise ValueError(
+                f"Faculty {faculty_id} is already associated with this authority"
+            )
 
         AuthorityRepository.associate_faculty(authority, faculty)
-        logger.info(f"Faculty {faculty_id} associated successfully with authority {authority_id}")
+        logger.info(
+            f"Faculty {faculty_id} associated successfully with authority {authority_id}"
+        )
 
     @staticmethod
     @transaction.atomic
     def disassociate_faculty(authority_id: int, faculty_id: int) -> None:
-        logger.info(f"Disassociating faculty {faculty_id} from authority {authority_id}")
+        logger.info(
+            f"Disassociating faculty {faculty_id} from authority {authority_id}"
+        )
 
         authority = AuthorityRepository.find_by_id(authority_id)
         if not authority:
@@ -189,8 +213,14 @@ class AuthorityService:
             raise ValueError(f"Faculty with id {faculty_id} does not exist")
 
         if not AuthorityRepository.is_faculty_associated(authority, faculty):
-            logger.warning(f"Faculty {faculty_id} is not associated with authority {authority_id}")
-            raise ValueError(f"Faculty {faculty_id} is not associated with this authority")
+            logger.warning(
+                f"Faculty {faculty_id} is not associated with authority {authority_id}"
+            )
+            raise ValueError(
+                f"Faculty {faculty_id} is not associated with this authority"
+            )
 
         AuthorityRepository.disassociate_faculty(authority, faculty)
-        logger.info(f"Faculty {faculty_id} disassociated successfully from authority {authority_id}")
+        logger.info(
+            f"Faculty {faculty_id} disassociated successfully from authority {authority_id}"
+        )

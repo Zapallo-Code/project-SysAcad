@@ -15,19 +15,29 @@ class PositionService:
     def create(position_data: dict) -> Any:
         logger.info(f"Creating position: {position_data.get('name')}")
 
-        if PositionRepository.exists_by_name(position_data.get('name')):
+        if PositionRepository.exists_by_name(position_data.get("name")):
             logger.error(f"Position name {position_data.get('name')} already exists")
-            raise ValueError(f"Position name '{position_data.get('name')}' is already taken")
+            raise ValueError(
+                f"Position name '{position_data.get('name')}' is already taken"
+            )
 
-        position_category_id = position_data.get('position_category_id')
-        if position_category_id and not PositionCategoryRepository.exists_by_id(position_category_id):
+        position_category_id = position_data.get("position_category_id")
+        if position_category_id and not PositionCategoryRepository.exists_by_id(
+            position_category_id
+        ):
             logger.error(f"Position category with id {position_category_id} not found")
-            raise ValueError(f"Position category with id {position_category_id} does not exist")
+            raise ValueError(
+                f"Position category with id {position_category_id} does not exist"
+            )
 
-        dedication_type_id = position_data.get('dedication_type_id')
-        if dedication_type_id and not DedicationTypeRepository.exists_by_id(dedication_type_id):
+        dedication_type_id = position_data.get("dedication_type_id")
+        if dedication_type_id and not DedicationTypeRepository.exists_by_id(
+            dedication_type_id
+        ):
             logger.error(f"Dedication type with id {dedication_type_id} not found")
-            raise ValueError(f"Dedication type with id {dedication_type_id} does not exist")
+            raise ValueError(
+                f"Dedication type with id {dedication_type_id} does not exist"
+            )
 
         created_position = PositionRepository.create(position_data)
         logger.info(f"Position created successfully with id: {created_position.id}")
@@ -62,10 +72,14 @@ class PositionService:
 
         if not PositionCategoryRepository.exists_by_id(position_category_id):
             logger.error(f"Position category with id {position_category_id} not found")
-            raise ValueError(f"Position category with id {position_category_id} does not exist")
+            raise ValueError(
+                f"Position category with id {position_category_id} does not exist"
+            )
 
         positions = PositionRepository.find_by_category(position_category_id)
-        logger.info(f"Found {len(positions)} positions for category {position_category_id}")
+        logger.info(
+            f"Found {len(positions)} positions for category {position_category_id}"
+        )
         return positions
 
     @staticmethod
@@ -78,21 +92,29 @@ class PositionService:
             logger.error(f"Position with id {id} not found for update")
             raise ValueError(f"Position with id {id} does not exist")
 
-        name = position_data.get('name')
+        name = position_data.get("name")
         if name and name != existing_position.name:
             if PositionRepository.exists_by_name(name):
                 logger.error(f"Position name {name} already exists")
                 raise ValueError(f"Position name '{name}' is already taken")
 
-        position_category_id = position_data.get('position_category_id')
-        if position_category_id and not PositionCategoryRepository.exists_by_id(position_category_id):
+        position_category_id = position_data.get("position_category_id")
+        if position_category_id and not PositionCategoryRepository.exists_by_id(
+            position_category_id
+        ):
             logger.error(f"Position category with id {position_category_id} not found")
-            raise ValueError(f"Position category with id {position_category_id} does not exist")
+            raise ValueError(
+                f"Position category with id {position_category_id} does not exist"
+            )
 
-        dedication_type_id = position_data.get('dedication_type_id')
-        if dedication_type_id and not DedicationTypeRepository.exists_by_id(dedication_type_id):
+        dedication_type_id = position_data.get("dedication_type_id")
+        if dedication_type_id and not DedicationTypeRepository.exists_by_id(
+            dedication_type_id
+        ):
             logger.error(f"Dedication type with id {dedication_type_id} not found")
-            raise ValueError(f"Dedication type with id {dedication_type_id} does not exist")
+            raise ValueError(
+                f"Dedication type with id {dedication_type_id} does not exist"
+            )
 
         for key, value in position_data.items():
             if hasattr(existing_position, key):

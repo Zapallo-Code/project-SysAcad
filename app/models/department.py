@@ -14,10 +14,10 @@ class Department(models.Model):
         return f"<Department: {self.name}>"
 
     class Meta:
-        db_table = 'departments'
-        verbose_name = 'Department'
-        verbose_name_plural = 'Departments'
-        ordering = ['name']
+        db_table = "departments"
+        verbose_name = "Department"
+        verbose_name_plural = "Departments"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
+            models.Index(fields=["name"]),
         ]

@@ -21,14 +21,14 @@ class Plan(models.Model):
         super().clean()
 
         if self.start_date and self.end_date and self.start_date > self.end_date:
-            raise ValidationError({'end_date': 'End date must be after start date.'})
+            raise ValidationError({"end_date": "End date must be after start date."})
 
     class Meta:
-        db_table = 'plans'
-        verbose_name = 'Plan'
-        verbose_name_plural = 'Plans'
-        ordering = ['-start_date']
+        db_table = "plans"
+        verbose_name = "Plan"
+        verbose_name_plural = "Plans"
+        ordering = ["-start_date"]
         indexes = [
-            models.Index(fields=['start_date', 'end_date']),
-            models.Index(fields=['name']),
+            models.Index(fields=["start_date", "end_date"]),
+            models.Index(fields=["name"]),
         ]

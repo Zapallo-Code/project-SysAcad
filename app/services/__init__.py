@@ -7,7 +7,7 @@ from .specialty_type import SpecialtyTypeService
 from .dedication_type import DedicationTypeService
 from .area import AreaService
 from .specialty import SpecialtyService
-from .plan import PlanService 
+from .plan import PlanService
 from .subject import SubjectService
 from .position_category import PositionCategoryService
 from .group import GroupService

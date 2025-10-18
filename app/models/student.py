@@ -10,20 +10,20 @@ class Student(models.Model):
     birth_date = models.DateField()
     gender = models.CharField(
         max_length=1,
-        choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')],
+        choices=[("M", "Male"), ("F", "Female"), ("O", "Other")],
     )
     student_number = models.IntegerField(unique=True)
     enrollment_date = models.DateField()
 
     document_type = models.ForeignKey(
-        'DocumentType',
+        "DocumentType",
         on_delete=models.PROTECT,
-        related_name='students',
+        related_name="students",
     )
     specialty = models.ForeignKey(
-        'Specialty',
+        "Specialty",
         on_delete=models.PROTECT,
-        related_name='students',
+        related_name="students",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -43,18 +43,24 @@ class Student(models.Model):
         super().clean()
 
         if self.birth_date and self.birth_date > date.today():
-            raise ValidationError({'birth_date': 'Birth date cannot be in the future.'})
+            raise ValidationError({"birth_date": "Birth date cannot be in the future."})
 
-        if (self.enrollment_date and self.birth_date and self.enrollment_date < self.birth_date):
-            raise ValidationError({'enrollment_date': 'Enrollment date cannot be before birth date.'})
+        if (
+            self.enrollment_date
+            and self.birth_date
+            and self.enrollment_date < self.birth_date
+        ):
+            raise ValidationError(
+                {"enrollment_date": "Enrollment date cannot be before birth date."}
+            )
 
     class Meta:
-        db_table = 'students'
-        verbose_name = 'Student'
-        verbose_name_plural = 'Students'
-        ordering = ['last_name', 'first_name']
+        db_table = "students"
+        verbose_name = "Student"
+        verbose_name_plural = "Students"
+        ordering = ["last_name", "first_name"]
         indexes = [
-            models.Index(fields=['student_number']),
-            models.Index(fields=['document_number']),
-            models.Index(fields=['last_name', 'first_name']),
+            models.Index(fields=["student_number"]),
+            models.Index(fields=["document_number"]),
+            models.Index(fields=["last_name", "first_name"]),
         ]

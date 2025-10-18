@@ -14,7 +14,7 @@ class PlanService:
     def create(plan_data: dict) -> Any:
         logger.info(f"Creating plan: {plan_data.get('name')}")
 
-        if PlanRepository.exists_by_name(plan_data.get('name')):
+        if PlanRepository.exists_by_name(plan_data.get("name")):
             logger.error(f"Plan name {plan_data.get('name')} already exists")
             raise ValueError(f"Plan name '{plan_data.get('name')}' is already taken")
 
@@ -54,7 +54,7 @@ class PlanService:
         return active_plans
 
     @staticmethod
-    def is_plan_active(plan: 'Plan') -> bool:
+    def is_plan_active(plan: "Plan") -> bool:
         if not plan:
             logger.warning("Cannot check if plan is active: plan is None")
             return False
@@ -74,7 +74,7 @@ class PlanService:
             logger.error(f"Plan with id {id} not found for update")
             raise ValueError(f"Plan with id {id} does not exist")
 
-        name = plan_data.get('name')
+        name = plan_data.get("name")
         if name and name != existing_plan.name:
             if PlanRepository.exists_by_name(name):
                 logger.error(f"Plan name {name} already exists")

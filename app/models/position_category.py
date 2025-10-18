@@ -14,10 +14,10 @@ class PositionCategory(models.Model):
         return f"<PositionCategory: {self.name}>"
 
     class Meta:
-        db_table = 'position_categories'
-        verbose_name = 'Position Category'
-        verbose_name_plural = 'Position Categories'
-        ordering = ['name']
+        db_table = "position_categories"
+        verbose_name = "Position Category"
+        verbose_name_plural = "Position Categories"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
+            models.Index(fields=["name"]),
         ]

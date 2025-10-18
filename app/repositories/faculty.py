@@ -15,31 +15,33 @@ class FacultyRepository:
     @staticmethod
     def find_by_id(id: int) -> Optional[Faculty]:
         try:
-            return Faculty.objects.select_related('university').get(id=id)
+            return Faculty.objects.select_related("university").get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
     def find_by_acronym(acronym: str) -> Optional[Faculty]:
         try:
-            return Faculty.objects.select_related('university').get(acronym=acronym)
+            return Faculty.objects.select_related("university").get(acronym=acronym)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
     def find_all() -> List[Faculty]:
-        return list(Faculty.objects.select_related('university').all())
+        return list(Faculty.objects.select_related("university").all())
 
     @staticmethod
     def find_by_university(university_id: int) -> List[Faculty]:
         return list(
-            Faculty.objects.filter(university_id=university_id).select_related('university')
+            Faculty.objects.filter(university_id=university_id).select_related(
+                "university"
+            )
         )
 
     @staticmethod
     def find_by_city(city: str) -> List[Faculty]:
         return list(
-            Faculty.objects.filter(city__iexact=city).select_related('university')
+            Faculty.objects.filter(city__iexact=city).select_related("university")
         )
 
     @staticmethod
@@ -71,14 +73,16 @@ class FacultyRepository:
     @staticmethod
     def find_with_full_relations(id: int) -> Optional[Faculty]:
         try:
-            return Faculty.objects.select_related(
-                'university'
-            ).prefetch_related(
-                'authorities',
-                'authorities__position',
-                'specialties',
-                'specialties__specialty_type'
-            ).get(id=id)
+            return (
+                Faculty.objects.select_related("university")
+                .prefetch_related(
+                    "authorities",
+                    "authorities__position",
+                    "specialties",
+                    "specialties__specialty_type",
+                )
+                .get(id=id)
+            )
         except ObjectDoesNotExist:
             return None
 

@@ -9,26 +9,17 @@ class Authority(models.Model):
         max_length=100,
         null=True,
         blank=True,
-        validators=[EmailValidator(message="Please enter a valid email address")]
+        validators=[EmailValidator(message="Please enter a valid email address")],
     )
 
     position = models.ForeignKey(
-        'Position',
-        on_delete=models.PROTECT,
-        related_name='authorities',
-        null=False
+        "Position", on_delete=models.PROTECT, related_name="authorities", null=False
     )
 
-    subjects = models.ManyToManyField(
-        'Subject',
-        related_name='authorities',
-        blank=True
-    )
+    subjects = models.ManyToManyField("Subject", related_name="authorities", blank=True)
 
     faculties = models.ManyToManyField(
-        'Faculty',
-        related_name='authorities',
-        blank=True
+        "Faculty", related_name="authorities", blank=True
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,11 +32,11 @@ class Authority(models.Model):
         return f"<Authority: {self.name}>"
 
     class Meta:
-        db_table = 'authorities'
-        verbose_name = 'Authority'
-        verbose_name_plural = 'Authorities'
-        ordering = ['name']
+        db_table = "authorities"
+        verbose_name = "Authority"
+        verbose_name_plural = "Authorities"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
-            models.Index(fields=['position']),
+            models.Index(fields=["name"]),
+            models.Index(fields=["position"]),
         ]

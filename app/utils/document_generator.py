@@ -32,11 +32,11 @@ class PDFDocument(Document):
 
         try:
             # Render HTML template
-            template_path = f'{folder}/{template}.html'
+            template_path = f"{folder}/{template}.html"
             html_string = render_to_string(template_path, context=context)
 
             # Generate PDF
-            base_url = getattr(settings, 'STATIC_URL', '/static/')
+            base_url = getattr(settings, "STATIC_URL", "/static/")
             bytes_data = HTML(string=html_string, base_url=base_url).write_pdf()
 
             pdf_io = BytesIO(bytes_data)
@@ -59,7 +59,7 @@ class ODTDocument(Document):
         try:
             # Validate template path
             template_path = os.path.join(
-                settings.BASE_DIR, 'app', folder, f'{template}.odt'
+                settings.BASE_DIR, "app", folder, f"{template}.odt"
             )
 
             if not os.path.exists(template_path):
@@ -67,13 +67,13 @@ class ODTDocument(Document):
                 raise FileNotFoundError(f"Template not found: {template_path}")
 
             # Setup renderer
-            media_path = getattr(settings, 'MEDIA_ROOT', 'media')
+            media_path = getattr(settings, "MEDIA_ROOT", "media")
             odt_renderer = get_odt_renderer(media_path=media_path)
 
             # Generate ODT in temporary file
             odt_io = BytesIO()
 
-            with tempfile.NamedTemporaryFile(suffix='.odt', delete=False) as temp_file:
+            with tempfile.NamedTemporaryFile(suffix=".odt", delete=False) as temp_file:
                 temp_path = temp_file.name
 
             try:
@@ -81,10 +81,12 @@ class ODTDocument(Document):
                     odt_renderer.render(odt_template, context=context)
                     odt_template.pack(temp_path)
 
-                    with open(temp_path, 'rb') as f:
+                    with open(temp_path, "rb") as f:
                         odt_io.write(f.read())
 
-                logger.info(f"ODT document generated successfully: {odt_io.tell()} bytes")
+                logger.info(
+                    f"ODT document generated successfully: {odt_io.tell()} bytes"
+                )
 
             finally:
                 # Clean up temporary file
@@ -110,7 +112,7 @@ class DOCXDocument(Document):
         try:
             # Validate template path
             template_path = os.path.join(
-                settings.BASE_DIR, 'app', folder, f'{template}.docx'
+                settings.BASE_DIR, "app", folder, f"{template}.docx"
             )
 
             if not os.path.exists(template_path):
@@ -123,7 +125,7 @@ class DOCXDocument(Document):
             # Generate DOCX in temporary file
             docx_io = BytesIO()
 
-            with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as temp_file:
+            with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as temp_file:
                 temp_path = temp_file.name
 
             try:
@@ -132,10 +134,12 @@ class DOCXDocument(Document):
                 doc.render(context, jinja_env)
                 doc.save(temp_path)
 
-                with open(temp_path, 'rb') as f:
+                with open(temp_path, "rb") as f:
                     docx_io.write(f.read())
 
-                logger.info(f"DOCX document generated successfully: {docx_io.tell()} bytes")
+                logger.info(
+                    f"DOCX document generated successfully: {docx_io.tell()} bytes"
+                )
 
             finally:
                 # Clean up temporary file
@@ -153,11 +157,7 @@ class DOCXDocument(Document):
 
 
 def get_document_generator(document_type: str) -> Optional[type[Document]]:
-    generators = {
-        'pdf': PDFDocument,
-        'odt': ODTDocument,
-        'docx': DOCXDocument
-    }
+    generators = {"pdf": PDFDocument, "odt": ODTDocument, "docx": DOCXDocument}
 
     generator = generators.get(document_type.lower())
 

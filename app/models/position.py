@@ -6,17 +6,14 @@ class Position(models.Model):
     points = models.IntegerField(null=True, blank=True)
 
     position_category = models.ForeignKey(
-        'PositionCategory',
+        "PositionCategory",
         on_delete=models.PROTECT,
-        related_name='positions',
-        null=False
+        related_name="positions",
+        null=False,
     )
 
     dedication_type = models.ForeignKey(
-        'DedicationType',
-        on_delete=models.PROTECT,
-        related_name='positions',
-        null=False
+        "DedicationType", on_delete=models.PROTECT, related_name="positions", null=False
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -29,11 +26,11 @@ class Position(models.Model):
         return f"<Position: {self.name} - {self.points} points>"
 
     class Meta:
-        db_table = 'positions'
-        verbose_name = 'Position'
-        verbose_name_plural = 'Positions'
-        ordering = ['name']
+        db_table = "positions"
+        verbose_name = "Position"
+        verbose_name_plural = "Positions"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
-            models.Index(fields=['position_category']),
+            models.Index(fields=["name"]),
+            models.Index(fields=["position_category"]),
         ]

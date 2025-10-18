@@ -13,12 +13,18 @@ class SpecialtyTypeService:
     def create(specialty_type_data: dict) -> Any:
         logger.info(f"Creating specialty type: {specialty_type_data.get('name')}")
 
-        if SpecialtyTypeRepository.exists_by_name(specialty_type_data.get('name')):
-            logger.error(f"Specialty type name {specialty_type_data.get('name')} already exists")
-            raise ValueError(f"Specialty type name '{specialty_type_data.get('name')}' is already taken")
+        if SpecialtyTypeRepository.exists_by_name(specialty_type_data.get("name")):
+            logger.error(
+                f"Specialty type name {specialty_type_data.get('name')} already exists"
+            )
+            raise ValueError(
+                f"Specialty type name '{specialty_type_data.get('name')}' is already taken"
+            )
 
         created_specialty_type = SpecialtyTypeRepository.create(specialty_type_data)
-        logger.info(f"Specialty type created successfully with id: {created_specialty_type.id}")
+        logger.info(
+            f"Specialty type created successfully with id: {created_specialty_type.id}"
+        )
         return created_specialty_type
 
     @staticmethod
@@ -54,7 +60,7 @@ class SpecialtyTypeService:
             logger.error(f"Specialty type with id {id} not found for update")
             raise ValueError(f"Specialty type with id {id} does not exist")
 
-        name = specialty_type_data.get('name')
+        name = specialty_type_data.get("name")
         if name and name != existing_specialty_type.name:
             if SpecialtyTypeRepository.exists_by_name(name):
                 logger.error(f"Specialty type name {name} already exists")

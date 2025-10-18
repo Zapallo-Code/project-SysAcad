@@ -71,9 +71,7 @@ class SubjectRepository:
     def find_with_relations(id: int) -> Optional[Subject]:
         try:
             return Subject.objects.prefetch_related(
-                'authorities',
-                'authorities__position',
-                'orientations'
+                "authorities", "authorities__position", "orientations"
             ).get(id=id)
         except ObjectDoesNotExist:
             return None

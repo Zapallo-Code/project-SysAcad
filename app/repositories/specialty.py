@@ -14,42 +14,46 @@ class SpecialtyRepository:
     @staticmethod
     def find_by_id(id: int) -> Optional[Specialty]:
         try:
-            return Specialty.objects.select_related(
-                'specialty_type', 'faculty'
-            ).get(id=id)
+            return Specialty.objects.select_related("specialty_type", "faculty").get(
+                id=id
+            )
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
     def find_all() -> List[Specialty]:
-        return list(Specialty.objects.select_related(
-            'specialty_type', 'faculty'
-        ).all())
+        return list(Specialty.objects.select_related("specialty_type", "faculty").all())
 
     @staticmethod
     def find_by_faculty(faculty_id: int) -> List[Specialty]:
-        return list(Specialty.objects.filter(
-            faculty_id=faculty_id
-        ).select_related('specialty_type', 'faculty'))
+        return list(
+            Specialty.objects.filter(faculty_id=faculty_id).select_related(
+                "specialty_type", "faculty"
+            )
+        )
 
     @staticmethod
     def find_by_letter(letter: str) -> List[Specialty]:
-        return list(Specialty.objects.filter(
-            letter=letter
-        ).select_related('specialty_type', 'faculty'))
+        return list(
+            Specialty.objects.filter(letter=letter).select_related(
+                "specialty_type", "faculty"
+            )
+        )
 
     @staticmethod
     def find_by_type(specialty_type_id: int) -> List[Specialty]:
-        return list(Specialty.objects.filter(
-            specialty_type_id=specialty_type_id
-        ).select_related('specialty_type', 'faculty'))
+        return list(
+            Specialty.objects.filter(
+                specialty_type_id=specialty_type_id
+            ).select_related("specialty_type", "faculty")
+        )
 
     @staticmethod
     def find_by_letter_and_faculty(letter: str, faculty_id: int) -> Optional[Specialty]:
         try:
-            return Specialty.objects.select_related(
-                'specialty_type', 'faculty'
-            ).get(letter=letter, faculty_id=faculty_id)
+            return Specialty.objects.select_related("specialty_type", "faculty").get(
+                letter=letter, faculty_id=faculty_id
+            )
         except ObjectDoesNotExist:
             return None
 
@@ -82,13 +86,12 @@ class SpecialtyRepository:
     @staticmethod
     def find_with_full_relations(id: int) -> Optional[Specialty]:
         try:
-            return Specialty.objects.select_related(
-                'specialty_type',
-                'faculty',
-                'faculty__university'
-            ).prefetch_related(
-                'students',
-                'orientations'
-            ).get(id=id)
+            return (
+                Specialty.objects.select_related(
+                    "specialty_type", "faculty", "faculty__university"
+                )
+                .prefetch_related("students", "orientations")
+                .get(id=id)
+            )
         except ObjectDoesNotExist:
             return None

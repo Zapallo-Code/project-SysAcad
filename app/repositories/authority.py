@@ -16,30 +16,30 @@ class AuthorityRepository:
     @staticmethod
     def find_by_id(id: int) -> Optional[Authority]:
         try:
-            return Authority.objects.select_related('position').get(id=id)
+            return Authority.objects.select_related("position").get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
     def find_all() -> List[Authority]:
-        return list(Authority.objects.select_related('position').all())
+        return list(Authority.objects.select_related("position").all())
 
     @staticmethod
     def find_by_position(position_id: int) -> List[Authority]:
-        return list(Authority.objects.filter(
-            position_id=position_id
-        ).select_related('position'))
+        return list(
+            Authority.objects.filter(position_id=position_id).select_related("position")
+        )
 
     @staticmethod
     def find_by_name(name: str) -> List[Authority]:
-        return list(Authority.objects.filter(
-            name__icontains=name
-        ).select_related('position'))
+        return list(
+            Authority.objects.filter(name__icontains=name).select_related("position")
+        )
 
     @staticmethod
     def find_by_email(email: str) -> Optional[Authority]:
         try:
-            return Authority.objects.select_related('position').get(email=email)
+            return Authority.objects.select_related("position").get(email=email)
         except ObjectDoesNotExist:
             return None
 
@@ -72,15 +72,15 @@ class AuthorityRepository:
     @staticmethod
     def find_with_relations(id: int) -> Optional[Authority]:
         try:
-            return Authority.objects.select_related(
-                'position',
-                'position__position_category',
-                'position__dedication_type'
-            ).prefetch_related(
-                'subjects',
-                'faculties',
-                'faculties__university'
-            ).get(id=id)
+            return (
+                Authority.objects.select_related(
+                    "position",
+                    "position__position_category",
+                    "position__dedication_type",
+                )
+                .prefetch_related("subjects", "faculties", "faculties__university")
+                .get(id=id)
+            )
         except ObjectDoesNotExist:
             return None
 

@@ -14,7 +14,7 @@ class SubjectService:
     def create(subject_data: dict) -> Any:
         logger.info(f"Creating subject: {subject_data.get('name')}")
 
-        code = subject_data.get('code')
+        code = subject_data.get("code")
         if code and SubjectRepository.exists_by_code(code):
             logger.error(f"Subject code {code} already exists")
             raise ValueError(f"Subject code '{code}' is already taken")
@@ -56,7 +56,7 @@ class SubjectService:
             logger.error(f"Subject with id {id} not found for update")
             raise ValueError(f"Subject with id {id} does not exist")
 
-        code = subject_data.get('code')
+        code = subject_data.get("code")
         if code and code != existing_subject.code:
             if SubjectRepository.exists_by_code(code):
                 logger.error(f"Subject code {code} already exists")
@@ -99,16 +99,24 @@ class SubjectService:
             raise ValueError(f"Authority with id {authority_id} does not exist")
 
         if SubjectRepository.is_authority_associated(subject, authority):
-            logger.warning(f"Authority {authority_id} is already associated with subject {subject_id}")
-            raise ValueError(f"Authority {authority_id} is already associated with this subject")
+            logger.warning(
+                f"Authority {authority_id} is already associated with subject {subject_id}"
+            )
+            raise ValueError(
+                f"Authority {authority_id} is already associated with this subject"
+            )
 
         SubjectRepository.associate_authority(subject, authority)
-        logger.info(f"Authority {authority_id} associated successfully with subject {subject_id}")
+        logger.info(
+            f"Authority {authority_id} associated successfully with subject {subject_id}"
+        )
 
     @staticmethod
     @transaction.atomic
     def disassociate_authority(subject_id: int, authority_id: int) -> None:
-        logger.info(f"Disassociating authority {authority_id} from subject {subject_id}")
+        logger.info(
+            f"Disassociating authority {authority_id} from subject {subject_id}"
+        )
 
         subject = SubjectRepository.find_by_id(subject_id)
         if not subject:
@@ -121,8 +129,14 @@ class SubjectService:
             raise ValueError(f"Authority with id {authority_id} does not exist")
 
         if not SubjectRepository.is_authority_associated(subject, authority):
-            logger.warning(f"Authority {authority_id} is not associated with subject {subject_id}")
-            raise ValueError(f"Authority {authority_id} is not associated with this subject")
+            logger.warning(
+                f"Authority {authority_id} is not associated with subject {subject_id}"
+            )
+            raise ValueError(
+                f"Authority {authority_id} is not associated with this subject"
+            )
 
         SubjectRepository.disassociate_authority(subject, authority)
-        logger.info(f"Authority {authority_id} disassociated successfully from subject {subject_id}")
+        logger.info(
+            f"Authority {authority_id} disassociated successfully from subject {subject_id}"
+        )

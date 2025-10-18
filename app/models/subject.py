@@ -8,7 +8,7 @@ class Subject(models.Model):
         null=False,
         blank=False,
         unique=True,
-        help_text="Unique identifier code for the subject"
+        help_text="Unique identifier code for the subject",
     )
     observation = models.CharField(max_length=255, null=True, blank=True)
 
@@ -22,11 +22,11 @@ class Subject(models.Model):
         return f"<Subject: {self.code} - {self.name}>"
 
     class Meta:
-        db_table = 'subjects'
-        verbose_name = 'Subject'
-        verbose_name_plural = 'Subjects'
-        ordering = ['code', 'name']
+        db_table = "subjects"
+        verbose_name = "Subject"
+        verbose_name_plural = "Subjects"
+        ordering = ["code", "name"]
         indexes = [
-            models.Index(fields=['code']),
-            models.Index(fields=['name']),
+            models.Index(fields=["code"]),
+            models.Index(fields=["name"]),
         ]

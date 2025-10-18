@@ -18,8 +18,8 @@ class PositionViewSet(viewsets.ViewSet):
         except Exception as e:
             logger.error(f"Error listing positions: {str(e)}")
             return Response(
-                {'error': 'Internal server error'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
     def retrieve(self, request, pk=None):
@@ -27,76 +27,62 @@ class PositionViewSet(viewsets.ViewSet):
             position = PositionService.find_by_id(int(pk))
             if position is None:
                 return Response(
-                    {'error': 'Position not found'},
-                    status=status.HTTP_404_NOT_FOUND
+                    {"error": "Position not found"}, status=status.HTTP_404_NOT_FOUND
                 )
             serializer = self.serializer_class(position)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except ValueError:
             return Response(
-                {'error': 'Invalid ID format'},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid ID format"}, status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
             logger.error(f"Error retrieving position {pk}: {str(e)}")
             return Response(
-                {'error': 'Internal server error'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
     def create(self, request):
         try:
             serializer = self.serializer_class(data=request.data)
             if not serializer.is_valid():
-                return Response(
-                    serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             position = PositionService.create(serializer.validated_data)
             response_serializer = self.serializer_class(position)
-            return Response(
-                response_serializer.data,
-                status=status.HTTP_201_CREATED
-            )
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.error(f"Error creating position: {str(e)}")
             return Response(
-                {'error': 'Internal server error'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
     def update(self, request, pk=None):
         try:
             serializer = self.serializer_class(data=request.data)
             if not serializer.is_valid():
-                return Response(
-                    serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            updated_position = PositionService.update(int(pk), serializer.validated_data)
+            updated_position = PositionService.update(
+                int(pk), serializer.validated_data
+            )
             if updated_position is None:
                 return Response(
-                    {'error': 'Position not found'},
-                    status=status.HTTP_404_NOT_FOUND
+                    {"error": "Position not found"}, status=status.HTTP_404_NOT_FOUND
                 )
 
             response_serializer = self.serializer_class(updated_position)
-            return Response(
-                response_serializer.data,
-                status=status.HTTP_200_OK
-            )
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
         except ValueError:
             return Response(
-                {'error': 'Invalid ID format'},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid ID format"}, status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
             logger.error(f"Error updating position {pk}: {str(e)}")
             return Response(
-                {'error': 'Internal server error'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
     def destroy(self, request, pk=None):
@@ -104,20 +90,18 @@ class PositionViewSet(viewsets.ViewSet):
             position = PositionService.find_by_id(int(pk))
             if position is None:
                 return Response(
-                    {'error': 'Position not found'},
-                    status=status.HTTP_404_NOT_FOUND
+                    {"error": "Position not found"}, status=status.HTTP_404_NOT_FOUND
                 )
 
             PositionService.delete_by_id(int(pk))
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ValueError:
             return Response(
-                {'error': 'Invalid ID format'},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid ID format"}, status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
             logger.error(f"Error deleting position {pk}: {str(e)}")
             return Response(
-                {'error': 'Internal server error'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

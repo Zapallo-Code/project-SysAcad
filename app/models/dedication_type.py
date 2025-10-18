@@ -15,10 +15,10 @@ class DedicationType(models.Model):
         return f"<DedicationType: {self.name}>"
 
     class Meta:
-        db_table = 'dedication_types'
-        verbose_name = 'Dedication Type'
-        verbose_name_plural = 'Dedication Types'
-        ordering = ['name']
+        db_table = "dedication_types"
+        verbose_name = "Dedication Type"
+        verbose_name_plural = "Dedication Types"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
+            models.Index(fields=["name"]),
         ]

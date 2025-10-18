@@ -13,11 +13,15 @@ class UniversityService:
     def create(university_data: dict) -> Any:
         logger.info(f"Creating university: {university_data.get('name')}")
 
-        if UniversityRepository.exists_by_name(university_data.get('name')):
-            logger.error(f"University name {university_data.get('name')} already exists")
-            raise ValueError(f"University name '{university_data.get('name')}' is already taken")
+        if UniversityRepository.exists_by_name(university_data.get("name")):
+            logger.error(
+                f"University name {university_data.get('name')} already exists"
+            )
+            raise ValueError(
+                f"University name '{university_data.get('name')}' is already taken"
+            )
 
-        acronym = university_data.get('acronym')
+        acronym = university_data.get("acronym")
         if acronym and UniversityRepository.exists_by_acronym(acronym):
             logger.error(f"University acronym {acronym} already exists")
             raise ValueError(f"University acronym '{acronym}' is already taken")
@@ -59,13 +63,13 @@ class UniversityService:
             logger.error(f"University with id {id} not found for update")
             raise ValueError(f"University with id {id} does not exist")
 
-        name = university_data.get('name')
+        name = university_data.get("name")
         if name and name != existing_university.name:
             if UniversityRepository.exists_by_name(name):
                 logger.error(f"University name {name} already exists")
                 raise ValueError(f"University name '{name}' is already taken")
 
-        acronym = university_data.get('acronym')
+        acronym = university_data.get("acronym")
         if acronym and acronym != existing_university.acronym:
             if UniversityRepository.exists_by_acronym(acronym):
                 logger.error(f"University acronym {acronym} already exists")

@@ -15,18 +15,24 @@ class SpecialtyService:
     def create(specialty_data: dict) -> Any:
         logger.info(f"Creating specialty: {specialty_data.get('name')}")
 
-        specialty_type_id = specialty_data.get('specialty_type_id')
-        faculty_id = specialty_data.get('faculty_id')
+        specialty_type_id = specialty_data.get("specialty_type_id")
+        faculty_id = specialty_data.get("faculty_id")
 
         if SpecialtyRepository.exists_by_name_and_type(
-            specialty_data.get('name'), specialty_type_id
+            specialty_data.get("name"), specialty_type_id
         ):
-            logger.error(f"Specialty with name {specialty_data.get('name')} and type {specialty_type_id} already exists")
-            raise ValueError(f"Specialty with this name and type already exists")
+            logger.error(
+                f"Specialty with name {specialty_data.get('name')} and type {specialty_type_id} already exists"
+            )
+            raise ValueError("Specialty with this name and type already exists")
 
-        if specialty_type_id and not SpecialtyTypeRepository.exists_by_id(specialty_type_id):
+        if specialty_type_id and not SpecialtyTypeRepository.exists_by_id(
+            specialty_type_id
+        ):
             logger.error(f"Specialty type with id {specialty_type_id} not found")
-            raise ValueError(f"Specialty type with id {specialty_type_id} does not exist")
+            raise ValueError(
+                f"Specialty type with id {specialty_type_id} does not exist"
+            )
 
         if faculty_id and not FacultyRepository.exists_by_id(faculty_id):
             logger.error(f"Faculty with id {faculty_id} not found")
@@ -80,23 +86,38 @@ class SpecialtyService:
             logger.error(f"Specialty with id {id} not found for update")
             raise ValueError(f"Specialty with id {id} does not exist")
 
-        name = specialty_data.get('name')
-        specialty_type_id = specialty_data.get('specialty_type_id')
+        name = specialty_data.get("name")
+        specialty_type_id = specialty_data.get("specialty_type_id")
 
         if name or specialty_type_id:
             check_name = name if name else existing_specialty.name
-            check_type = specialty_type_id if specialty_type_id else existing_specialty.specialty_type_id
+            check_type = (
+                specialty_type_id
+                if specialty_type_id
+                else existing_specialty.specialty_type_id
+            )
 
-            if (check_name != existing_specialty.name or check_type != existing_specialty.specialty_type_id):
+            if (
+                check_name != existing_specialty.name
+                or check_type != existing_specialty.specialty_type_id
+            ):
                 if SpecialtyRepository.exists_by_name_and_type(check_name, check_type):
-                    logger.error(f"Specialty with name {check_name} and type {check_type} already exists")
-                    raise ValueError(f"Specialty with this name and type already exists")
+                    logger.error(
+                        f"Specialty with name {check_name} and type {check_type} already exists"
+                    )
+                    raise ValueError(
+                        f"Specialty with this name and type already exists"
+                    )
 
-        if specialty_type_id and not SpecialtyTypeRepository.exists_by_id(specialty_type_id):
+        if specialty_type_id and not SpecialtyTypeRepository.exists_by_id(
+            specialty_type_id
+        ):
             logger.error(f"Specialty type with id {specialty_type_id} not found")
-            raise ValueError(f"Specialty type with id {specialty_type_id} does not exist")
+            raise ValueError(
+                f"Specialty type with id {specialty_type_id} does not exist"
+            )
 
-        faculty_id = specialty_data.get('faculty_id')
+        faculty_id = specialty_data.get("faculty_id")
         if faculty_id and not FacultyRepository.exists_by_id(faculty_id):
             logger.error(f"Faculty with id {faculty_id} not found")
             raise ValueError(f"Faculty with id {faculty_id} does not exist")

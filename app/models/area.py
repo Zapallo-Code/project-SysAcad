@@ -14,10 +14,10 @@ class Area(models.Model):
         return f"<Area: {self.name}>"
 
     class Meta:
-        db_table = 'areas'
-        verbose_name = 'Area'
-        verbose_name_plural = 'Areas'
-        ordering = ['name']
+        db_table = "areas"
+        verbose_name = "Area"
+        verbose_name_plural = "Areas"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
+            models.Index(fields=["name"]),
         ]

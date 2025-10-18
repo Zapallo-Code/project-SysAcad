@@ -5,22 +5,13 @@ from django.core.validators import EmailValidator
 class Faculty(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     abbreviation = models.CharField(
-        max_length=10,
-        null=False,
-        blank=False,
-        help_text="Faculty abbreviation"
+        max_length=10, null=False, blank=False, help_text="Faculty abbreviation"
     )
     directory = models.CharField(
-        max_length=100,
-        null=False,
-        blank=False,
-        help_text="Directory path or location"
+        max_length=100, null=False, blank=False, help_text="Directory path or location"
     )
     acronym = models.CharField(
-        max_length=10,
-        null=False,
-        blank=False,
-        help_text="Faculty identifying acronym"
+        max_length=10, null=False, blank=False, help_text="Faculty identifying acronym"
     )
 
     postal_code = models.CharField(max_length=10, null=True, blank=True)
@@ -28,23 +19,17 @@ class Faculty(models.Model):
     address = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     contact_name = models.CharField(
-        max_length=100,
-        null=True,
-        blank=True,
-        help_text="Contact person's name"
+        max_length=100, null=True, blank=True, help_text="Contact person's name"
     )
     email = models.EmailField(
         max_length=100,
         null=False,
         blank=False,
-        validators=[EmailValidator(message="Please enter a valid email address")]
+        validators=[EmailValidator(message="Please enter a valid email address")],
     )
 
     university = models.ForeignKey(
-        'University',
-        on_delete=models.PROTECT,
-        related_name='faculties',
-        null=False
+        "University", on_delete=models.PROTECT, related_name="faculties", null=False
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -57,12 +42,12 @@ class Faculty(models.Model):
         return f"<Faculty: {self.name} - {self.acronym}>"
 
     class Meta:
-        db_table = 'faculties'
-        verbose_name = 'Faculty'
-        verbose_name_plural = 'Faculties'
-        ordering = ['name']
+        db_table = "faculties"
+        verbose_name = "Faculty"
+        verbose_name_plural = "Faculties"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['acronym']),
-            models.Index(fields=['abbreviation']),
-            models.Index(fields=['name']),
+            models.Index(fields=["acronym"]),
+            models.Index(fields=["abbreviation"]),
+            models.Index(fields=["name"]),
         ]

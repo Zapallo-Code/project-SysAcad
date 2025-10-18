@@ -14,44 +14,48 @@ class StudentRepository:
     @staticmethod
     def find_by_id(id: int) -> Optional[Student]:
         try:
-            return Student.objects.select_related(
-                'document_type', 'specialty'
-            ).get(id=id)
+            return Student.objects.select_related("document_type", "specialty").get(
+                id=id
+            )
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
     def find_by_student_number(student_number: int) -> Optional[Student]:
         try:
-            return Student.objects.select_related(
-                'document_type', 'specialty'
-            ).get(student_number=student_number)
+            return Student.objects.select_related("document_type", "specialty").get(
+                student_number=student_number
+            )
         except (ObjectDoesNotExist, MultipleObjectsReturned):
             return None
 
     @staticmethod
     def find_by_document_number(document_number: str) -> List[Student]:
-        return list(Student.objects.filter(
-            document_number=document_number
-        ).select_related('document_type', 'specialty'))
+        return list(
+            Student.objects.filter(document_number=document_number).select_related(
+                "document_type", "specialty"
+            )
+        )
 
     @staticmethod
     def find_all() -> List[Student]:
-        return list(Student.objects.select_related(
-            'document_type', 'specialty'
-        ).all())
+        return list(Student.objects.select_related("document_type", "specialty").all())
 
     @staticmethod
     def find_by_specialty(specialty_id: int) -> List[Student]:
-        return list(Student.objects.filter(
-            specialty_id=specialty_id
-        ).select_related('document_type', 'specialty'))
+        return list(
+            Student.objects.filter(specialty_id=specialty_id).select_related(
+                "document_type", "specialty"
+            )
+        )
 
     @staticmethod
     def find_by_gender(gender: str) -> List[Student]:
-        return list(Student.objects.filter(
-            gender=gender
-        ).select_related('document_type', 'specialty'))
+        return list(
+            Student.objects.filter(gender=gender).select_related(
+                "document_type", "specialty"
+            )
+        )
 
     @staticmethod
     def update(student: Student) -> Student:
@@ -87,11 +91,11 @@ class StudentRepository:
     def find_with_full_relations(id: int) -> Optional[Student]:
         try:
             return Student.objects.select_related(
-                'document_type',
-                'specialty',
-                'specialty__faculty',
-                'specialty__faculty__university',
-                'specialty__specialty_type'
+                "document_type",
+                "specialty",
+                "specialty__faculty",
+                "specialty__faculty__university",
+                "specialty__specialty_type",
             ).get(id=id)
         except ObjectDoesNotExist:
             return None

@@ -14,10 +14,10 @@ class Group(models.Model):
         return f"<Group: {self.name}>"
 
     class Meta:
-        db_table = 'groups'
-        verbose_name = 'Group'
-        verbose_name_plural = 'Groups'
-        ordering = ['name']
+        db_table = "groups"
+        verbose_name = "Group"
+        verbose_name_plural = "Groups"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
+            models.Index(fields=["name"]),
         ]

@@ -16,27 +16,33 @@ class OrientationService:
     def create(orientation_data: dict) -> Any:
         logger.info(f"Creating orientation: {orientation_data.get('name')}")
 
-        if OrientationRepository.exists_by_name(orientation_data.get('name')):
-            logger.error(f"Orientation name {orientation_data.get('name')} already exists")
-            raise ValueError(f"Orientation name '{orientation_data.get('name')}' is already taken")
+        if OrientationRepository.exists_by_name(orientation_data.get("name")):
+            logger.error(
+                f"Orientation name {orientation_data.get('name')} already exists"
+            )
+            raise ValueError(
+                f"Orientation name '{orientation_data.get('name')}' is already taken"
+            )
 
-        specialty_id = orientation_data.get('specialty_id')
+        specialty_id = orientation_data.get("specialty_id")
         if specialty_id and not SpecialtyRepository.exists_by_id(specialty_id):
             logger.error(f"Specialty with id {specialty_id} not found")
             raise ValueError(f"Specialty with id {specialty_id} does not exist")
 
-        plan_id = orientation_data.get('plan_id')
+        plan_id = orientation_data.get("plan_id")
         if plan_id and not PlanRepository.exists_by_id(plan_id):
             logger.error(f"Plan with id {plan_id} not found")
             raise ValueError(f"Plan with id {plan_id} does not exist")
 
-        subject_id = orientation_data.get('subject_id')
+        subject_id = orientation_data.get("subject_id")
         if subject_id and not SubjectRepository.exists_by_id(subject_id):
             logger.error(f"Subject with id {subject_id} not found")
             raise ValueError(f"Subject with id {subject_id} does not exist")
 
         created_orientation = OrientationRepository.create(orientation_data)
-        logger.info(f"Orientation created successfully with id: {created_orientation.id}")
+        logger.info(
+            f"Orientation created successfully with id: {created_orientation.id}"
+        )
         return created_orientation
 
     @staticmethod
@@ -71,7 +77,9 @@ class OrientationService:
             raise ValueError(f"Specialty with id {specialty_id} does not exist")
 
         orientations = OrientationRepository.find_by_specialty(specialty_id)
-        logger.info(f"Found {len(orientations)} orientations for specialty {specialty_id}")
+        logger.info(
+            f"Found {len(orientations)} orientations for specialty {specialty_id}"
+        )
         return orientations
 
     @staticmethod
@@ -84,23 +92,23 @@ class OrientationService:
             logger.error(f"Orientation with id {id} not found for update")
             raise ValueError(f"Orientation with id {id} does not exist")
 
-        name = orientation_data.get('name')
+        name = orientation_data.get("name")
         if name and name != existing_orientation.name:
             if OrientationRepository.exists_by_name(name):
                 logger.error(f"Orientation name {name} already exists")
                 raise ValueError(f"Orientation name '{name}' is already taken")
 
-        specialty_id = orientation_data.get('specialty_id')
+        specialty_id = orientation_data.get("specialty_id")
         if specialty_id and not SpecialtyRepository.exists_by_id(specialty_id):
             logger.error(f"Specialty with id {specialty_id} not found")
             raise ValueError(f"Specialty with id {specialty_id} does not exist")
 
-        plan_id = orientation_data.get('plan_id')
+        plan_id = orientation_data.get("plan_id")
         if plan_id and not PlanRepository.exists_by_id(plan_id):
             logger.error(f"Plan with id {plan_id} not found")
             raise ValueError(f"Plan with id {plan_id} does not exist")
 
-        subject_id = orientation_data.get('subject_id')
+        subject_id = orientation_data.get("subject_id")
         if subject_id and not SubjectRepository.exists_by_id(subject_id):
             logger.error(f"Subject with id {subject_id} not found")
             raise ValueError(f"Subject with id {subject_id} does not exist")

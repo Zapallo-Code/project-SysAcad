@@ -7,22 +7,19 @@ class Specialty(models.Model):
         max_length=1,
         null=False,
         blank=False,
-        help_text="Identifier letter for the specialty"
+        help_text="Identifier letter for the specialty",
     )
     observation = models.CharField(max_length=255, null=True, blank=True)
 
     specialty_type = models.ForeignKey(
-        'SpecialtyType',
+        "SpecialtyType",
         on_delete=models.PROTECT,
-        related_name='specialties',
-        null=False
+        related_name="specialties",
+        null=False,
     )
 
     faculty = models.ForeignKey(
-        'Faculty',
-        on_delete=models.PROTECT,
-        related_name='specialties',
-        null=False
+        "Faculty", on_delete=models.PROTECT, related_name="specialties", null=False
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,12 +32,12 @@ class Specialty(models.Model):
         return f"<Specialty: {self.name} - Letter: {self.letter}>"
 
     class Meta:
-        db_table = 'specialties'
-        verbose_name = 'Specialty'
-        verbose_name_plural = 'Specialties'
-        ordering = ['name']
+        db_table = "specialties"
+        verbose_name = "Specialty"
+        verbose_name_plural = "Specialties"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['letter']),
-            models.Index(fields=['name']),
-            models.Index(fields=['specialty_type']),
+            models.Index(fields=["letter"]),
+            models.Index(fields=["name"]),
+            models.Index(fields=["specialty_type"]),
         ]

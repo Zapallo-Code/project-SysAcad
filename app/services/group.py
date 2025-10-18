@@ -13,7 +13,7 @@ class GroupService:
     def create(group_data: dict) -> Any:
         logger.info(f"Creating group: {group_data.get('name')}")
 
-        if GroupRepository.exists_by_name(group_data.get('name')):
+        if GroupRepository.exists_by_name(group_data.get("name")):
             logger.error(f"Group name {group_data.get('name')} already exists")
             raise ValueError(f"Group name '{group_data.get('name')}' is already taken")
 
@@ -54,7 +54,7 @@ class GroupService:
             logger.error(f"Group with id {id} not found for update")
             raise ValueError(f"Group with id {id} does not exist")
 
-        name = group_data.get('name')
+        name = group_data.get("name")
         if name and name != existing_group.name:
             if GroupRepository.exists_by_name(name):
                 logger.error(f"Group name {name} already exists")

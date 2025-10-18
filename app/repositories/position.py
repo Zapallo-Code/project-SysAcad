@@ -15,41 +15,50 @@ class PositionRepository:
     def find_by_id(id: int) -> Optional[Position]:
         try:
             return Position.objects.select_related(
-                'position_category', 'dedication_type'
+                "position_category", "dedication_type"
             ).get(id=id)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
     def find_all() -> List[Position]:
-        return list(Position.objects.select_related(
-            'position_category', 'dedication_type'
-        ).all())
+        return list(
+            Position.objects.select_related(
+                "position_category", "dedication_type"
+            ).all()
+        )
 
     @staticmethod
     def find_by_category(position_category_id: int) -> List[Position]:
-        return list(Position.objects.filter(
-            position_category_id=position_category_id
-        ).select_related('position_category', 'dedication_type'))
+        return list(
+            Position.objects.filter(
+                position_category_id=position_category_id
+            ).select_related("position_category", "dedication_type")
+        )
 
     @staticmethod
     def find_by_dedication_type(dedication_type_id: int) -> List[Position]:
-        return list(Position.objects.filter(
-            dedication_type_id=dedication_type_id
-        ).select_related('position_category', 'dedication_type'))
+        return list(
+            Position.objects.filter(
+                dedication_type_id=dedication_type_id
+            ).select_related("position_category", "dedication_type")
+        )
 
     @staticmethod
     def find_by_name(name: str) -> List[Position]:
-        return list(Position.objects.filter(
-            name__icontains=name
-        ).select_related('position_category', 'dedication_type'))
+        return list(
+            Position.objects.filter(name__icontains=name).select_related(
+                "position_category", "dedication_type"
+            )
+        )
 
     @staticmethod
     def find_by_points_range(min_points: int, max_points: int) -> List[Position]:
-        return list(Position.objects.filter(
-            points__gte=min_points,
-            points__lte=max_points
-        ).select_related('position_category', 'dedication_type'))
+        return list(
+            Position.objects.filter(
+                points__gte=min_points, points__lte=max_points
+            ).select_related("position_category", "dedication_type")
+        )
 
     @staticmethod
     def update(position: Position) -> Position:
@@ -76,10 +85,10 @@ class PositionRepository:
     @staticmethod
     def find_with_relations(id: int) -> Optional[Position]:
         try:
-            return Position.objects.select_related(
-                'position_category', 'dedication_type'
-            ).prefetch_related(
-                'authorities'
-            ).get(id=id)
+            return (
+                Position.objects.select_related("position_category", "dedication_type")
+                .prefetch_related("authorities")
+                .get(id=id)
+            )
         except ObjectDoesNotExist:
             return None

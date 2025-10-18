@@ -15,10 +15,10 @@ class Degree(models.Model):
         return f"<Degree: {self.name}>"
 
     class Meta:
-        db_table = 'degrees'
-        verbose_name = 'Degree'
-        verbose_name_plural = 'Degrees'
-        ordering = ['name']
+        db_table = "degrees"
+        verbose_name = "Degree"
+        verbose_name_plural = "Degrees"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['name']),
+            models.Index(fields=["name"]),
         ]

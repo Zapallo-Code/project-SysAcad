@@ -13,9 +13,11 @@ class DegreeService:
     def create(degree_data: dict) -> Any:
         logger.info(f"Creating degree: {degree_data.get('name')}")
 
-        if DegreeRepository.exists_by_name(degree_data.get('name')):
+        if DegreeRepository.exists_by_name(degree_data.get("name")):
             logger.error(f"Degree name {degree_data.get('name')} already exists")
-            raise ValueError(f"Degree name '{degree_data.get('name')}' is already taken")
+            raise ValueError(
+                f"Degree name '{degree_data.get('name')}' is already taken"
+            )
 
         created_degree = DegreeRepository.create(degree_data)
         logger.info(f"Degree created successfully with id: {created_degree.id}")
@@ -54,7 +56,7 @@ class DegreeService:
             logger.error(f"Degree with id {id} not found for update")
             raise ValueError(f"Degree with id {id} does not exist")
 
-        name = degree_data.get('name')
+        name = degree_data.get("name")
         if name and name != existing_degree.name:
             if DegreeRepository.exists_by_name(name):
                 logger.error(f"Degree name {name} already exists")

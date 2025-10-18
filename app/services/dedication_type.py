@@ -13,12 +13,18 @@ class DedicationTypeService:
     def create(dedication_type_data: dict) -> Any:
         logger.info(f"Creating dedication type: {dedication_type_data.get('name')}")
 
-        if DedicationTypeRepository.exists_by_name(dedication_type_data.get('name')):
-            logger.error(f"Dedication type name {dedication_type_data.get('name')} already exists")
-            raise ValueError(f"Dedication type name '{dedication_type_data.get('name')}' is already taken")
+        if DedicationTypeRepository.exists_by_name(dedication_type_data.get("name")):
+            logger.error(
+                f"Dedication type name {dedication_type_data.get('name')} already exists"
+            )
+            raise ValueError(
+                f"Dedication type name '{dedication_type_data.get('name')}' is already taken"
+            )
 
         created_dedication_type = DedicationTypeRepository.create(dedication_type_data)
-        logger.info(f"Dedication type created successfully with id: {created_dedication_type.id}")
+        logger.info(
+            f"Dedication type created successfully with id: {created_dedication_type.id}"
+        )
         return created_dedication_type
 
     @staticmethod
@@ -54,7 +60,7 @@ class DedicationTypeService:
             logger.error(f"Dedication type with id {id} not found for update")
             raise ValueError(f"Dedication type with id {id} does not exist")
 
-        name = dedication_type_data.get('name')
+        name = dedication_type_data.get("name")
         if name and name != existing_dedication_type.name:
             if DedicationTypeRepository.exists_by_name(name):
                 logger.error(f"Dedication type name {name} already exists")
@@ -64,7 +70,9 @@ class DedicationTypeService:
             if hasattr(existing_dedication_type, key):
                 setattr(existing_dedication_type, key, value)
 
-        updated_dedication_type = DedicationTypeRepository.update(existing_dedication_type)
+        updated_dedication_type = DedicationTypeRepository.update(
+            existing_dedication_type
+        )
         logger.info(f"Dedication type with id {id} updated successfully")
         return updated_dedication_type
 

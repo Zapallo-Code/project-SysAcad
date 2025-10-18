@@ -32,10 +32,9 @@ class PlanRepository:
 
     @staticmethod
     def find_by_date_range(start_date: date, end_date: date) -> List[Plan]:
-        return list(Plan.objects.filter(
-            start_date__lte=end_date,
-            end_date__gte=start_date
-        ))
+        return list(
+            Plan.objects.filter(start_date__lte=end_date, end_date__gte=start_date)
+        )
 
     @staticmethod
     def find_starting_after(target_date: date) -> List[Plan]:

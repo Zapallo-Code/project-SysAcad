@@ -3,27 +3,19 @@ from django.db import models
 
 class DocumentType(models.Model):
     dni = models.IntegerField(
-        null=False,
-        blank=False,
-        help_text="Type: DNI (Documento Nacional de Identidad)"
+        null=False, blank=False, help_text="Type: DNI (Documento Nacional de Identidad)"
     )
     civic_card = models.CharField(
-        max_length=20,
-        null=False,
-        blank=False,
-        help_text="Type: L.C (Libreta Cívica)"
+        max_length=20, null=False, blank=False, help_text="Type: L.C (Libreta Cívica)"
     )
     enrollment_card = models.CharField(
         max_length=20,
         null=False,
         blank=False,
-        help_text="Type: L.E (Libreta de Enrolamiento)"
+        help_text="Type: L.E (Libreta de Enrolamiento)",
     )
     passport = models.CharField(
-        max_length=20,
-        null=False,
-        blank=False,
-        help_text="Type: Pasaporte"
+        max_length=20, null=False, blank=False, help_text="Type: Pasaporte"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -45,6 +37,6 @@ class DocumentType(models.Model):
         return f"<DocumentType: id={self.id}>"
 
     class Meta:
-        db_table = 'document_types'
-        verbose_name = 'Document Type'
-        verbose_name_plural = 'Document Types'
+        db_table = "document_types"
+        verbose_name = "Document Type"
+        verbose_name_plural = "Document Types"

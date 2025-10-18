@@ -15,15 +15,25 @@ class FacultyService:
     def create(faculty_data: dict) -> Any:
         logger.info(f"Creating faculty: {faculty_data.get('name')}")
 
-        if FacultyRepository.exists_by_name(faculty_data.get('name')):
+        if FacultyRepository.exists_by_name(faculty_data.get("name")):
             logger.error(f"Faculty name {faculty_data.get('name')} already exists")
-            raise ValueError(f"Faculty name '{faculty_data.get('name')}' is already taken")
+            raise ValueError(
+                f"Faculty name '{faculty_data.get('name')}' is already taken"
+            )
 
-        if faculty_data.get('abbreviation') and FacultyRepository.exists_by_abbreviation(faculty_data.get('abbreviation')):
-            logger.error(f"Faculty abbreviation {faculty_data.get('abbreviation')} already exists")
-            raise ValueError(f"Faculty abbreviation '{faculty_data.get('abbreviation')}' is already taken")
+        if faculty_data.get(
+            "abbreviation"
+        ) and FacultyRepository.exists_by_abbreviation(
+            faculty_data.get("abbreviation")
+        ):
+            logger.error(
+                f"Faculty abbreviation {faculty_data.get('abbreviation')} already exists"
+            )
+            raise ValueError(
+                f"Faculty abbreviation '{faculty_data.get('abbreviation')}' is already taken"
+            )
 
-        university_id = faculty_data.get('university_id')
+        university_id = faculty_data.get("university_id")
         if university_id and not UniversityRepository.exists_by_id(university_id):
             logger.error(f"University with id {university_id} not found")
             raise ValueError(f"University with id {university_id} does not exist")
@@ -77,19 +87,21 @@ class FacultyService:
             logger.error(f"Faculty with id {id} not found for update")
             raise ValueError(f"Faculty with id {id} does not exist")
 
-        name = faculty_data.get('name')
+        name = faculty_data.get("name")
         if name and name != existing_faculty.name:
             if FacultyRepository.exists_by_name(name):
                 logger.error(f"Faculty name {name} already exists")
                 raise ValueError(f"Faculty name '{name}' is already taken")
 
-        abbreviation = faculty_data.get('abbreviation')
+        abbreviation = faculty_data.get("abbreviation")
         if abbreviation and abbreviation != existing_faculty.abbreviation:
             if FacultyRepository.exists_by_abbreviation(abbreviation):
                 logger.error(f"Faculty abbreviation {abbreviation} already exists")
-                raise ValueError(f"Faculty abbreviation '{abbreviation}' is already taken")
+                raise ValueError(
+                    f"Faculty abbreviation '{abbreviation}' is already taken"
+                )
 
-        university_id = faculty_data.get('university_id')
+        university_id = faculty_data.get("university_id")
         if university_id and not UniversityRepository.exists_by_id(university_id):
             logger.error(f"University with id {university_id} not found")
             raise ValueError(f"University with id {university_id} does not exist")
@@ -131,16 +143,24 @@ class FacultyService:
             raise ValueError(f"Authority with id {authority_id} does not exist")
 
         if FacultyRepository.is_authority_associated(faculty, authority):
-            logger.warning(f"Authority {authority_id} is already associated with faculty {faculty_id}")
-            raise ValueError(f"Authority {authority_id} is already associated with this faculty")
+            logger.warning(
+                f"Authority {authority_id} is already associated with faculty {faculty_id}"
+            )
+            raise ValueError(
+                f"Authority {authority_id} is already associated with this faculty"
+            )
 
         FacultyRepository.associate_authority(faculty, authority)
-        logger.info(f"Authority {authority_id} associated successfully with faculty {faculty_id}")
+        logger.info(
+            f"Authority {authority_id} associated successfully with faculty {faculty_id}"
+        )
 
     @staticmethod
     @transaction.atomic
     def disassociate_authority(faculty_id: int, authority_id: int) -> None:
-        logger.info(f"Disassociating authority {authority_id} from faculty {faculty_id}")
+        logger.info(
+            f"Disassociating authority {authority_id} from faculty {faculty_id}"
+        )
 
         faculty = FacultyRepository.find_by_id(faculty_id)
         if not faculty:
@@ -153,8 +173,14 @@ class FacultyService:
             raise ValueError(f"Authority with id {authority_id} does not exist")
 
         if not FacultyRepository.is_authority_associated(faculty, authority):
-            logger.warning(f"Authority {authority_id} is not associated with faculty {faculty_id}")
-            raise ValueError(f"Authority {authority_id} is not associated with this faculty")
+            logger.warning(
+                f"Authority {authority_id} is not associated with faculty {faculty_id}"
+            )
+            raise ValueError(
+                f"Authority {authority_id} is not associated with this faculty"
+            )
 
         FacultyRepository.disassociate_authority(faculty, authority)
-        logger.info(f"Authority {authority_id} disassociated successfully from faculty {faculty_id}")
+        logger.info(
+            f"Authority {authority_id} disassociated successfully from faculty {faculty_id}"
+        )

@@ -8,7 +8,7 @@ class University(models.Model):
         null=False,
         blank=False,
         unique=True,
-        help_text="Unique acronym for the university"
+        help_text="Unique acronym for the university",
     )
 
     def __str__(self):
@@ -18,10 +18,10 @@ class University(models.Model):
         return f"<University: {self.acronym}>"
 
     class Meta:
-        db_table = 'universities'
-        verbose_name = 'University'
-        verbose_name_plural = 'Universities'
-        ordering = ['name']
+        db_table = "universities"
+        verbose_name = "University"
+        verbose_name_plural = "Universities"
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['acronym']),
+            models.Index(fields=["acronym"]),
         ]

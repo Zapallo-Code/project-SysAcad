@@ -13,12 +13,22 @@ class PositionCategoryService:
     def create(position_category_data: dict) -> Any:
         logger.info(f"Creating position category: {position_category_data.get('name')}")
 
-        if PositionCategoryRepository.exists_by_name(position_category_data.get('name')):
-            logger.error(f"Position category name {position_category_data.get('name')} already exists")
-            raise ValueError(f"Position category name '{position_category_data.get('name')}' is already taken")
+        if PositionCategoryRepository.exists_by_name(
+            position_category_data.get("name")
+        ):
+            logger.error(
+                f"Position category name {position_category_data.get('name')} already exists"
+            )
+            raise ValueError(
+                f"Position category name '{position_category_data.get('name')}' is already taken"
+            )
 
-        created_position_category = PositionCategoryRepository.create(position_category_data)
-        logger.info(f"Position category created successfully with id: {created_position_category.id}")
+        created_position_category = PositionCategoryRepository.create(
+            position_category_data
+        )
+        logger.info(
+            f"Position category created successfully with id: {created_position_category.id}"
+        )
         return created_position_category
 
     @staticmethod
@@ -54,7 +64,7 @@ class PositionCategoryService:
             logger.error(f"Position category with id {id} not found for update")
             raise ValueError(f"Position category with id {id} does not exist")
 
-        name = position_category_data.get('name')
+        name = position_category_data.get("name")
         if name and name != existing_position_category.name:
             if PositionCategoryRepository.exists_by_name(name):
                 logger.error(f"Position category name {name} already exists")
@@ -64,7 +74,9 @@ class PositionCategoryService:
             if hasattr(existing_position_category, key):
                 setattr(existing_position_category, key, value)
 
-        updated_position_category = PositionCategoryRepository.update(existing_position_category)
+        updated_position_category = PositionCategoryRepository.update(
+            existing_position_category
+        )
         logger.info(f"Position category with id {id} updated successfully")
         return updated_position_category
 
