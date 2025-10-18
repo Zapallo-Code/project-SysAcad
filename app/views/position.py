@@ -1,54 +1,123 @@
+import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.position import Position
-from app.serializers.position import PositionSerializer
-from app.services.position import PositionService
+from app.serializers import PositionSerializer
+from app.services import PositionService
+
+logger = logging.getLogger(__name__)
 
 
-class PositionViewSet(viewsets.ModelViewSet):
-    queryset = Position.objects.all()
+class PositionViewSet(viewsets.ViewSet):
     serializer_class = PositionSerializer
 
     def list(self, request):
-        positions = PositionService.find_all()
-        serializer = self.get_serializer(positions, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            positions = PositionService.find_all()
+            serializer = self.serializer_class(positions, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error listing positions: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def retrieve(self, request, pk=None):
-        position = PositionService.find_by_id(pk)
-        if position is None:
+        try:
+            position = PositionService.find_by_id(int(pk))
+            if position is None:
+                return Response(
+                    {'error': 'Position not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            serializer = self.serializer_class(position)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError:
             return Response(
-                {'message': 'Position not found'},
-                status=status.HTTP_404_NOT_FOUND
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = self.get_serializer(position)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error retrieving position {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            position = serializer.save()
-            PositionService.create(position)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            position = PositionService.create(serializer.validated_data)
+            response_serializer = self.serializer_class(position)
             return Response(
-                'Position creado exitosamente',
-                status=status.HTTP_200_OK
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error creating position: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def update(self, request, pk=None):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            position = serializer.save()
-            PositionService.update(pk, position)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            updated_position = PositionService.update(int(pk), serializer.validated_data)
+            if updated_position is None:
+                return Response(
+                    {'error': 'Position not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            response_serializer = self.serializer_class(updated_position)
             return Response(
-                'Position actualizado exitosamente',
+                response_serializer.data,
                 status=status.HTTP_200_OK
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error updating position {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def destroy(self, request, pk=None):
-        PositionService.delete_by_id(pk)
-        return Response(
-            'Position borrado exitosamente',
-            status=status.HTTP_200_OK
-        )
+        try:
+            position = PositionService.find_by_id(int(pk))
+            if position is None:
+                return Response(
+                    {'error': 'Position not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            PositionService.delete_by_id(int(pk))
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error deleting position {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

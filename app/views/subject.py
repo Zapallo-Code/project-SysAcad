@@ -1,54 +1,123 @@
+import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.subject import Subject
-from app.serializers.subject import SubjectSerializer
-from app.services.subject import SubjectService
+from app.serializers import SubjectSerializer
+from app.services import SubjectService
+
+logger = logging.getLogger(__name__)
 
 
-class SubjectViewSet(viewsets.ModelViewSet):
-    queryset = Subject.objects.all()
+class SubjectViewSet(viewsets.ViewSet):
     serializer_class = SubjectSerializer
 
     def list(self, request):
-        subjects = SubjectService.find_all()
-        serializer = self.get_serializer(subjects, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            subjects = SubjectService.find_all()
+            serializer = self.serializer_class(subjects, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error listing subjects: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def retrieve(self, request, pk=None):
-        subject = SubjectService.find_by_id(pk)
-        if subject is None:
+        try:
+            subject = SubjectService.find_by_id(int(pk))
+            if subject is None:
+                return Response(
+                    {'error': 'Subject not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            serializer = self.serializer_class(subject)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError:
             return Response(
-                {'message': 'Subject not found'},
-                status=status.HTTP_404_NOT_FOUND
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = self.get_serializer(subject)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error retrieving subject {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            subject = serializer.save()
-            SubjectService.create(subject)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            subject = SubjectService.create(serializer.validated_data)
+            response_serializer = self.serializer_class(subject)
             return Response(
-                'Subject creada exitosamente',
-                status=status.HTTP_200_OK
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error creating subject: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def update(self, request, pk=None):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            subject = serializer.save()
-            SubjectService.update(pk, subject)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            updated_subject = SubjectService.update(int(pk), serializer.validated_data)
+            if updated_subject is None:
+                return Response(
+                    {'error': 'Subject not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            response_serializer = self.serializer_class(updated_subject)
             return Response(
-                'Subject actualizada exitosamente',
+                response_serializer.data,
                 status=status.HTTP_200_OK
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error updating subject {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def destroy(self, request, pk=None):
-        SubjectService.delete_by_id(pk)
-        return Response(
-            'Subject borrada exitosamente',
-            status=status.HTTP_200_OK
-        )
+        try:
+            subject = SubjectService.find_by_id(int(pk))
+            if subject is None:
+                return Response(
+                    {'error': 'Subject not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            SubjectService.delete_by_id(int(pk))
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error deleting subject {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

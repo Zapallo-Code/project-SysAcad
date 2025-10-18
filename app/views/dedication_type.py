@@ -1,54 +1,123 @@
+import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.dedication_type import DedicationType
-from app.serializers.dedication_type import DedicationTypeSerializer
-from app.services.dedication_type import DedicationTypeService
+from app.serializers import DedicationTypeSerializer
+from app.services import DedicationTypeService
+
+logger = logging.getLogger(__name__)
 
 
-class DedicationTypeViewSet(viewsets.ModelViewSet):
-    queryset = DedicationType.objects.all()
+class DedicationTypeViewSet(viewsets.ViewSet):
     serializer_class = DedicationTypeSerializer
 
     def list(self, request):
-        tipos = DedicationTypeService.find_all()
-        serializer = self.get_serializer(tipos, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            tipos = DedicationTypeService.find_all()
+            serializer = self.serializer_class(tipos, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error listing dedication types: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def retrieve(self, request, pk=None):
-        tipo = DedicationTypeService.find_by_id(pk)
-        if tipo is None:
+        try:
+            tipo = DedicationTypeService.find_by_id(int(pk))
+            if tipo is None:
+                return Response(
+                    {'error': 'Dedication type not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            serializer = self.serializer_class(tipo)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError:
             return Response(
-                {'message': 'Dedication type not found'},
-                status=status.HTTP_404_NOT_FOUND
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = self.get_serializer(tipo)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error retrieving dedication type {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            tipo = serializer.save()
-            DedicationTypeService.create(tipo)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            tipo = DedicationTypeService.create(serializer.validated_data)
+            response_serializer = self.serializer_class(tipo)
             return Response(
-                'Tipo de dedicación creado exitosamente',
-                status=status.HTTP_200_OK
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error creating dedication type: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def update(self, request, pk=None):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            tipo = serializer.save()
-            DedicationTypeService.update(pk, tipo)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            updated_tipo = DedicationTypeService.update(int(pk), serializer.validated_data)
+            if updated_tipo is None:
+                return Response(
+                    {'error': 'Dedication type not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            response_serializer = self.serializer_class(updated_tipo)
             return Response(
-                'Tipo de dedicación actualizado exitosamente',
+                response_serializer.data,
                 status=status.HTTP_200_OK
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error updating dedication type {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def destroy(self, request, pk=None):
-        DedicationTypeService.delete_by_id(pk)
-        return Response(
-            'Tipo de dedicación borrado exitosamente',
-            status=status.HTTP_200_OK
-        )
+        try:
+            tipo = DedicationTypeService.find_by_id(int(pk))
+            if tipo is None:
+                return Response(
+                    {'error': 'Dedication type not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            DedicationTypeService.delete_by_id(int(pk))
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error deleting dedication type {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

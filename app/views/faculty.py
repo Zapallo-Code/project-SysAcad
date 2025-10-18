@@ -1,54 +1,123 @@
+import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.faculty import Faculty
-from app.serializers.faculty import FacultySerializer
-from app.services.faculty import FacultyService
+from app.serializers import FacultySerializer
+from app.services import FacultyService
+
+logger = logging.getLogger(__name__)
 
 
-class FacultyViewSet(viewsets.ModelViewSet):
-    queryset = Faculty.objects.all()
+class FacultyViewSet(viewsets.ViewSet):
     serializer_class = FacultySerializer
 
     def list(self, request):
-        faculties = FacultyService.find_all()
-        serializer = self.get_serializer(faculties, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            faculties = FacultyService.find_all()
+            serializer = self.serializer_class(faculties, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error listing faculties: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def retrieve(self, request, pk=None):
-        faculty = FacultyService.find_by_id(pk)
-        if faculty is None:
+        try:
+            faculty = FacultyService.find_by_id(int(pk))
+            if faculty is None:
+                return Response(
+                    {'error': 'Faculty not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            serializer = self.serializer_class(faculty)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError:
             return Response(
-                {'message': 'Faculty no encontrada'},
-                status=status.HTTP_404_NOT_FOUND
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = self.get_serializer(faculty)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error retrieving faculty {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            faculty = serializer.save()
-            FacultyService.create(faculty)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            faculty = FacultyService.create(serializer.validated_data)
+            response_serializer = self.serializer_class(faculty)
             return Response(
-                'Faculty creada exitosamente',
-                status=status.HTTP_200_OK
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error creating faculty: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def update(self, request, pk=None):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            faculty = serializer.save()
-            FacultyService.update(pk, faculty)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            updated_faculty = FacultyService.update(int(pk), serializer.validated_data)
+            if updated_faculty is None:
+                return Response(
+                    {'error': 'Faculty not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            response_serializer = self.serializer_class(updated_faculty)
             return Response(
-                'Faculty actualizada exitosamente',
+                response_serializer.data,
                 status=status.HTTP_200_OK
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error updating faculty {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def destroy(self, request, pk=None):
-        FacultyService.delete_by_id(pk)
-        return Response(
-            'Faculty borrada exitosamente',
-            status=status.HTTP_200_OK
-        )
+        try:
+            faculty = FacultyService.find_by_id(int(pk))
+            if faculty is None:
+                return Response(
+                    {'error': 'Faculty not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            FacultyService.delete_by_id(int(pk))
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error deleting faculty {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

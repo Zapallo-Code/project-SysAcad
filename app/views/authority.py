@@ -1,54 +1,123 @@
+import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.authority import Authority
-from app.serializers.authority import AuthoritySerializer
-from app.services.authority import AuthorityService
+from app.serializers import AuthoritySerializer
+from app.services import AuthorityService
+
+logger = logging.getLogger(__name__)
 
 
-class AuthorityViewSet(viewsets.ModelViewSet):
-    queryset = Authority.objects.all()
+class AuthorityViewSet(viewsets.ViewSet):
     serializer_class = AuthoritySerializer
 
     def list(self, request):
-        authorities = AuthorityService.find_all()
-        serializer = self.get_serializer(authorities, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            authorities = AuthorityService.find_all()
+            serializer = self.serializer_class(authorities, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error listing authorities: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def retrieve(self, request, pk=None):
-        authority = AuthorityService.find_by_id(pk)
-        if authority is None:
+        try:
+            authority = AuthorityService.find_by_id(int(pk))
+            if authority is None:
+                return Response(
+                    {'error': 'Authority not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            serializer = self.serializer_class(authority)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError:
             return Response(
-                {'message': 'Authority no encontrada'},
-                status=status.HTTP_404_NOT_FOUND
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = self.get_serializer(authority)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error retrieving authority {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            authority = serializer.save()
-            AuthorityService.create(authority)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            authority = AuthorityService.create(serializer.validated_data)
+            response_serializer = self.serializer_class(authority)
             return Response(
-                'Authority creada exitosamente',
-                status=status.HTTP_200_OK
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error creating authority: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def update(self, request, pk=None):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            authority = serializer.save()
-            AuthorityService.update(pk, authority)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            updated_authority = AuthorityService.update(int(pk), serializer.validated_data)
+            if updated_authority is None:
+                return Response(
+                    {'error': 'Authority not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            response_serializer = self.serializer_class(updated_authority)
             return Response(
-                'Authority actualizada exitosamente',
+                response_serializer.data,
                 status=status.HTTP_200_OK
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error updating authority {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def destroy(self, request, pk=None):
-        AuthorityService.delete_by_id(pk)
-        return Response(
-            'Authority borrada exitosamente',
-            status=status.HTTP_200_OK
-        )
+        try:
+            authority = AuthorityService.find_by_id(int(pk))
+            if authority is None:
+                return Response(
+                    {'error': 'Authority not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            AuthorityService.delete_by_id(int(pk))
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error deleting authority {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

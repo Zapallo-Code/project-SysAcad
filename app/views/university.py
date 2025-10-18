@@ -1,54 +1,123 @@
+import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from app.models.university import University
-from app.serializers.university import UniversitySerializer
-from app.services.university import UniversityService
+from app.serializers import UniversitySerializer
+from app.services import UniversityService
+
+logger = logging.getLogger(__name__)
 
 
-class UniversityViewSet(viewsets.ModelViewSet):
-    queryset = University.objects.all()
+class UniversityViewSet(viewsets.ViewSet):
     serializer_class = UniversitySerializer
 
     def list(self, request):
-        universityes = UniversityService.find_all()
-        serializer = self.get_serializer(universityes, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            universities = UniversityService.find_all()
+            serializer = self.serializer_class(universities, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error listing universities: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def retrieve(self, request, pk=None):
-        university = UniversityService.find_by_id(pk)
-        if university is None:
+        try:
+            university = UniversityService.find_by_id(int(pk))
+            if university is None:
+                return Response(
+                    {'error': 'University not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            serializer = self.serializer_class(university)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError:
             return Response(
-                {'message': 'University not found'},
-                status=status.HTTP_404_NOT_FOUND
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = self.get_serializer(university)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error retrieving university {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            university = serializer.save()
-            UniversityService.create(university)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            university = UniversityService.create(serializer.validated_data)
+            response_serializer = self.serializer_class(university)
             return Response(
-                'University creada exitosamente',
-                status=status.HTTP_200_OK
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error creating university: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def update(self, request, pk=None):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            university = serializer.save()
-            UniversityService.update(pk, university)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            updated_university = UniversityService.update(int(pk), serializer.validated_data)
+            if updated_university is None:
+                return Response(
+                    {'error': 'University not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            response_serializer = self.serializer_class(updated_university)
             return Response(
-                'University actualizada exitosamente',
+                response_serializer.data,
                 status=status.HTTP_200_OK
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error updating university {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def destroy(self, request, pk=None):
-        UniversityService.delete_by_id(pk)
-        return Response(
-            'University borrada exitosamente',
-            status=status.HTTP_200_OK
-        )
+        try:
+            university = UniversityService.find_by_id(int(pk))
+            if university is None:
+                return Response(
+                    {'error': 'University not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            UniversityService.delete_by_id(int(pk))
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response(
+                {'error': 'Invalid ID format'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error deleting university {pk}: {str(e)}")
+            return Response(
+                {'error': 'Internal server error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
