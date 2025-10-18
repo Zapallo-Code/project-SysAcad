@@ -87,6 +87,10 @@ class FacultyRepository:
             return None
 
     @staticmethod
+    def is_authority_associated(faculty: Faculty, authority: Authority) -> bool:
+        return faculty.authorities.filter(id=authority.id).exists()
+
+    @staticmethod
     def associate_authority(faculty: Faculty, authority: Authority) -> None:
         authority.faculties.add(faculty)
 
