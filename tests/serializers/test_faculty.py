@@ -1,6 +1,6 @@
 """Unit tests for FacultySerializer."""
+
 import unittest
-from unittest.mock import patch, MagicMock
 
 
 class TestFacultySerializer(unittest.TestCase):
@@ -9,95 +9,69 @@ class TestFacultySerializer(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures."""
         self.valid_data = {
-            'name': 'Facultad de Ciencias Exactas',
-            'university': 1
+            "name": "Facultad de Ciencias Exactas",
+            "abbreviation": "FCE",
+            "directory": "direccion@fce.edu.ar",
+            "acronym": "FCE",
+            "email": "contacto@fce.edu.ar",
+            "university_id": 1,
         }
 
-    @patch('app.serializers.faculty.FacultySerializer')
-    def test_valid_data(self, mock_serializer):
+    def test_valid_data(self):
         """Test serializer with valid data."""
         from app.serializers import FacultySerializer
-        
-        serializer = FacultySerializer(data=self.valid_data)
-        mock_serializer.return_value.is_valid.return_value = True
-        
-        self.assertTrue(serializer.is_valid())
 
-    @patch('app.serializers.faculty.FacultySerializer')
-    def test_required_fields(self, mock_serializer):
+        serializer = FacultySerializer(data=self.valid_data)
+
+        self.assertTrue(serializer.is_valid(), msg=f"Errors: {serializer.errors}")
+
+    def test_required_fields(self):
         """Test required fields validation."""
         from app.serializers import FacultySerializer
-        
-        serializer = FacultySerializer(data={})
-        mock_serializer.return_value.is_valid.return_value = False
-        mock_serializer.return_value.errors = {
-            'name': ['This field is required.'],
-            'university': ['This field is required.']
-        }
-        
-        self.assertFalse(serializer.is_valid())
 
-    @patch('app.serializers.faculty.FacultySerializer')
-    def test_name_length_validation(self, mock_serializer):
+        serializer = FacultySerializer(data={})
+
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("name", serializer.errors)
+        self.assertIn("abbreviation", serializer.errors)
+        self.assertIn("university_id", serializer.errors)
+
+    def test_name_length_validation(self):
         """Test name length validation."""
         from app.serializers import FacultySerializer
-        
+
         invalid_data = self.valid_data.copy()
-        invalid_data['name'] = 'A' * 201
-        
-        serializer = FacultySerializer(data=invalid_data)
-        mock_serializer.return_value.is_valid.return_value = False
-        mock_serializer.return_value.errors = {
-            'name': ['Ensure this field has no more than 200 characters.']
-        }
-        
-        self.assertFalse(serializer.is_valid())
+        invalid_data["name"] = "A" * 101
 
-    @patch('app.serializers.faculty.FacultySerializer')
-    def test_name_whitespace_validation(self, mock_serializer):
-        """Test name whitespace validation."""
+        serializer = FacultySerializer(data=invalid_data)
+
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("name", serializer.errors)
+
+    def test_name_starts_with_letter(self):
+        """Test name must start with letter."""
         from app.serializers import FacultySerializer
-        
+
         invalid_data = self.valid_data.copy()
-        invalid_data['name'] = '   Facultad   '
-        
-        serializer = FacultySerializer(data=invalid_data)
-        mock_serializer.return_value.is_valid.return_value = False
-        mock_serializer.return_value.errors = {
-            'name': ['Name cannot start or end with whitespace.']
-        }
-        
-        self.assertFalse(serializer.is_valid())
+        invalid_data["name"] = "123 Facultad"
 
-    @patch('app.serializers.faculty.FacultySerializer')
-    def test_university_foreign_key_validation(self, mock_serializer):
-        """Test university foreign key validation."""
+        serializer = FacultySerializer(data=invalid_data)
+
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("name", serializer.errors)
+
+    def test_invalid_email(self):
+        """Test invalid email validation."""
         from app.serializers import FacultySerializer
-        
+
         invalid_data = self.valid_data.copy()
-        invalid_data['university'] = 9999
-        
+        invalid_data["email"] = "not-an-email"
+
         serializer = FacultySerializer(data=invalid_data)
-        mock_serializer.return_value.is_valid.return_value = False
-        mock_serializer.return_value.errors = {
-            'university': ['Invalid pk "9999" - object does not exist.']
-        }
-        
+
         self.assertFalse(serializer.is_valid())
-
-    @patch('app.serializers.faculty.FacultySerializer')
-    def test_duplicate_name_validation(self, mock_serializer):
-        """Test duplicate name validation."""
-        from app.serializers import FacultySerializer
-        
-        serializer = FacultySerializer(data=self.valid_data)
-        mock_serializer.return_value.is_valid.return_value = False
-        mock_serializer.return_value.errors = {
-            'name': ['Faculty with this name already exists in this university.']
-        }
-        
-        self.assertFalse(serializer.is_valid())
+        self.assertIn("email", serializer.errors)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 class SubjectService:
-
     @staticmethod
     @transaction.atomic
     def create(subject_data: dict) -> Any:

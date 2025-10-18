@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class PositionCategoryService:
-
     @staticmethod
     @transaction.atomic
     def create(position_category_data: dict) -> Any:

@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class DocumentTypeService:
-
     @staticmethod
     @transaction.atomic
     def create(document_type_data: dict) -> Any:

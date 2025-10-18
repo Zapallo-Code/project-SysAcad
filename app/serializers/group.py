@@ -3,7 +3,6 @@ from app.models import Group
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(
         max_length=50,
         min_length=2,

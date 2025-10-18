@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class DepartmentService:
-
     @staticmethod
     @transaction.atomic
     def create(department_data: dict) -> Any:

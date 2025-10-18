@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class AreaService:
-
     @staticmethod
     @transaction.atomic
     def create(area_data: dict) -> Any:

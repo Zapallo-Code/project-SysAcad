@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class StudentService:
-
     @staticmethod
     @transaction.atomic
     def create(student_data: dict) -> Any:

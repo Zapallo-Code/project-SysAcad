@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class SpecialtyTypeService:
-
     @staticmethod
     @transaction.atomic
     def create(specialty_type_data: dict) -> Any:

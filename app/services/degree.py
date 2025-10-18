@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class DegreeService:
-
     @staticmethod
     @transaction.atomic
     def create(degree_data: dict) -> Any:

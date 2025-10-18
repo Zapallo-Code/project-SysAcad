@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 class PlanService:
-
     @staticmethod
     @transaction.atomic
     def create(plan_data: dict) -> Any:

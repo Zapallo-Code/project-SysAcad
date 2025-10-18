@@ -3,7 +3,6 @@ from app.models import PositionCategory
 
 
 class PositionCategorySerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(
         max_length=30,
         min_length=2,

@@ -11,6 +11,9 @@ class University(models.Model):
         help_text="Unique acronym for the university",
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.acronym} - {self.name}"
 

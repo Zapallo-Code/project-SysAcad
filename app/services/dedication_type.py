@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class DedicationTypeService:
-
     @staticmethod
     @transaction.atomic
     def create(dedication_type_data: dict) -> Any:

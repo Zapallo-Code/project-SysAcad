@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class GroupService:
-
     @staticmethod
     @transaction.atomic
     def create(group_data: dict) -> Any:

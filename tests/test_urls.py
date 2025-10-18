@@ -1,4 +1,5 @@
 """Unit tests for URLs configuration."""
+
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -9,16 +10,16 @@ class TestURLConfiguration(unittest.TestCase):
     def test_url_patterns_exist(self):
         """Test that URL patterns are defined."""
         from app import urls
-        
-        self.assertTrue(hasattr(urls, 'urlpatterns'))
+
+        self.assertTrue(hasattr(urls, "urlpatterns"))
         self.assertIsNotNone(urls.urlpatterns)
 
     def test_api_router_configured(self):
         """Test that API router is configured."""
         from app import urls
-        
+
         # Check if router exists
-        self.assertTrue(hasattr(urls, 'router') or 'router' in dir(urls))
+        self.assertTrue(hasattr(urls, "router") or "router" in dir(urls))
 
     def test_university_endpoint_registered(self):
         """Test that university endpoint is registered."""
@@ -36,5 +37,5 @@ class TestURLConfiguration(unittest.TestCase):
         self.assertTrue(True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

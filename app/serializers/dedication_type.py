@@ -3,7 +3,6 @@ from app.models import DedicationType
 
 
 class DedicationTypeSerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(
         max_length=100,
         min_length=2,

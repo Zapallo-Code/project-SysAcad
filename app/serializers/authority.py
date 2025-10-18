@@ -4,7 +4,6 @@ from app.models import Authority
 
 
 class AuthoritySerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(
         max_length=100,
         min_length=3,

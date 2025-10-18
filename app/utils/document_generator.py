@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 
 
 class Document(ABC):
-
     @staticmethod
     @abstractmethod
     def generate(folder: str, template: str, context: Dict) -> BytesIO:
@@ -25,7 +24,6 @@ class Document(ABC):
 
 
 class PDFDocument(Document):
-
     @staticmethod
     def generate(folder: str, template: str, context: Dict) -> BytesIO:
         logger.info(f"Generating PDF document from template: {folder}/{template}.html")
@@ -51,7 +49,6 @@ class PDFDocument(Document):
 
 
 class ODTDocument(Document):
-
     @staticmethod
     def generate(folder: str, template: str, context: Dict) -> BytesIO:
         logger.info(f"Generating ODT document from template: {folder}/{template}.odt")
@@ -104,7 +101,6 @@ class ODTDocument(Document):
 
 
 class DOCXDocument(Document):
-
     @staticmethod
     def generate(folder: str, template: str, context: Dict) -> BytesIO:
         logger.info(f"Generating DOCX document from template: {folder}/{template}.docx")

@@ -3,7 +3,6 @@ from app.models import University
 
 
 class UniversitySerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(
         max_length=100,
         min_length=3,
@@ -34,12 +33,14 @@ class UniversitySerializer(serializers.ModelSerializer):
                 "University name cannot be only whitespace."
             )
 
-        if not value[0].isalpha():
+        cleaned_value = value.strip()
+
+        if not cleaned_value[0].isalpha():
             raise serializers.ValidationError(
                 "University name must start with a letter."
             )
 
-        return value.strip().title()
+        return cleaned_value.title()
 
     def validate_acronym(self, value):
         if not value or value.strip() == "":

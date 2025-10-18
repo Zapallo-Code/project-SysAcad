@@ -3,7 +3,6 @@ from app.models import DocumentType
 
 
 class DocumentTypeSerializer(serializers.ModelSerializer):
-
     dni = serializers.IntegerField(
         required=True,
         min_value=1000000,

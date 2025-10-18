@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 class PositionService:
-
     @staticmethod
     @transaction.atomic
     def create(position_data: dict) -> Any:

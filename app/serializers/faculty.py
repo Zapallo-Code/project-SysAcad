@@ -4,7 +4,6 @@ from app.models import Faculty
 
 
 class FacultySerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(
         max_length=100,
         min_length=3,

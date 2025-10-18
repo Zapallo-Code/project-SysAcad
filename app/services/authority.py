@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class AuthorityService:
-
     @staticmethod
     @transaction.atomic
     def create(authority_data: dict) -> Any:

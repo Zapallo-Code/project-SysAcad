@@ -3,7 +3,6 @@ from app.models import Specialty
 
 
 class SpecialtySerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(
         max_length=100,
         min_length=3,

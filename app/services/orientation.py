@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class OrientationService:
-
     @staticmethod
     @transaction.atomic
     def create(orientation_data: dict) -> Any:
