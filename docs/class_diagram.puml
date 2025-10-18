@@ -1,118 +1,231 @@
-@startuml Diagrama de Clases de sysacad
-package "Sistema Académico"{
-    package "Personas"{
-        class Alumno {
-            - apellido: str
-            - nombre: str
-            - nroDocumento: str
-            - tipoDocumento: TipoDocumento
-            - fechaNacimiento: str
-            // “M”= Masculino, “F”=Femenino
-            - sexo: str
-            - nroLegajo: int
-            - fechaIngreso: date
-        }
+@startuml Diagrama_de_Clases_SysAcad
 
-        enum TipoDocumento {
-            DNI
-            LibretaCivica
-            LibretaEnrolamiento
-            Pasaporte
-        }
-    }
+!define ENTITY_COLOR #E1F5FE
+!define VALUE_COLOR #FFF9C4
 
-    class Universidad {
-        -nombre: str
-        -sigla: str
-    }
-
-    class Facultad {
-        -nombre: str
-        -abreviatura: str
-        -directorio: str
-        -sigla: str
-        -codigoPostal: str
-        -ciudad: str
-        -domicilio: str
-        -telefono: str
-        -contacto: str
-        -email: str
-    }
-
-    class Autoridad {
-        -nombre: str
-        -position: str
-        -telefono: str
-        -email: str
-    }
-
-    class Area {
-        - nombre: str
-    }
-
-    class Especialidad {
-        - nombre: str
-        - letra: str
-        - observacion: str
-    }
-
-    class TipoEspecialidad {
-        - nombre: str
-        - Nivel: str
-    }
-
-    class Grupo {
-        - nombre: str
-    }
-
-    class Plan {
-        - nombre: str
-        - fechaInicio: str
-        - fechaFin: str
-        - observacion: str
-    }
-
-    class Orientacion {
-        - nombre: str
-    }
-
-    class Grado {
-        - nombre: str
-    }
-
-    class Cargo {
-        - nombre: str
-        - puntos: int
-        
-    }
-    
-    class CategoriaCargo {
-        - nombre: str
-    } 
-   
-    class Materia {
-        - nombre: str
-        - codigo: str
-        - observacion: str
-    }
-
-    class TipoDedicacion {
-        - nombre: str
-        - observacion: str
-    }
-
-    class Departamento {
-        - nombre: str
-    }
-
-
-    Orientacion -- Especialidad
-    Orientacion -- Plan
-    Orientacion -- Materia
-    Especialidad -- TipoEspecialidad
-    Facultad <-- Autoridad
-    Facultad -- Universidad
-    Cargo -- CategoriaCargo
-    Cargo -- TipoDedicacion
+skinparam class {
+    BackgroundColor ENTITY_COLOR
+    BorderColor #01579B
+    ArrowColor #0277BD
 }
+
+package "Sistema Académico" {
+
+    class Student <<Entity>> {
+        - id: int {PK}
+        - first_name: CharField(50)
+        - last_name: CharField(50)
+        - document_number: CharField(50)
+        - birth_date: DateField
+        - gender: CharField(1) {M, F, O}
+        - student_number: int {unique}
+        - enrollment_date: DateField
+        - document_type_id: FK
+        - specialty_id: FK
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + full_name(): str
+        + clean(): void
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class DocumentType <<Entity>> {
+        - id: int {PK}
+        - name: CharField(50)
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class University <<Entity>> {
+        - id: int {PK}
+        - name: CharField(100)
+        - acronym: CharField(10) {unique}
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Faculty <<Entity>> {
+        - id: int {PK}
+        - name: CharField(100)
+        - abbreviation: CharField(10)
+        - directory: CharField(100)
+        - acronym: CharField(10)
+        - postal_code: CharField(10)
+        - city: CharField(50)
+        - address: CharField(100)
+        - phone: CharField(20)
+        - contact_name: CharField(100)
+        - email: EmailField(100)
+        - university_id: FK
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class SpecialtyType <<Entity>> {
+        - id: int {PK}
+        - name: CharField(100) {unique}
+        - level: CharField(50)
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Specialty <<Entity>> {
+        - id: int {PK}
+        - name: CharField(100)
+        - letter: CharField(1)
+        - observation: CharField(255)
+        - specialty_type_id: FK
+        - faculty_id: FK
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Plan <<Entity>> {
+        - id: int {PK}
+        - name: CharField(50)
+        - start_date: DateField
+        - end_date: DateField
+        - observation: CharField(255)
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + clean(): void
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Orientation <<Entity>> {
+        - id: int {PK}
+        - name: CharField(50)
+        - specialty_id: FK
+        - plan_id: FK
+        - subject_id: FK
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Subject <<Entity>> {
+        - id: int {PK}
+        - name: CharField(255)
+        - code: CharField(20) {unique}
+        - observation: CharField(255)
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Authority <<Entity>> {
+        - id: int {PK}
+        - name: CharField(100)
+        - phone: CharField(20)
+        - email: EmailField(100)
+        - position_id: FK
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Position <<Entity>> {
+        - id: int {PK}
+        - name: CharField(50)
+        - points: int
+        - position_category_id: FK
+        - dedication_type_id: FK
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class PositionCategory <<Entity>> {
+        - id: int {PK}
+        - name: CharField(30) {unique}
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class DedicationType <<Entity>> {
+        - id: int {PK}
+        - name: CharField(100) {unique}
+        - observation: CharField(200)
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    class Department <<Entity>> {
+        - id: int {PK}
+        - name: CharField(50) {unique}
+        - created_at: DateTime
+        - updated_at: DateTime
+        --
+        + __str__(): str
+        + __repr__(): str
+    }
+
+    ' Relaciones
+    Student "n" --> "1" DocumentType : document_type
+    Student "n" --> "1" Specialty : specialty
+    Faculty "n" --> "1" University : university
+    Specialty "n" --> "1" SpecialtyType : specialty_type
+    Specialty "n" --> "1" Faculty : faculty
+    Orientation "n" --> "1" Specialty : specialty
+    Orientation "n" --> "1" Plan : plan
+    Orientation "n" --> "1" Subject : subject
+    Position "n" --> "1" PositionCategory : position_category
+    Position "n" --> "1" DedicationType : dedication_type
+    Authority "n" --> "1" Position : position
+    Authority "n" --> "n" Subject : subjects
+    Authority "n" --> "n" Faculty : faculties
+
+    note right of Student
+        Validaciones:
+        - birth_date no puede ser futuro
+        - enrollment_date >= birth_date
+    end note
+
+    note right of Plan
+        Validaciones:
+        - start_date <= end_date
+    end note
+
+    note right of DocumentType
+        Almacena múltiples tipos:
+        - DNI
+        - Libreta Cívica
+        - Libreta de Enrolamiento
+        - Pasaporte
+    end note
+}
+
 @enduml
