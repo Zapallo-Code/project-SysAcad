@@ -17,14 +17,6 @@ class SpecialtyService:
         specialty_type_id = specialty_data.get("specialty_type_id")
         faculty_id = specialty_data.get("faculty_id")
 
-        if SpecialtyRepository.exists_by_name_and_type(
-            specialty_data.get("name"), specialty_type_id
-        ):
-            logger.error(
-                f"Specialty with name {specialty_data.get('name')} and type {specialty_type_id} already exists"
-            )
-            raise ValueError("Specialty with this name and type already exists")
-
         if specialty_type_id and not SpecialtyTypeRepository.exists_by_id(
             specialty_type_id
         ):
@@ -48,13 +40,6 @@ class SpecialtyService:
         if not specialty:
             logger.warning(f"Specialty with id {id} not found")
         return specialty
-
-    @staticmethod
-    def find_by_name(name: str) -> List[Any]:
-        logger.info(f"Finding specialties with name: {name}")
-        specialties = SpecialtyRepository.find_by_name(name)
-        logger.info(f"Found {len(specialties)} specialties with name '{name}'")
-        return specialties
 
     @staticmethod
     def find_all() -> List[Any]:
@@ -85,29 +70,7 @@ class SpecialtyService:
             logger.error(f"Specialty with id {id} not found for update")
             raise ValueError(f"Specialty with id {id} does not exist")
 
-        name = specialty_data.get("name")
         specialty_type_id = specialty_data.get("specialty_type_id")
-
-        if name or specialty_type_id:
-            check_name = name if name else existing_specialty.name
-            check_type = (
-                specialty_type_id
-                if specialty_type_id
-                else existing_specialty.specialty_type_id
-            )
-
-            if (
-                check_name != existing_specialty.name
-                or check_type != existing_specialty.specialty_type_id
-            ):
-                if SpecialtyRepository.exists_by_name_and_type(check_name, check_type):
-                    logger.error(
-                        f"Specialty with name {check_name} and type {check_type} already exists"
-                    )
-                    raise ValueError(
-                        f"Specialty with this name and type already exists"
-                    )
-
         if specialty_type_id and not SpecialtyTypeRepository.exists_by_id(
             specialty_type_id
         ):

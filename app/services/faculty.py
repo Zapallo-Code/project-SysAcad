@@ -14,24 +14,6 @@ class FacultyService:
     def create(faculty_data: dict) -> Any:
         logger.info(f"Creating faculty: {faculty_data.get('name')}")
 
-        if FacultyRepository.exists_by_name(faculty_data.get("name")):
-            logger.error(f"Faculty name {faculty_data.get('name')} already exists")
-            raise ValueError(
-                f"Faculty name '{faculty_data.get('name')}' is already taken"
-            )
-
-        if faculty_data.get(
-            "abbreviation"
-        ) and FacultyRepository.exists_by_abbreviation(
-            faculty_data.get("abbreviation")
-        ):
-            logger.error(
-                f"Faculty abbreviation {faculty_data.get('abbreviation')} already exists"
-            )
-            raise ValueError(
-                f"Faculty abbreviation '{faculty_data.get('abbreviation')}' is already taken"
-            )
-
         university_id = faculty_data.get("university_id")
         if university_id and not UniversityRepository.exists_by_id(university_id):
             logger.error(f"University with id {university_id} not found")
@@ -47,14 +29,6 @@ class FacultyService:
         faculty = FacultyRepository.find_by_id(id)
         if not faculty:
             logger.warning(f"Faculty with id {id} not found")
-        return faculty
-
-    @staticmethod
-    def find_by_name(name: str) -> Optional[Any]:
-        logger.info(f"Finding faculty with name: {name}")
-        faculty = FacultyRepository.find_by_name(name)
-        if not faculty:
-            logger.warning(f"Faculty with name '{name}' not found")
         return faculty
 
     @staticmethod
@@ -85,20 +59,6 @@ class FacultyService:
         if not existing_faculty:
             logger.error(f"Faculty with id {id} not found for update")
             raise ValueError(f"Faculty with id {id} does not exist")
-
-        name = faculty_data.get("name")
-        if name and name != existing_faculty.name:
-            if FacultyRepository.exists_by_name(name):
-                logger.error(f"Faculty name {name} already exists")
-                raise ValueError(f"Faculty name '{name}' is already taken")
-
-        abbreviation = faculty_data.get("abbreviation")
-        if abbreviation and abbreviation != existing_faculty.abbreviation:
-            if FacultyRepository.exists_by_abbreviation(abbreviation):
-                logger.error(f"Faculty abbreviation {abbreviation} already exists")
-                raise ValueError(
-                    f"Faculty abbreviation '{abbreviation}' is already taken"
-                )
 
         university_id = faculty_data.get("university_id")
         if university_id and not UniversityRepository.exists_by_id(university_id):
