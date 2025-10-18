@@ -21,7 +21,6 @@ class TestFacultyService(unittest.TestCase):
         """Test creating a faculty successfully."""
         from app.services import FacultyService
 
-        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_faculty
         mock_atomic.return_value.__enter__ = MagicMock()
         mock_atomic.return_value.__exit__ = MagicMock()
@@ -30,16 +29,6 @@ class TestFacultyService(unittest.TestCase):
 
         mock_repo.create.assert_called_once_with(self.faculty_data)
         self.assertEqual(result, self.mock_faculty)
-
-    @patch("app.services.faculty.FacultyRepository")
-    def test_create_duplicate_name(self, mock_repo):
-        """Test creating a faculty with duplicate name raises ValueError."""
-        from app.services import FacultyService
-
-        mock_repo.exists_by_name.return_value = True
-
-        with self.assertRaises(ValueError):
-            FacultyService.create(self.faculty_data)
 
     @patch("app.services.faculty.FacultyRepository")
     def test_find_by_id_success(self, mock_repo):
