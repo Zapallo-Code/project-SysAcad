@@ -79,9 +79,12 @@ class TestFacultyRepository(unittest.TestCase):
         from app.repositories import FacultyRepository
 
         mock_queryset = [self.mock_faculty]
+        mock_select_related = MagicMock()
+        mock_select_related.__iter__ = lambda self: iter(mock_queryset)
+        
         mock_filter = MagicMock()
-        mock_filter.return_value = mock_queryset
-        mock_objects.filter = mock_filter
+        mock_filter.select_related.return_value = mock_select_related
+        mock_objects.filter.return_value = mock_filter
 
         result = FacultyRepository.find_by_university(1)
 

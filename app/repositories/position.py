@@ -53,6 +53,17 @@ class PositionRepository:
         )
 
     @staticmethod
+    def find_by_subject(subject_id: int) -> List[Position]:
+        """Find all positions associated with a specific subject."""
+        return list(
+            Position.objects.filter(
+                authorities__subjects__id=subject_id
+            ).select_related(
+                "position_category", "dedication_type"
+            ).distinct()
+        )
+
+    @staticmethod
     def find_by_points_range(min_points: int, max_points: int) -> List[Position]:
         return list(
             Position.objects.filter(

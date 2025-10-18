@@ -107,7 +107,7 @@ class TestStudentSerializer(unittest.TestCase):
         from app.serializers import StudentSerializer
 
         data = {**self.valid_data}
-        del data["document_type"]
+        del data["document_type_id"]
         serializer = StudentSerializer(data=data)
 
         self.assertFalse(serializer.is_valid())
@@ -117,7 +117,7 @@ class TestStudentSerializer(unittest.TestCase):
         from app.serializers import StudentSerializer
 
         data = {**self.valid_data}
-        del data["specialty"]
+        del data["specialty_id"]
         serializer = StudentSerializer(data=data)
 
         self.assertFalse(serializer.is_valid())

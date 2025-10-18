@@ -25,6 +25,8 @@ class TestUniversityServiceErrors(unittest.TestCase):
         """Test database error during creation."""
         from app.services import UniversityService
 
+        mock_repo.exists_by_name.return_value = False
+        mock_repo.exists_by_acronym.return_value = False
         mock_repo.create.side_effect = DatabaseError("Connection lost")
 
         with self.assertRaises(DatabaseError):
@@ -84,21 +86,25 @@ class TestStudentServiceErrors(unittest.TestCase):
 
         self.assertIn("already taken", str(context.exception).lower())
 
+    @patch("app.services.student.SpecialtyRepository")
+    @patch("app.services.student.DocumentTypeRepository")
     @patch("app.services.student.StudentRepository")
-    def test_invalid_specialty_error(self, mock_repo):
+    def test_invalid_specialty_error(self, mock_repo, mock_doc_repo, mock_spec_repo):
         """Test creating student with invalid specialty."""
         from app.services import StudentService
 
-        mock_repo.exists_by_document.return_value = False
-        mock_repo.create.side_effect = IntegrityError("Foreign key constraint")
+        mock_repo.exists_by_number.return_value = False
+        mock_doc_repo.exists_by_id.return_value = True
+        mock_spec_repo.exists_by_id.return_value = False
 
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(ValueError):
             StudentService.create(
                 {
-                    "document_number": "12345678",
+                    "number": "12345678",
                     "first_name": "Juan",
                     "last_name": "Pérez",
-                    "specialty": 9999,
+                    "document_type_id": 1,
+                    "specialty_id": 9999,
                 }
             )
 
@@ -153,15 +159,19 @@ class TestPlanServiceErrors(unittest.TestCase):
 class TestFacultyServiceErrors(unittest.TestCase):
     """Error handling tests for FacultyService."""
 
+    @patch("app.services.faculty.UniversityRepository")
     @patch("app.services.faculty.FacultyRepository")
-    def test_create_with_invalid_university(self, mock_repo):
+    def test_create_with_invalid_university(self, mock_repo, mock_university_repo):
         """Test creating faculty with invalid university."""
         from app.services import FacultyService
 
+        mock_repo.exists_by_name.return_value = False
+        mock_repo.exists_by_abbreviation.return_value = False
+        mock_university_repo.exists_by_id.return_value = False
         mock_repo.create.side_effect = IntegrityError("Invalid university")
 
-        with self.assertRaises(IntegrityError):
-            FacultyService.create({"name": "Test Faculty", "university": 9999})
+        with self.assertRaises(ValueError):
+            FacultyService.create({"name": "Test Faculty", "university_id": 9999})
 
 
 class TestRepositoryErrors(unittest.TestCase):

@@ -19,6 +19,7 @@ class TestDedicationTypeService(unittest.TestCase):
         """Test creating a dedication type successfully."""
         from app.services import DedicationTypeService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_dedication
 
         result = DedicationTypeService.create(
@@ -87,6 +88,7 @@ class TestPositionCategoryService(unittest.TestCase):
         """Test creating a position category successfully."""
         from app.services import PositionCategoryService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_category
 
         result = PositionCategoryService.create({"name": "Profesor Titular"})
@@ -119,6 +121,7 @@ class TestSpecialtyTypeService(unittest.TestCase):
         """Test creating a specialty type successfully."""
         from app.services import SpecialtyTypeService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_specialty_type
 
         result = SpecialtyTypeService.create({"name": "Licenciatura"})

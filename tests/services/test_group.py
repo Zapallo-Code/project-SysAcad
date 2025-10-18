@@ -20,6 +20,7 @@ class TestGroupService(unittest.TestCase):
         """Test creating a group successfully."""
         from app.services import GroupService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.exists_by_code.return_value = False
         mock_repo.create.return_value = self.mock_group
 
@@ -76,6 +77,8 @@ class TestGroupService(unittest.TestCase):
         """Test updating a group successfully."""
         from app.services import GroupService
 
+        mock_repo.find_by_id.return_value = self.mock_group
+        mock_repo.exists_by_name.return_value = False
         mock_repo.update.return_value = self.mock_group
 
         result = GroupService.update(1, {"name": "Grupo A Updated"})

@@ -35,6 +35,21 @@ class SubjectRepository:
         return list(Subject.objects.filter(name__icontains=name))
 
     @staticmethod
+    def search_by_name(name: str) -> List[Subject]:
+        """Search subjects by name (case-insensitive)."""
+        return list(Subject.objects.filter(name__icontains=name))
+
+    @staticmethod
+    def find_by_plan(plan_id: int) -> List[Subject]:
+        """Find all subjects for a specific plan."""
+        return list(Subject.objects.filter(plan_id=plan_id).select_related("plan"))
+
+    @staticmethod
+    def find_by_area(area_id: int) -> List[Subject]:
+        """Find all subjects for a specific area."""
+        return list(Subject.objects.filter(area_id=area_id).select_related("area"))
+
+    @staticmethod
     def find_by_name_exact(name: str) -> Optional[Subject]:
         try:
             return Subject.objects.get(name=name)

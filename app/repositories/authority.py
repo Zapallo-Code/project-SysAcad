@@ -37,6 +37,24 @@ class AuthorityRepository:
         )
 
     @staticmethod
+    def search_by_name(name: str) -> List[Authority]:
+        """Search authorities by first name or last name."""
+        return list(
+            Authority.objects.filter(
+                first_name__icontains=name
+            ) | Authority.objects.filter(
+                last_name__icontains=name
+            ).select_related("position")
+        )
+
+    @staticmethod
+    def find_by_faculty(faculty_id: int) -> List[Authority]:
+        """Find all authorities associated with a specific faculty."""
+        return list(
+            Authority.objects.filter(faculties__id=faculty_id).select_related("position").distinct()
+        )
+
+    @staticmethod
     def find_by_email(email: str) -> Optional[Authority]:
         try:
             return Authority.objects.select_related("position").get(email=email)

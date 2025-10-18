@@ -18,6 +18,7 @@ class TestDegreeService(unittest.TestCase):
         """Test creating a degree successfully."""
         from app.services import DegreeService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_degree
 
         result = DegreeService.create({"name": "Licenciatura"})
@@ -83,6 +84,7 @@ class TestDepartmentService(unittest.TestCase):
         """Test creating a department successfully."""
         from app.services import DepartmentService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_department
 
         result = DepartmentService.create({"name": "Informática"})
@@ -115,6 +117,7 @@ class TestAreaService(unittest.TestCase):
         """Test creating an area successfully."""
         from app.services import AreaService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_area
 
         result = AreaService.create({"name": "Programación"})

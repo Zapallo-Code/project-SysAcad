@@ -56,7 +56,12 @@ class TestAuthorityRepository(unittest.TestCase):
         """Test finding authorities by faculty."""
         from app.repositories import AuthorityRepository
 
-        mock_queryset = [self.mock_authority]
+        mock_auth_list = [self.mock_authority]
+        mock_queryset = MagicMock()
+        mock_queryset.__iter__ = lambda x: iter(mock_auth_list)
+        mock_queryset.select_related.return_value = mock_queryset
+        mock_queryset.distinct.return_value = mock_auth_list
+
         mock_filter = MagicMock()
         mock_filter.select_related.return_value = mock_queryset
         mock_objects.filter.return_value = mock_filter
@@ -86,8 +91,22 @@ class TestAuthorityRepository(unittest.TestCase):
         """Test searching authorities by name."""
         from app.repositories import AuthorityRepository
 
-        mock_queryset = [self.mock_authority]
-        mock_objects.filter.return_value = mock_queryset
+        mock_auth_list = [self.mock_authority]
+
+        # Mock para el resultado final después de select_related
+        mock_final_result = MagicMock()
+        mock_final_result.__iter__ = lambda x: iter(mock_auth_list)
+
+        # Mock para el segundo filter (last_name)
+        mock_second_filter = MagicMock()
+        mock_second_filter.select_related.return_value = mock_final_result
+
+        # Mock para el primer filter (first_name) con soporte para operador |
+        mock_first_filter = MagicMock()
+        mock_first_filter.__or__ = lambda self, other: mock_final_result
+
+        # Configurar objects.filter para retornar los mocks apropiados
+        mock_objects.filter.side_effect = [mock_first_filter, mock_second_filter]
 
         result = AuthorityRepository.search_by_name("Juan")
 

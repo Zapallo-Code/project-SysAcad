@@ -51,9 +51,11 @@ class TestDedicationTypeViewSet(unittest.TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     @patch("app.views.dedication_type.DedicationTypeService")
-    def test_create_success(self):
+    def test_create_success(self, mock_service):
         """Test creating a dedication type successfully."""
         from app.views import DedicationTypeViewSet
+
+        mock_service.create.return_value = self.mock_dedication
 
         viewset = DedicationTypeViewSet()
         request = self.factory.post(

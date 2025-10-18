@@ -84,6 +84,12 @@ class SubjectService:
 
     @staticmethod
     @transaction.atomic
+    def delete(id: int) -> bool:
+        """Alias for delete_by_id to maintain consistency with other services."""
+        return SubjectService.delete_by_id(id)
+
+    @staticmethod
+    @transaction.atomic
     def associate_authority(subject_id: int, authority_id: int) -> None:
         logger.info(f"Associating authority {authority_id} with subject {subject_id}")
 

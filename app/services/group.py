@@ -44,6 +44,14 @@ class GroupService:
         return groups
 
     @staticmethod
+    def find_by_subject(subject_id: int) -> List[Any]:
+        """Find all groups for a specific subject."""
+        logger.info(f"Finding groups for subject id: {subject_id}")
+        groups = GroupRepository.find_by_subject(subject_id)
+        logger.info(f"Found {len(groups)} groups for subject {subject_id}")
+        return groups
+
+    @staticmethod
     @transaction.atomic
     def update(id: int, group_data: dict) -> Any:
         logger.info(f"Updating group with id: {id}")
@@ -79,3 +87,9 @@ class GroupService:
         result = GroupRepository.delete_by_id(id)
         logger.info(f"Group with id {id} deleted successfully")
         return result
+
+    @staticmethod
+    @transaction.atomic
+    def delete(id: int) -> bool:
+        """Alias for delete_by_id for compatibility."""
+        return GroupService.delete_by_id(id)

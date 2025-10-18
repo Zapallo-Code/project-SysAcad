@@ -80,7 +80,7 @@ class TestDocumentTypeRepository(unittest.TestCase):
         """Test finding document type by name."""
         from app.repositories import DocumentTypeRepository
 
-        mock_model.objects.filter.return_value.first.return_value = self.mock_doc_type
+        mock_model.objects.get.return_value = self.mock_doc_type
 
         result = DocumentTypeRepository.find_by_name("DNI")
 
@@ -116,7 +116,11 @@ class TestDepartmentRepository(unittest.TestCase):
         """Test finding departments by faculty."""
         from app.repositories import DepartmentRepository
 
-        mock_model.objects.filter.return_value = [self.mock_department]
+        mock_dept_list = [self.mock_department]
+        mock_queryset = MagicMock()
+        mock_queryset.__iter__ = lambda x: iter(mock_dept_list)
+        mock_queryset.select_related.return_value = mock_dept_list
+        mock_model.objects.filter.return_value = mock_queryset
 
         result = DepartmentRepository.find_by_faculty(1)
 

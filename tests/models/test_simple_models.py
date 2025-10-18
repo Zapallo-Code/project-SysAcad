@@ -47,8 +47,10 @@ class TestDocumentTypeModel(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures."""
         self.valid_data = {
-            "name": "DNI",
-            "description": "Documento Nacional de Identidad",
+            "dni": 12345678,
+            "civic_card": "1234567",
+            "enrollment_card": "7654321",
+            "passport": "AB123456",
         }
 
     def test_create_document_type_success(self):
@@ -56,7 +58,7 @@ class TestDocumentTypeModel(unittest.TestCase):
         from app.models import DocumentType
 
         doc_type = DocumentType(**self.valid_data)
-        self.assertEqual(doc_type.name, "DNI")
+        self.assertEqual(doc_type.dni, 12345678)
 
     def test_str_representation(self):
         """Test string representation."""
@@ -73,7 +75,6 @@ class TestDepartmentModel(unittest.TestCase):
         """Set up test fixtures."""
         self.valid_data = {
             "name": "Departamento de Computación",
-            "description": "Departamento de ciencias de la computación",
         }
 
     def test_create_department_success(self):
@@ -90,8 +91,7 @@ class TestAreaModel(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures."""
         self.valid_data = {
-            "name": "Área de Sistemas",
-            "description": "Área de sistemas de información",
+            "name": "Área de Programación",
         }
 
     def test_create_area_success(self):
@@ -99,7 +99,7 @@ class TestAreaModel(unittest.TestCase):
         from app.models import Area
 
         area = Area(**self.valid_data)
-        self.assertEqual(area.name, "Área de Sistemas")
+        self.assertEqual(area.name, "Área de Programación")
 
 
 class TestDedicationTypeModel(unittest.TestCase):
@@ -107,7 +107,10 @@ class TestDedicationTypeModel(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        self.valid_data = {"name": "Dedicación Exclusiva", "hours": 40}
+        self.valid_data = {
+            "name": "Dedicación Exclusiva",
+            "observation": "40 horas semanales",
+        }
 
     def test_create_dedication_type_success(self):
         """Test creating a dedication type with valid data."""
@@ -115,7 +118,7 @@ class TestDedicationTypeModel(unittest.TestCase):
 
         dedication = DedicationType(**self.valid_data)
         self.assertEqual(dedication.name, "Dedicación Exclusiva")
-        self.assertEqual(dedication.hours, 40)
+        self.assertEqual(dedication.observation, "40 horas semanales")
 
 
 class TestPositionCategoryModel(unittest.TestCase):
@@ -125,7 +128,6 @@ class TestPositionCategoryModel(unittest.TestCase):
         """Set up test fixtures."""
         self.valid_data = {
             "name": "Profesor Titular",
-            "description": "Máxima categoría docente",
         }
 
     def test_create_position_category_success(self):
@@ -143,7 +145,7 @@ class TestSpecialtyTypeModel(unittest.TestCase):
         """Set up test fixtures."""
         self.valid_data = {
             "name": "Orientación",
-            "description": "Tipo de especialidad por orientación",
+            "level": "Grado",
         }
 
     def test_create_specialty_type_success(self):

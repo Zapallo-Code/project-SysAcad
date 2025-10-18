@@ -87,3 +87,9 @@ class DedicationTypeService:
         result = DedicationTypeRepository.delete_by_id(id)
         logger.info(f"Dedication type with id {id} deleted successfully")
         return result
+
+    @staticmethod
+    @transaction.atomic
+    def delete(id: int) -> bool:
+        """Alias for delete_by_id for compatibility."""
+        return DedicationTypeService.delete_by_id(id)

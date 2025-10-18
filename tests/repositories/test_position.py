@@ -56,7 +56,12 @@ class TestPositionRepository(unittest.TestCase):
         """Test finding positions by subject."""
         from app.repositories import PositionRepository
 
-        mock_queryset = [self.mock_position]
+        mock_pos_list = [self.mock_position]
+        mock_queryset = MagicMock()
+        mock_queryset.__iter__ = lambda x: iter(mock_pos_list)
+        mock_queryset.select_related.return_value = mock_queryset
+        mock_queryset.distinct.return_value = mock_pos_list
+
         mock_filter = MagicMock()
         mock_filter.select_related.return_value = mock_queryset
         mock_objects.filter.return_value = mock_filter

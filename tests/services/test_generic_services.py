@@ -16,6 +16,7 @@ class GenericServiceTestMixin:
         with patch(f"{self.repository_path}") as mock_repo:
             mock_entity = MagicMock()
             mock_entity.id = 1
+            mock_repo.exists_by_name.return_value = False
             mock_repo.create.return_value = mock_entity
 
             result = self.service_class.create(self.valid_data)

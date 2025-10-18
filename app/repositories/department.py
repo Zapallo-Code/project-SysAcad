@@ -34,10 +34,24 @@ class DepartmentRepository:
         return list(Department.objects.all())
 
     @staticmethod
+    def find_by_faculty(faculty_id: int) -> List[Department]:
+        """Find all departments for a specific faculty."""
+        return list(Department.objects.filter(faculty_id=faculty_id).select_related("faculty"))
+
+    @staticmethod
     def update(department: Department) -> Department:
         department.full_clean()
         department.save()
         return department
+    
+    @staticmethod
+    def delete(id: int) -> bool:
+        """Delete a department by ID."""
+        department = DepartmentRepository.find_by_id(id)
+        if not department:
+            return False
+        department.delete()
+        return True
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
@@ -52,8 +66,12 @@ class DepartmentRepository:
         return Department.objects.filter(id=id).exists()
 
     @staticmethod
-    def exists_by_name(name: str) -> bool:
-        return Department.objects.filter(name=name).exists()
+    def exists_by_name(name: str, faculty_id: int = None) -> bool:
+        """Check if department exists by name, optionally scoped to a faculty."""
+        query = Department.objects.filter(name=name)
+        if faculty_id is not None:
+            query = query.filter(faculty_id=faculty_id)
+        return query.exists()
 
     @staticmethod
     def count() -> int:

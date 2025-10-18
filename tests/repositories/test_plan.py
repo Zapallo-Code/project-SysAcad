@@ -57,7 +57,10 @@ class TestPlanRepository(unittest.TestCase):
         """Test finding plans by specialty."""
         from app.repositories import PlanRepository
 
-        mock_queryset = [self.mock_plan]
+        mock_plan_list = [self.mock_plan]
+        mock_queryset = MagicMock()
+        mock_queryset.__iter__ = lambda x: iter(mock_plan_list)
+        mock_queryset.select_related.return_value = mock_queryset
         mock_objects.filter.return_value = mock_queryset
 
         result = PlanRepository.find_by_specialty(1)

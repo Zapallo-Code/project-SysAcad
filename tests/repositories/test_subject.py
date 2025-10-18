@@ -63,7 +63,12 @@ class TestSubjectRepository(unittest.TestCase):
         from app.repositories import SubjectRepository
 
         mock_queryset = [self.mock_subject]
-        mock_objects.filter.return_value = mock_queryset
+        mock_select_related = MagicMock()
+        mock_select_related.__iter__ = lambda self: iter(mock_queryset)
+
+        mock_filter = MagicMock()
+        mock_filter.select_related.return_value = mock_select_related
+        mock_objects.filter.return_value = mock_filter
 
         result = SubjectRepository.find_by_plan(1)
 
@@ -75,7 +80,12 @@ class TestSubjectRepository(unittest.TestCase):
         from app.repositories import SubjectRepository
 
         mock_queryset = [self.mock_subject]
-        mock_objects.filter.return_value = mock_queryset
+        mock_select_related = MagicMock()
+        mock_select_related.__iter__ = lambda self: iter(mock_queryset)
+
+        mock_filter = MagicMock()
+        mock_filter.select_related.return_value = mock_select_related
+        mock_objects.filter.return_value = mock_filter
 
         result = SubjectRepository.find_by_area(1)
 

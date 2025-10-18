@@ -20,10 +20,15 @@ class TestSpecialtyService(unittest.TestCase):
         self.mock_specialty.name = "Computación"
 
     @patch("app.services.specialty.SpecialtyRepository")
-    def test_create_success(self, mock_repo):
+    @patch("app.services.specialty.FacultyRepository")
+    @patch("app.services.specialty.SpecialtyTypeRepository")
+    def test_create_success(self, mock_type_repo, mock_faculty_repo, mock_repo):
         """Test creating a specialty successfully."""
         from app.services import SpecialtyService
 
+        mock_faculty_repo.exists_by_id.return_value = True
+        mock_type_repo.exists_by_id.return_value = True
+        mock_repo.exists_by_name_and_type.return_value = False
         mock_repo.create.return_value = self.mock_specialty
 
         result = SpecialtyService.create(self.specialty_data)
@@ -43,9 +48,14 @@ class TestSpecialtyService(unittest.TestCase):
         self.assertEqual(result, self.mock_specialty)
 
     @patch("app.services.specialty.SpecialtyRepository")
-    def test_find_by_faculty(self, mock_repo):
+    @patch("app.services.specialty.FacultyRepository")
+    def test_find_by_faculty(self, mock_faculty_repo, mock_repo):
         """Test finding specialties by faculty."""
         from app.services import SpecialtyService
+
+        mock_faculty = MagicMock()
+        mock_faculty.id = 1
+        mock_faculty_repo.find_by_id.return_value = mock_faculty
 
         mock_specialties = [self.mock_specialty]
         mock_repo.find_by_faculty.return_value = mock_specialties

@@ -47,7 +47,11 @@ class TestGroupRepository(unittest.TestCase):
         """Test finding groups by subject."""
         from app.repositories import GroupRepository
 
-        mock_model.objects.filter.return_value = [self.mock_group]
+        mock_group_list = [self.mock_group]
+        mock_queryset = MagicMock()
+        mock_queryset.__iter__ = lambda x: iter(mock_group_list)
+        mock_queryset.select_related.return_value = mock_group_list
+        mock_model.objects.filter.return_value = mock_queryset
 
         result = GroupRepository.find_by_subject(1)
 
@@ -59,7 +63,8 @@ class TestGroupRepository(unittest.TestCase):
         """Test finding group by code."""
         from app.repositories import GroupRepository
 
-        mock_model.objects.filter.return_value.first.return_value = self.mock_group
+        self.mock_group.code = "GA001"
+        mock_model.objects.get.return_value = self.mock_group
 
         result = GroupRepository.find_by_code("GA001")
 
@@ -81,10 +86,10 @@ class TestGroupRepository(unittest.TestCase):
         """Test updating a group successfully."""
         from app.repositories import GroupRepository
 
-        mock_model.objects.filter.return_value.update.return_value = 1
-        mock_model.objects.get.return_value = self.mock_group
+        self.mock_group.full_clean = MagicMock()
+        self.mock_group.save = MagicMock()
 
-        result = GroupRepository.update(1, {"name": "Grupo A Updated"})
+        result = GroupRepository.update(self.mock_group)
 
         self.assertEqual(result, self.mock_group)
 

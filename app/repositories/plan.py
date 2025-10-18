@@ -31,6 +31,19 @@ class PlanRepository:
         return list(Plan.objects.all())
 
     @staticmethod
+    def find_by_specialty(specialty_id: int) -> List[Plan]:
+        """Find all plans for a specific specialty."""
+        return list(Plan.objects.filter(specialty_id=specialty_id).select_related("specialty"))
+
+    @staticmethod
+    def find_by_code(code: str) -> Optional[Plan]:
+        """Find a plan by its code."""
+        try:
+            return Plan.objects.get(code=code)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
     def find_by_date_range(start_date: date, end_date: date) -> List[Plan]:
         return list(
             Plan.objects.filter(start_date__lte=end_date, end_date__gte=start_date)
@@ -65,6 +78,11 @@ class PlanRepository:
     @staticmethod
     def exists_by_name(name: str) -> bool:
         return Plan.objects.filter(name=name).exists()
+
+    @staticmethod
+    def exists_by_code(code: str) -> bool:
+        """Check if a plan exists by code."""
+        return Plan.objects.filter(code=code).exists()
 
     @staticmethod
     def count() -> int:

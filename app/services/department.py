@@ -48,6 +48,14 @@ class DepartmentService:
         return departments
 
     @staticmethod
+    def find_by_faculty(faculty_id: int) -> List[Any]:
+        """Find all departments for a specific faculty."""
+        logger.info(f"Finding departments for faculty id: {faculty_id}")
+        departments = DepartmentRepository.find_by_faculty(faculty_id)
+        logger.info(f"Found {len(departments)} departments for faculty {faculty_id}")
+        return departments
+
+    @staticmethod
     @transaction.atomic
     def update(id: int, department_data: dict) -> Any:
         logger.info(f"Updating department with id: {id}")
@@ -83,3 +91,9 @@ class DepartmentService:
         result = DepartmentRepository.delete_by_id(id)
         logger.info(f"Department with id {id} deleted successfully")
         return result
+
+    @staticmethod
+    @transaction.atomic
+    def delete(id: int) -> bool:
+        """Alias for delete_by_id for compatibility."""
+        return DepartmentService.delete_by_id(id)

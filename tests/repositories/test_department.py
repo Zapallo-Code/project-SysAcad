@@ -48,7 +48,11 @@ class TestDepartmentRepository(unittest.TestCase):
         """Test finding departments by faculty."""
         from app.repositories import DepartmentRepository
 
-        mock_model.objects.filter.return_value = [self.mock_department]
+        mock_dept_list = [self.mock_department]
+        mock_queryset = MagicMock()
+        mock_queryset.__iter__ = lambda x: iter(mock_dept_list)
+        mock_queryset.select_related.return_value = mock_dept_list
+        mock_model.objects.filter.return_value = mock_queryset
 
         result = DepartmentRepository.find_by_faculty(1)
 
@@ -70,10 +74,10 @@ class TestDepartmentRepository(unittest.TestCase):
         """Test updating a department successfully."""
         from app.repositories import DepartmentRepository
 
-        mock_model.objects.filter.return_value.update.return_value = 1
-        mock_model.objects.get.return_value = self.mock_department
+        self.mock_department.full_clean = MagicMock()
+        self.mock_department.save = MagicMock()
 
-        result = DepartmentRepository.update(1, {"name": "Updated"})
+        result = DepartmentRepository.update(self.mock_department)
 
         self.assertEqual(result, self.mock_department)
 

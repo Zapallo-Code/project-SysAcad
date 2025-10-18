@@ -23,6 +23,14 @@ class DocumentTypeRepository:
         return list(DocumentType.objects.all())
 
     @staticmethod
+    def find_by_name(name: str) -> Optional[DocumentType]:
+        """Find a document type by its name."""
+        try:
+            return DocumentType.objects.get(name=name)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
     def find_by_dni(dni: int) -> Optional[DocumentType]:
         try:
             return DocumentType.objects.get(dni=dni)

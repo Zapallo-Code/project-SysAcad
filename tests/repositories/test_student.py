@@ -114,10 +114,22 @@ class TestStudentRepository(unittest.TestCase):
         """Test searching students by name."""
         from app.repositories import StudentRepository
 
-        mock_queryset = [self.mock_student]
-        mock_filter = MagicMock()
-        mock_filter.return_value = mock_queryset
-        mock_objects.filter = mock_filter
+        mock_student_list = [self.mock_student]
+
+        # Mock para el resultado final después de select_related
+        mock_final_result = MagicMock()
+        mock_final_result.__iter__ = lambda x: iter(mock_student_list)
+
+        # Mock para el segundo filter (last_name)
+        mock_second_filter = MagicMock()
+        mock_second_filter.select_related.return_value = mock_final_result
+
+        # Mock para el primer filter (first_name) con soporte para operador |
+        mock_first_filter = MagicMock()
+        mock_first_filter.__or__ = lambda self, other: mock_final_result
+
+        # Configurar objects.filter para retornar los mocks apropiados
+        mock_objects.filter.side_effect = [mock_first_filter, mock_second_filter]
 
         result = StudentRepository.search_by_name("Juan")
 

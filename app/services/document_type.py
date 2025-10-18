@@ -27,6 +27,15 @@ class DocumentTypeService:
         return document_type
 
     @staticmethod
+    def find_by_name(name: str) -> Optional[Any]:
+        """Find a document type by its name."""
+        logger.info(f"Finding document type with name: {name}")
+        document_type = DocumentTypeRepository.find_by_name(name)
+        if not document_type:
+            logger.warning(f"Document type with name '{name}' not found")
+        return document_type
+
+    @staticmethod
     def find_all() -> List[Any]:
         logger.info("Finding all document types")
         document_types = DocumentTypeRepository.find_all()

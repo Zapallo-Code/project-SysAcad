@@ -111,9 +111,12 @@ class TestLargeDatasets(unittest.TestCase):
         from app.repositories import PlanRepository
 
         mock_plans = [MagicMock(id=i, specialty_id=i % 10) for i in range(200)]
-        mock_model.objects.filter.return_value = [
-            p for p in mock_plans if p.specialty_id == 5
-        ]
+        filtered_plans = [p for p in mock_plans if p.specialty_id == 5]
+        
+        mock_queryset = MagicMock()
+        mock_queryset.__iter__ = lambda x: iter(filtered_plans)
+        mock_queryset.select_related.return_value = filtered_plans
+        mock_model.objects.filter.return_value = mock_queryset
 
         result = PlanRepository.find_by_specialty(5)
 

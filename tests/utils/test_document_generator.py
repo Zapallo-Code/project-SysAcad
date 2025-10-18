@@ -83,6 +83,7 @@ class TestODTDocument(unittest.TestCase):
         self.assertIn("Template not found", str(context.exception))
 
     @patch("builtins.open", new_callable=mock_open, read_data=b"ODT content")
+    @patch("app.utils.document_generator.tempfile.NamedTemporaryFile")
     @patch("app.utils.document_generator.os.unlink")
     @patch("app.utils.document_generator.os.path.exists")
     @patch("app.utils.document_generator.ODTTemplate")
@@ -95,6 +96,7 @@ class TestODTDocument(unittest.TestCase):
         mock_template_class,
         mock_exists,
         mock_unlink,
+        mock_tempfile,
         mock_file,
     ):
         """Test generating ODT successfully."""
@@ -102,6 +104,13 @@ class TestODTDocument(unittest.TestCase):
 
         mock_join.return_value = "/fake/path/template.odt"
         mock_exists.return_value = True
+
+        # Mock temp file
+        mock_temp = MagicMock()
+        mock_temp.name = "/tmp/temp.odt"
+        mock_temp.__enter__ = MagicMock(return_value=mock_temp)
+        mock_temp.__exit__ = MagicMock(return_value=False)
+        mock_tempfile.return_value = mock_temp
 
         mock_odt_template = MagicMock()
         mock_template_class.return_value.__enter__ = MagicMock(
@@ -116,18 +125,27 @@ class TestODTDocument(unittest.TestCase):
 
         self.assertIsInstance(result, BytesIO)
 
+    @patch("app.utils.document_generator.os.unlink")
+    @patch("app.utils.document_generator.tempfile.NamedTemporaryFile")
     @patch("app.utils.document_generator.os.path.exists")
     @patch("app.utils.document_generator.os.path.join")
     @patch("app.utils.document_generator.ODTTemplate")
     @patch("app.utils.document_generator.get_odt_renderer")
     def test_generate_odt_render_error(
-        self, mock_renderer, mock_template_class, mock_join, mock_exists
+        self, mock_renderer, mock_template_class, mock_join, mock_exists, mock_tempfile, mock_unlink
     ):
         """Test ODT generation with render error."""
         from app.utils.document_generator import ODTDocument
 
         mock_join.return_value = "/fake/path/template.odt"
         mock_exists.return_value = True
+
+        # Mock temp file
+        mock_temp = MagicMock()
+        mock_temp.name = "/tmp/temp.odt"
+        mock_temp.__enter__ = MagicMock(return_value=mock_temp)
+        mock_temp.__exit__ = MagicMock(return_value=False)
+        mock_tempfile.return_value = mock_temp
 
         mock_template_class.return_value.__enter__ = MagicMock(
             side_effect=Exception("Render error")
@@ -163,6 +181,7 @@ class TestDOCXDocument(unittest.TestCase):
         self.assertIn("Template not found", str(context.exception))
 
     @patch("builtins.open", new_callable=mock_open, read_data=b"DOCX content")
+    @patch("app.utils.document_generator.tempfile.NamedTemporaryFile")
     @patch("app.utils.document_generator.os.unlink")
     @patch("app.utils.document_generator.os.path.exists")
     @patch("app.utils.document_generator.DocxTemplate")
@@ -175,6 +194,7 @@ class TestDOCXDocument(unittest.TestCase):
         mock_docx_class,
         mock_exists,
         mock_unlink,
+        mock_tempfile,
         mock_file,
     ):
         """Test generating DOCX successfully."""
@@ -182,6 +202,13 @@ class TestDOCXDocument(unittest.TestCase):
 
         mock_join.return_value = "/fake/path/template.docx"
         mock_exists.return_value = True
+
+        # Mock temp file
+        mock_temp = MagicMock()
+        mock_temp.name = "/tmp/temp.docx"
+        mock_temp.__enter__ = MagicMock(return_value=mock_temp)
+        mock_temp.__exit__ = MagicMock(return_value=False)
+        mock_tempfile.return_value = mock_temp
 
         mock_doc = MagicMock()
         mock_docx_class.return_value = mock_doc
@@ -192,15 +219,24 @@ class TestDOCXDocument(unittest.TestCase):
         mock_doc.render.assert_called_once()
         mock_doc.save.assert_called_once()
 
+    @patch("app.utils.document_generator.os.unlink")
+    @patch("app.utils.document_generator.tempfile.NamedTemporaryFile")
     @patch("app.utils.document_generator.os.path.exists")
     @patch("app.utils.document_generator.os.path.join")
     @patch("app.utils.document_generator.DocxTemplate")
-    def test_generate_docx_render_error(self, mock_docx_class, mock_join, mock_exists):
+    def test_generate_docx_render_error(self, mock_docx_class, mock_join, mock_exists, mock_tempfile, mock_unlink):
         """Test DOCX generation with render error."""
         from app.utils.document_generator import DOCXDocument
 
         mock_join.return_value = "/fake/path/template.docx"
         mock_exists.return_value = True
+
+        # Mock temp file
+        mock_temp = MagicMock()
+        mock_temp.name = "/tmp/temp.docx"
+        mock_temp.__enter__ = MagicMock(return_value=mock_temp)
+        mock_temp.__exit__ = MagicMock(return_value=False)
+        mock_tempfile.return_value = mock_temp
 
         mock_doc = MagicMock()
         mock_doc.render.side_effect = Exception("Render error")

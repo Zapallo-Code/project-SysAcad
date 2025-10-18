@@ -58,6 +58,17 @@ class StudentRepository:
         )
 
     @staticmethod
+    def search_by_name(name: str) -> List[Student]:
+        """Search students by first name or last name."""
+        return list(
+            Student.objects.filter(
+                first_name__icontains=name
+            ) | Student.objects.filter(
+                last_name__icontains=name
+            ).select_related("document_type", "specialty")
+        )
+
+    @staticmethod
     def update(student: Student) -> Student:
         student.full_clean()
         student.save()

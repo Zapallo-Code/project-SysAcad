@@ -18,6 +18,7 @@ class TestDepartmentService(unittest.TestCase):
         """Test creating a department successfully."""
         from app.services import DepartmentService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_department
 
         result = DepartmentService.create(
@@ -64,6 +65,8 @@ class TestDepartmentService(unittest.TestCase):
         """Test updating a department successfully."""
         from app.services import DepartmentService
 
+        mock_repo.find_by_id.return_value = self.mock_department
+        mock_repo.exists_by_name.return_value = False
         mock_repo.update.return_value = self.mock_department
 
         result = DepartmentService.update(1, {"name": "Updated Department"})

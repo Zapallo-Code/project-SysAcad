@@ -27,10 +27,22 @@ class TestStudentService(unittest.TestCase):
         self.mock_student.student_number = 12345
 
     @patch("app.services.student.StudentRepository")
+    @patch("app.services.student.SpecialtyRepository")
+    @patch("app.services.student.DocumentTypeRepository")
     @patch("app.services.student.transaction.atomic")
-    def test_create_success(self, mock_atomic, mock_repo):
+    def test_create_success(
+        self, mock_atomic, mock_doc_type_repo, mock_specialty_repo, mock_repo
+    ):
         """Test creating a student successfully."""
         from app.services import StudentService
+
+        mock_specialty = MagicMock()
+        mock_specialty.id = 1
+        mock_specialty_repo.find_by_id.return_value = mock_specialty
+
+        mock_doc_type = MagicMock()
+        mock_doc_type.id = 1
+        mock_doc_type_repo.find_by_id.return_value = mock_doc_type
 
         mock_repo.exists_by_student_number.return_value = False
         mock_repo.exists_by_document_number.return_value = False

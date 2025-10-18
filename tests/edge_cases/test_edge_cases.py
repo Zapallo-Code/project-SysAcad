@@ -225,11 +225,10 @@ class TestServiceEdgeCases(unittest.TestCase):
         """Test delete non-existent entity."""
         from app.services import SubjectService
 
-        mock_repo.delete.return_value = False
+        mock_repo.exists_by_id.return_value = False
 
-        result = SubjectService.delete(9999)
-
-        self.assertFalse(result)
+        with self.assertRaises(ValueError):
+            SubjectService.delete(9999)
 
 
 if __name__ == "__main__":

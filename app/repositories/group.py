@@ -34,10 +34,32 @@ class GroupRepository:
         return list(Group.objects.all())
 
     @staticmethod
+    def find_by_subject(subject_id: int) -> List[Group]:
+        """Find all groups for a specific subject."""
+        return list(Group.objects.filter(subject_id=subject_id).select_related("subject"))
+
+    @staticmethod
+    def find_by_code(code: str) -> Optional[Group]:
+        """Find a group by its code."""
+        try:
+            return Group.objects.get(code=code)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
     def update(group: Group) -> Group:
         group.full_clean()
         group.save()
         return group
+
+    @staticmethod
+    def delete(id: int) -> bool:
+        """Delete a group by ID."""
+        group = GroupRepository.find_by_id(id)
+        if not group:
+            return False
+        group.delete()
+        return True
 
     @staticmethod
     def delete_by_id(id: int) -> bool:
@@ -54,6 +76,11 @@ class GroupRepository:
     @staticmethod
     def exists_by_name(name: str) -> bool:
         return Group.objects.filter(name=name).exists()
+
+    @staticmethod
+    def exists_by_code(code: str) -> bool:
+        """Check if a group exists by code."""
+        return Group.objects.filter(code=code).exists()
 
     @staticmethod
     def count() -> int:

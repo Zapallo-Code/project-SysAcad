@@ -18,6 +18,7 @@ class TestPlanService(unittest.TestCase):
         """Test creating a plan successfully."""
         from app.services import PlanService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_plan
         result = PlanService.create(self.plan_data)
         self.assertEqual(result, self.mock_plan)
@@ -46,6 +47,7 @@ class TestSubjectService(unittest.TestCase):
         """Test creating a subject successfully."""
         from app.services import SubjectService
 
+        mock_repo.exists_by_code.return_value = False
         mock_repo.create.return_value = self.mock_subject
         result = SubjectService.create(self.subject_data)
         self.assertEqual(result, self.mock_subject)
@@ -74,6 +76,7 @@ class TestPositionService(unittest.TestCase):
         """Test creating a position successfully."""
         from app.services import PositionService
 
+        mock_repo.exists_by_name.return_value = False
         mock_repo.create.return_value = self.mock_position
         result = PositionService.create(self.position_data)
         self.assertEqual(result, self.mock_position)
@@ -112,10 +115,13 @@ class TestOrientationService(unittest.TestCase):
         self.mock_orientation.id = 1
 
     @patch("app.services.orientation.OrientationRepository")
-    def test_create_success(self, mock_repo):
+    @patch("app.services.orientation.SpecialtyRepository")
+    def test_create_success(self, mock_specialty_repo, mock_repo):
         """Test creating an orientation successfully."""
         from app.services import OrientationService
 
+        mock_repo.exists_by_name.return_value = False
+        mock_specialty_repo.exists_by_id.return_value = True
         mock_repo.create.return_value = self.mock_orientation
         result = OrientationService.create(self.orientation_data)
         self.assertEqual(result, self.mock_orientation)
