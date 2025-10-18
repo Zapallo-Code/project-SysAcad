@@ -1,6 +1,8 @@
 import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.http import HttpResponse
 from app.serializers import StudentSerializer
 from app.services import StudentService
 
@@ -99,6 +101,37 @@ class StudentViewSet(viewsets.ViewSet):
             )
         except Exception as e:
             logger.error(f"Error deleting student {pk}: {str(e)}")
+            return Response(
+                {"error": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    @action(detail=True, methods=["get"], url_path="certificate")
+    def generate_certificate(self, request, pk=None):
+        """
+        Generate PDF certificate for a student.
+        Usage: GET /api/v1/student/{id}/certificate/?type=pdf
+        """
+        try:
+            document_type = request.query_params.get("type", "pdf").lower()
+
+            # Generate the certificate
+            pdf_io = StudentService.generate_regular_student_certificate(
+                int(pk), document_type
+            )
+
+            # Return the PDF as a response
+            response = HttpResponse(pdf_io.getvalue(), content_type="application/pdf")
+            response["Content-Disposition"] = (
+                f'attachment; filename="certificado_estudiante_{pk}.pdf"'
+            )
+            return response
+
+        except ValueError as e:
+            logger.error(f"Error generating certificate for student {pk}: {str(e)}")
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error generating certificate for student {pk}: {str(e)}")
             return Response(
                 {"error": "Internal server error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
