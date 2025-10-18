@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Subject
 from app.models import Authority
@@ -6,7 +6,8 @@ from app.models import Authority
 
 class SubjectRepository:
     @staticmethod
-    def create(subject: Subject) -> Subject:
+    def create(subject_data: Dict[str, Any]) -> Subject:
+        subject = Subject(**subject_data)
         subject.full_clean()
         subject.save()
         return subject

@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from app.models import Student
 
 
 class StudentRepository:
     @staticmethod
-    def create(student: Student) -> Student:
+    def create(student_data: Dict[str, Any]) -> Student:
+        student = Student(**student_data)
         student.full_clean()
         student.save()
         return student
@@ -54,7 +55,7 @@ class StudentRepository:
 
     @staticmethod
     def update(student: Student) -> Student:
-        student.full_clean()  # Validate before saving
+        student.full_clean()
         student.save()
         return student
 

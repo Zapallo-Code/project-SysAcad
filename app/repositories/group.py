@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Group
 
 
 class GroupRepository:
     @staticmethod
-    def create(group: Group) -> Group:
+    def create(group_data: Dict[str, Any]) -> Group:
+        group = Group(**group_data)
         group.full_clean()
         group.save()
         return group

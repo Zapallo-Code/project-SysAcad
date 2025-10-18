@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Department
 
 
 class DepartmentRepository:
     @staticmethod
-    def create(department: Department) -> Department:
+    def create(department_data: Dict[str, Any]) -> Department:
+        department = Department(**department_data)
         department.full_clean()
         department.save()
         return department

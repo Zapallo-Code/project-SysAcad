@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import DedicationType
 
 
 class DedicationTypeRepository:
     @staticmethod
-    def create(dedication_type: DedicationType) -> DedicationType:
+    def create(dedication_type_data: Dict[str, Any]) -> DedicationType:
+        dedication_type = DedicationType(**dedication_type_data)
         dedication_type.full_clean()
         dedication_type.save()
         return dedication_type

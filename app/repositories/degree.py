@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Degree
 
 
 class DegreeRepository:
     @staticmethod
-    def create(degree: Degree) -> Degree:
+    def create(degree_data: Dict[str, Any]) -> Degree:
+        degree = Degree(**degree_data)
         degree.full_clean()
         degree.save()
         return degree

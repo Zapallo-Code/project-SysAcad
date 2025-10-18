@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models.university import University
 
 
 class UniversityRepository:
     @staticmethod
-    def create(university: University) -> University:
+    def create(university_data: Dict[str, Any]) -> University:
+        university = University(**university_data)
         university.full_clean()
         university.save()
         return university

@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Specialty
 
 
 class SpecialtyRepository:
     @staticmethod
-    def create(specialty: Specialty) -> Specialty:
+    def create(specialty_data: Dict[str, Any]) -> Specialty:
+        specialty = Specialty(**specialty_data)
         specialty.full_clean()
         specialty.save()
         return specialty

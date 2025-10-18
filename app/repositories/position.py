@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Position
 
 
 class PositionRepository:
     @staticmethod
-    def create(position: Position) -> Position:
+    def create(position_data: Dict[str, Any]) -> Position:
+        position = Position(**position_data)
         position.full_clean()
         position.save()
         return position

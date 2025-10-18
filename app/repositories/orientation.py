@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Orientation
 
 
 class OrientationRepository:
     @staticmethod
-    def create(orientation: Orientation) -> Orientation:
+    def create(orientation_data: Dict[str, Any]) -> Orientation:
+        orientation = Orientation(**orientation_data)
         orientation.full_clean()
         orientation.save()
         return orientation

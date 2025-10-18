@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Area
 
 
 class AreaRepository:
     @staticmethod
-    def create(area: Area) -> Area:
+    def create(area_data: Dict[str, Any]) -> Area:
+        area = Area(**area_data)
         area.full_clean()
         area.save()
         return area

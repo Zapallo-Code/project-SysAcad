@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import date
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Plan
@@ -6,7 +6,8 @@ from app.models import Plan
 
 class PlanRepository:
     @staticmethod
-    def create(plan: Plan) -> Plan:
+    def create(plan_data: Dict[str, Any]) -> Plan:
+        plan = Plan(**plan_data)
         plan.full_clean()
         plan.save()
         return plan

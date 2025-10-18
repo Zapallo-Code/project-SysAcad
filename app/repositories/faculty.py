@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import Faculty
 from app.models import Authority
@@ -6,7 +6,8 @@ from app.models import Authority
 
 class FacultyRepository:
     @staticmethod
-    def create(faculty: Faculty) -> Faculty:
+    def create(faculty_data: Dict[str, Any]) -> Faculty:
+        faculty = Faculty(**faculty_data)
         faculty.full_clean()
         faculty.save()
         return faculty

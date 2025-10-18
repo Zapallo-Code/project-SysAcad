@@ -1,11 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from django.core.exceptions import ObjectDoesNotExist
 from app.models import DocumentType
 
 
 class DocumentTypeRepository:
     @staticmethod
-    def create(document_type: DocumentType) -> DocumentType:
+    def create(document_type_data: Dict[str, Any]) -> DocumentType:
+        document_type = DocumentType(**document_type_data)
         document_type.full_clean()
         document_type.save()
         return document_type

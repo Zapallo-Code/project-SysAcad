@@ -15,4 +15,3 @@ from .position import PositionService
 from .orientation import OrientationService
 from .authority import AuthorityService
 from .faculty import FacultyService
-from .certificate import PDFDocument, ODTDocument, DOCXDocument
