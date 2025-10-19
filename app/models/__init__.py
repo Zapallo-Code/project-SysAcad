@@ -1,3 +1,4 @@
+from .base import BaseModel
 from .degree import Degree
 from .university import University
 from .document_type import DocumentType

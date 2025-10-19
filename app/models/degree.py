@@ -1,20 +1,15 @@
 from django.db import models
+from .base import BaseModel
 
 
-class Degree(models.Model):
+class Degree(BaseModel):
     name = models.CharField(max_length=50, null=False, blank=False, unique=True)
     description = models.CharField(max_length=200, null=False, blank=False)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
 
-    def __repr__(self):
-        return f"<Degree: {self.name}>"
-
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "degrees"
         verbose_name = "Degree"
         verbose_name_plural = "Degrees"

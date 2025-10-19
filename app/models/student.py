@@ -1,9 +1,10 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import date
+from .base import BaseModel
 
 
-class Student(models.Model):
+class Student(BaseModel):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     document_number = models.CharField(max_length=50)
@@ -25,9 +26,6 @@ class Student(models.Model):
         on_delete=models.PROTECT,
         related_name="students",
     )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def full_name(self):
@@ -54,7 +52,7 @@ class Student(models.Model):
                 {"enrollment_date": "Enrollment date cannot be before birth date."}
             )
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "students"
         verbose_name = "Student"
         verbose_name_plural = "Students"

@@ -1,7 +1,8 @@
 from django.db import models
+from .base import BaseModel
 
 
-class DocumentType(models.Model):
+class DocumentType(BaseModel):
     dni = models.IntegerField(
         null=False, blank=False, help_text="Type: DNI (Documento Nacional de Identidad)"
     )
@@ -18,9 +19,6 @@ class DocumentType(models.Model):
         max_length=20, null=False, blank=False, help_text="Type: Pasaporte"
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         types = []
         if self.dni:
@@ -33,10 +31,7 @@ class DocumentType(models.Model):
             types.append(f"Pasaporte: {self.passport}")
         return " | ".join(types) if types else "Tipo de Documento"
 
-    def __repr__(self):
-        return f"<DocumentType: id={self.id}>"
-
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "document_types"
         verbose_name = "Document Type"
         verbose_name_plural = "Document Types"

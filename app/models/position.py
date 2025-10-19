@@ -1,7 +1,8 @@
 from django.db import models
+from .base import BaseModel
 
 
-class Position(models.Model):
+class Position(BaseModel):
     name = models.CharField(max_length=50, null=False, blank=False)
     points = models.IntegerField(null=True, blank=True)
 
@@ -16,16 +17,10 @@ class Position(models.Model):
         "DedicationType", on_delete=models.PROTECT, related_name="positions", null=False
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f"{self.name} ({self.position_category})"
 
-    def __repr__(self):
-        return f"<Position: {self.name} - {self.points} points>"
-
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "positions"
         verbose_name = "Position"
         verbose_name_plural = "Positions"

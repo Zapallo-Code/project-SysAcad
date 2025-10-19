@@ -1,8 +1,9 @@
 from django.db import models
 from django.core.validators import EmailValidator
+from .base import BaseModel
 
 
-class Faculty(models.Model):
+class Faculty(BaseModel):
     name = models.CharField(max_length=100, null=False, blank=False)
     abbreviation = models.CharField(
         max_length=10, null=False, blank=False, help_text="Faculty abbreviation"
@@ -32,16 +33,13 @@ class Faculty(models.Model):
         "University", on_delete=models.PROTECT, related_name="faculties", null=False
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f"{self.name} ({self.abbreviation})"
 
     def __repr__(self):
         return f"<Faculty: {self.name} - {self.acronym}>"
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "faculties"
         verbose_name = "Faculty"
         verbose_name_plural = "Faculties"

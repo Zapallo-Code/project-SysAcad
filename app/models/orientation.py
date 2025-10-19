@@ -1,7 +1,8 @@
 from django.db import models
+from .base import BaseModel
 
 
-class Orientation(models.Model):
+class Orientation(BaseModel):
     name = models.CharField(max_length=50, null=False, blank=False)
 
     specialty = models.ForeignKey(
@@ -16,16 +17,10 @@ class Orientation(models.Model):
         "Subject", on_delete=models.PROTECT, related_name="orientations", null=False
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f"{self.name} - {self.specialty}"
 
-    def __repr__(self):
-        return f"<Orientation: {self.name}>"
-
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "orientations"
         verbose_name = "Orientation"
         verbose_name_plural = "Orientations"

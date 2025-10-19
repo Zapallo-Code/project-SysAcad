@@ -1,7 +1,8 @@
 from django.db import models
+from .base import BaseModel
 
 
-class Specialty(models.Model):
+class Specialty(BaseModel):
     name = models.CharField(max_length=100, null=False, blank=False)
     letter = models.CharField(
         max_length=1,
@@ -22,16 +23,10 @@ class Specialty(models.Model):
         "Faculty", on_delete=models.PROTECT, related_name="specialties", null=False
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f"{self.name} ({self.letter})"
 
-    def __repr__(self):
-        return f"<Specialty: {self.name} - Letter: {self.letter}>"
-
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "specialties"
         verbose_name = "Specialty"
         verbose_name_plural = "Specialties"

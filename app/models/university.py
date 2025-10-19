@@ -1,7 +1,8 @@
 from django.db import models
+from .base import BaseModel
 
 
-class University(models.Model):
+class University(BaseModel):
     name = models.CharField(max_length=100, null=False, blank=False)
     acronym = models.CharField(
         max_length=10,
@@ -11,16 +12,13 @@ class University(models.Model):
         help_text="Unique acronym for the university",
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f"{self.acronym} - {self.name}"
 
     def __repr__(self):
         return f"<University: {self.acronym}>"
 
-    class Meta:
+    class Meta(BaseModel.Meta):
         db_table = "universities"
         verbose_name = "University"
         verbose_name_plural = "Universities"
