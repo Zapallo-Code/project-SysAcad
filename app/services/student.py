@@ -195,9 +195,21 @@ class StudentService:
             logger.error(f"Document type '{type}' is not supported")
             raise ValueError(f"Document type '{type}' is not supported")
 
+        # Map document types to their corresponding templates and folders
+        if type.lower() == "pdf":
+            folder = "certificado"  # PDF uses Django templates
+            template_name = "certificado_pdf"
+        else:
+            folder = "templates/certificado"  # DOCX and ODT use file templates
+            template_map = {
+                "docx": "certificate_docx",
+                "odt": "certificate_odt",
+            }
+            template_name = template_map.get(type.lower(), "certificate_docx")
+        
         logger.info(f"Certificate generated successfully for student {id}")
         return document_generator.generate(
-            folder="certificado", template="certificado_pdf", context=context
+            folder=folder, template=template_name, context=context
         )
 
     @staticmethod
@@ -207,10 +219,40 @@ class StudentService:
 
     @staticmethod
     def _get_student_data(student: Any) -> dict:
+        # Create a simple object with Spanish field names for DOCX/ODT templates
+        class AlumnoData:
+            def __init__(self, student_obj):
+                # Spanish field names
+                self.nombre = student_obj.first_name
+                self.apellido = student_obj.last_name
+                self.documento = student_obj.document_number
+                self.numero_legajo = student_obj.student_number
+                self.legajo = student_obj.student_number
+                self.fecha_nacimiento = student_obj.birth_date
+                self.genero = student_obj.gender
+                self.fecha_inscripcion = student_obj.enrollment_date
+                self.tipo_documento = student_obj.document_type
+                # English field names (for compatibility)
+                self.first_name = student_obj.first_name
+                self.last_name = student_obj.last_name
+                self.document_number = student_obj.document_number
+                self.student_number = student_obj.student_number
+                self.birth_date = student_obj.birth_date
+                self.gender = student_obj.gender
+                self.enrollment_date = student_obj.enrollment_date
+                self.document_type = student_obj.document_type
+        
         return {
+            # English variables (for existing templates)
             "student": student,
             "specialty": student.specialty,
             "faculty": student.specialty.faculty,
             "university": student.specialty.faculty.university,
             "date": StudentService._get_current_date(),
+            # Spanish variables (for DOCX/ODT templates)
+            "alumno": AlumnoData(student),
+            "especialidad": student.specialty,
+            "facultad": student.specialty.faculty,
+            "universidad": student.specialty.faculty.university,
+            "fecha": StudentService._get_current_date(),
         }
