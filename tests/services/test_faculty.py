@@ -15,19 +15,22 @@ class TestFacultyService(unittest.TestCase):
         self.mock_faculty.id = 1
         self.mock_faculty.name = "Facultad de Ciencias Exactas"
 
+    @patch("app.services.faculty.UniversityRepository")
     @patch("app.services.faculty.FacultyRepository")
     @patch("app.services.faculty.transaction.atomic")
-    def test_create_success(self, mock_atomic, mock_repo):
+    def test_create_success(self, mock_atomic, mock_faculty_repo, mock_university_repo):
         """Test creating a faculty successfully."""
         from app.services import FacultyService
 
-        mock_repo.create.return_value = self.mock_faculty
+        mock_university_repo.exists_by_id.return_value = True
+        mock_faculty_repo.create.return_value = self.mock_faculty
         mock_atomic.return_value.__enter__ = MagicMock()
         mock_atomic.return_value.__exit__ = MagicMock()
 
         result = FacultyService.create(self.faculty_data)
 
-        mock_repo.create.assert_called_once_with(self.faculty_data)
+        mock_university_repo.exists_by_id.assert_called_once_with(1)
+        mock_faculty_repo.create.assert_called_once_with(self.faculty_data)
         self.assertEqual(result, self.mock_faculty)
 
     @patch("app.services.faculty.FacultyRepository")
@@ -41,16 +44,19 @@ class TestFacultyService(unittest.TestCase):
 
         self.assertEqual(result, self.mock_faculty)
 
+    @patch("app.services.faculty.UniversityRepository")
     @patch("app.services.faculty.FacultyRepository")
-    def test_find_by_university(self, mock_repo):
+    def test_find_by_university(self, mock_faculty_repo, mock_university_repo):
         """Test finding faculties by university."""
         from app.services import FacultyService
 
+        mock_university_repo.exists_by_id.return_value = True
         mock_faculties = [self.mock_faculty]
-        mock_repo.find_by_university.return_value = mock_faculties
+        mock_faculty_repo.find_by_university.return_value = mock_faculties
 
         result = FacultyService.find_by_university(1)
 
+        mock_university_repo.exists_by_id.assert_called_once_with(1)
         self.assertEqual(len(result), 1)
 
     @patch("app.services.faculty.FacultyRepository")
